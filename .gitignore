@@ -1,0 +1,12 @@
+results/
+data/*.vcf
+data/*.vcf.gz
+data/*.tbi
+data/*.csi
+data/*.loci
+data/*.loci.gz
+*.RData
+*.Rhistory
+.DS_Store
+
+

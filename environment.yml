@@ -1,0 +1,16 @@
+name: dryas-popgen
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - r-base>=4.3
+  - r-adegenet
+  - r-dartr
+  - r-hierfstat
+  - r-vcfr
+  - r-tidyverse
+  - r-patchwork
+  - bcftools>=1.17
+  - htslib
+  - python>=3.11
+
