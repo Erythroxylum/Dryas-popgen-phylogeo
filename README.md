@@ -35,7 +35,7 @@ conda activate dryas-popgen
 After checking the paths below, steps 1-5 can also be run together:
 
 ```bash
-NBOOT=1000 bash scripts/00_run_core.sh
+NBOOT=1000 NCORES=4 bash scripts/00_run_core.sh
 ```
 
 ### 1. Validate identifiers and create population maps
@@ -90,14 +90,14 @@ Rscript scripts/04_individual_heterozygosity.R \
 ### 5. Pairwise differentiation
 
 ```bash
-NBOOT=1000 Rscript scripts/05_pairwise_fst.R \
+NBOOT=1000 NCORES=4 Rscript scripts/05_pairwise_fst.R \
   results/vcf/s215_popgen_one_snp_per_locus.vcf.gz \
   results/metadata/sample_to_population.tsv \
   results/fst
 ```
 
 This calculates pairwise Weir-Cockerham FST and 95% locus-bootstrap intervals
-with `hierfstat`. The full matrix is supplementary output; focal admixed-to-
+with the parallel StAMPP implementation wrapped by `dartR`. The full matrix is supplementary output; focal admixed-to-
 reference comparisons can be selected after reviewing the matrix.
 
 ### 6. Filtered sequence-level nucleotide diversity

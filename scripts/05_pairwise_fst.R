@@ -9,28 +9,56 @@ script_arg <- grep("^--file=", commandArgs(), value = TRUE)
 script_dir <- dirname(normalizePath(sub("^--file=", "", script_arg[1])))
 source(file.path(script_dir, "popgen_helpers.R"))
 
-required_packages(c("hierfstat", "dartR", "adegenet", "vcfR", "ggplot2"))
+required_packages(c("StAMPP", "dartR", "adegenet", "vcfR", "ggplot2"))
 output_dir <- args[3]
 dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
 nboot <- as.integer(Sys.getenv("NBOOT", "1000"))
+ncores_default <- max(1L, parallel::detectCores(logical = FALSE) - 1L)
+ncores <- as.integer(Sys.getenv("NCORES", as.character(ncores_default)))
+if (!is.finite(ncores) || ncores < 1) ncores <- 1L
 seed <- as.integer(Sys.getenv("BOOTSTRAP_SEED", "20261012"))
 
 loaded <- load_dosage(args[1], args[2])
-hf_object <- make_hierfstat(loaded$dos, loaded$map$pop_gen_population)
-hf <- hf_object$data
-population_levels <- hf_object$levels
+population_levels <- unique(as.character(loaded$map$pop_gen_population))
 
-message("Calculating pairwise Weir-Cockerham FST...")
-fst <- hierfstat::pairwise.WCfst(hf, diploid = TRUE)
-fst <- rename_population_matrix(fst, population_levels)
-
-message("Bootstrapping ", nboot, " times over independent ipyrad loci...")
-set.seed(seed)
-boot <- hierfstat::boot.ppfst(
-  dat = hf, nboot = nboot, quant = c(0.025, 0.975), diploid = TRUE
+message(
+  "Calculating pairwise Weir-Cockerham FST with ", ncores,
+  " cores and ", nboot, " locus bootstraps..."
 )
-lower <- rename_population_matrix(boot$ll, population_levels)
-upper <- rename_population_matrix(boot$ul, population_levels)
+set.seed(seed)
+result <- dartR::gl.fst.pop(
+  loaded$gl, nboots = nboot, percent = 95,
+  nclusters = ncores, verbose = 2
+)
+
+if (nboot < 2) {
+  fst <- as.matrix(result)
+  lower <- upper <- matrix(
+    NA_real_, nrow(fst), ncol(fst), dimnames = dimnames(fst)
+  )
+  boot <- NULL
+} else {
+  fst <- result$Fsts
+  boot <- as.data.frame(result$Bootstraps, stringsAsFactors = FALSE)
+  lower <- upper <- matrix(
+    NA_real_, nrow(fst), ncol(fst), dimnames = dimnames(fst)
+  )
+  for (i in seq_len(nrow(boot))) {
+    p1 <- as.character(boot$Population1[i])
+    p2 <- as.character(boot$Population2[i])
+    lo <- as.numeric(boot[["Lower bound CI limit"]][i])
+    hi <- as.numeric(boot[["Upper bound CI limit"]][i])
+    lower[p1, p2] <- lower[p2, p1] <- lo
+    upper[p1, p2] <- upper[p2, p1] <- hi
+  }
+}
+
+# StAMPP returns the informative triangle. Mirror it for tables and plotting.
+fst[upper.tri(fst)] <- t(fst)[upper.tri(fst)]
+diag(fst) <- 0
+fst <- fst[population_levels, population_levels, drop = FALSE]
+lower <- lower[population_levels, population_levels, drop = FALSE]
+upper <- upper[population_levels, population_levels, drop = FALSE]
 
 write.table(
   data.frame(population = rownames(fst), fst, check.names = FALSE),
@@ -95,7 +123,7 @@ ggplot2::ggsave(
 )
 
 saveRDS(
-  list(fst = fst, bootstrap = boot, long = long),
+  list(fst = fst, bootstrap = boot, stampp_result = result, long = long),
   file.path(output_dir, "pairwise_wc_fst_objects.rds")
 )
 message("Pairwise FST outputs written to ", output_dir)

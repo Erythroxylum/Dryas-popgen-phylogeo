@@ -5,6 +5,7 @@ set -euo pipefail
 metadata=${METADATA:-data/Dryas_sampledata_popgen.csv}
 vcf=${VCF:-data/s384_batchclean_ab25_locusFDR05_mac4_dp15-150_miss10.sorted.vcf.gz}
 nboot=${NBOOT:-1000}
+ncores=${NCORES:-4}
 
 Rscript scripts/01_validate_metadata.R "$metadata" "$vcf" results/metadata
 
@@ -23,7 +24,7 @@ Rscript scripts/04_individual_heterozygosity.R \
   results/metadata/sample_to_population.tsv \
   results/diversity/individual_snp_heterozygosity.tsv
 
-NBOOT="$nboot" Rscript scripts/05_pairwise_fst.R \
+NBOOT="$nboot" NCORES="$ncores" Rscript scripts/05_pairwise_fst.R \
   results/vcf/s215_popgen_one_snp_per_locus.vcf.gz \
   results/metadata/sample_to_population.tsv \
   results/fst
