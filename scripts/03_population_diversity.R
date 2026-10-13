@@ -17,6 +17,7 @@ dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
 nboot <- as.integer(Sys.getenv("NBOOT", "1000"))
 seed <- as.integer(Sys.getenv("BOOTSTRAP_SEED", "20261012"))
 min_gene_copies <- as.integer(Sys.getenv("RAREFACTION_GENE_COPIES", "6"))
+min_outside_call_rate <- as.numeric(Sys.getenv("PRIVATE_MIN_OUTSIDE_CALL_RATE", "0.80"))
 
 loaded <- load_dosage(vcf_file, map_file)
 dos <- loaded$dos
@@ -99,6 +100,112 @@ ci_rows <- lapply(seq_along(population_levels), function(i) {
 })
 confidence_intervals <- do.call(rbind, ci_rows)
 
+# Calculate private alleles explicitly. A candidate allele must be observed in
+# the focal population, absent from all called chromosomes outside it, have at
+# least the requested outside-sample call rate, and have enough focal gene
+# copies for rarefaction. The hypergeometric probability gives its expected
+# representation after rarefying the focal population to min_gene_copies.
+rarefaction_probability <- function(total_copies, allele_copies, draw) {
+  if (total_copies < draw || allele_copies < 1) return(NA_real_)
+  nonallele <- total_copies - allele_copies
+  miss <- if (nonallele < draw) 0 else exp(
+    lchoose(nonallele, draw) - lchoose(total_copies, draw)
+  )
+  1 - miss
+}
+
+private_contribution <- matrix(
+  NA_real_, nrow = ncol(dos), ncol = length(population_levels),
+  dimnames = list(colnames(dos), population_levels)
+)
+private_rows <- list()
+private_row_index <- 0L
+
+for (p in seq_along(population_levels)) {
+  focal <- map$pop_gen_population == population_levels[p]
+  outside <- !focal
+  outside_n <- sum(outside)
+  for (locus in seq_len(ncol(dos))) {
+    focal_dos <- dos[focal, locus]
+    outside_dos <- dos[outside, locus]
+    focal_called <- sum(!is.na(focal_dos))
+    outside_called <- sum(!is.na(outside_dos))
+    focal_copies <- 2L * focal_called
+    outside_call_rate <- outside_called / outside_n
+    if (focal_copies < min_gene_copies ||
+        outside_call_rate < min_outside_call_rate) next
+
+    private_contribution[locus, p] <- 0
+    focal_alt <- sum(focal_dos, na.rm = TRUE)
+    outside_alt <- sum(outside_dos, na.rm = TRUE)
+    focal_ref <- focal_copies - focal_alt
+    outside_ref <- 2L * outside_called - outside_alt
+    counts <- c(REF = focal_ref, ALT = focal_alt)
+    outside_counts <- c(REF = outside_ref, ALT = outside_alt)
+
+    for (allele in names(counts)) {
+      if (counts[allele] > 0 && outside_counts[allele] == 0) {
+        expected <- rarefaction_probability(
+          focal_copies, counts[allele], min_gene_copies
+        )
+        private_contribution[locus, p] <-
+          private_contribution[locus, p] + expected
+        private_row_index <- private_row_index + 1L
+        private_rows[[private_row_index]] <- data.frame(
+          population = population_levels[p], locus = colnames(dos)[locus],
+          allele = allele, focal_allele_copies = counts[allele],
+          focal_called_gene_copies = focal_copies,
+          outside_called_samples = outside_called,
+          outside_call_rate = outside_call_rate,
+          rarefied_detection_probability = expected,
+          stringsAsFactors = FALSE
+        )
+      }
+    }
+  }
+}
+
+private_detail <- if (length(private_rows)) do.call(rbind, private_rows) else {
+  data.frame(
+    population = character(), locus = character(), allele = character(),
+    focal_allele_copies = integer(), focal_called_gene_copies = integer(),
+    outside_called_samples = integer(), outside_call_rate = numeric(),
+    rarefied_detection_probability = numeric()
+  )
+}
+private_summary <- data.frame(
+  population = population_levels,
+  eligible_loci = colSums(!is.na(private_contribution)),
+  observed_private_alleles = vapply(
+    population_levels,
+    function(z) sum(private_detail$population == z), integer(1)
+  ),
+  rarefied_private_alleles = colSums(private_contribution, na.rm = TRUE),
+  private_allelic_richness = mean_na(private_contribution),
+  rarefied_gene_copies = min_gene_copies,
+  minimum_outside_call_rate = min_outside_call_rate,
+  stringsAsFactors = FALSE
+)
+point$private_allelic_richness <- private_summary$private_allelic_richness[
+  match(point$population, private_summary$population)
+]
+
+boot_private <- bootstrap_means(private_contribution)
+private_ci <- do.call(rbind, lapply(seq_along(population_levels), function(i) {
+  values <- boot_private[i, ]
+  values <- values[is.finite(values)]
+  interval <- if (length(values)) {
+    quantile(values, c(0.025, 0.975), names = FALSE)
+  } else c(NA_real_, NA_real_)
+  data.frame(
+    population = population_levels[i], metric = "private_allelic_richness",
+    estimate = point$private_allelic_richness[i],
+    lower_95 = interval[1], upper_95 = interval[2], nboot = nboot,
+    stringsAsFactors = FALSE
+  )
+}))
+confidence_intervals <- rbind(confidence_intervals, private_ci)
+
 write.table(
   point, file.path(output_dir, "population_snp_diversity.tsv"),
   sep = "\t", quote = FALSE, row.names = FALSE, na = ""
@@ -108,27 +215,14 @@ write.table(
   file.path(output_dir, "population_snp_diversity_bootstrap_ci.tsv"),
   sep = "\t", quote = FALSE, row.names = FALSE, na = ""
 )
-
-# dartR implements a published one-population-versus-rest private-allele
-# comparison. These counts remain sample-size sensitive and are supplementary.
-private_result <- try(
-  dartR::gl.report.pa(
-    loaded$gl, method = "one2rest", loc_names = FALSE,
-    plot.out = FALSE, map.interactive = FALSE, verbose = 1
-  ),
-  silent = TRUE
+write.table(
+  private_summary, file.path(output_dir, "private_alleles_by_population.tsv"),
+  sep = "\t", quote = FALSE, row.names = FALSE, na = ""
 )
-if (inherits(private_result, "try-error")) {
-  warning("dartR private-allele calculation failed: ", as.character(private_result))
-} else {
-  private_table <- if (is.list(private_result) && !is.data.frame(private_result)) {
-    private_result[[1]]
-  } else private_result
-  write.table(
-    private_table, file.path(output_dir, "private_alleles_one_to_rest.tsv"),
-    sep = "\t", quote = FALSE, row.names = FALSE, na = ""
-  )
-}
+write.table(
+  private_detail, file.path(output_dir, "private_alleles_by_locus.tsv"),
+  sep = "\t", quote = FALSE, row.names = FALSE, na = ""
+)
 
 plot_data <- merge(
   confidence_intervals,
@@ -139,7 +233,8 @@ metric_labels <- c(
   Ho = "Observed heterozygosity",
   Hs = "Gene diversity",
   Fis_ratio = "FIS",
-  allelic_richness = "Rarefied allelic richness"
+  allelic_richness = "Rarefied allelic richness",
+  private_allelic_richness = "Private allelic richness"
 )
 plot_data$metric <- factor(plot_data$metric, levels = names(metric_labels))
 p <- ggplot2::ggplot(
@@ -165,6 +260,8 @@ ggplot2::ggsave(
 
 saveRDS(
   list(basic_stats = basic, allelic_richness = allelic,
+       private_alleles = private_summary,
+       private_alleles_by_locus = private_detail,
        population_table = point, bootstrap_ci = confidence_intervals),
   file.path(output_dir, "population_snp_diversity_objects.rds")
 )
