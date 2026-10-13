@@ -1,0 +1,385 @@
+vcf_order	raw_id	sampleID	phyloID	pop_gen	pop_gen_population	spID	geoID	Latitude	Longitude	Plate	selected
+1	Cermon_DW847	Cermon_DW847	Cermon_DW847-US.NM	unassigned		Cermon	US.NM	35.1535	-106.63875	4	FALSE
+2	Chafol_1611	Chafol_1611	Chafol_1611-US.CA	unassigned		Chafol	US.CA	39.468	-121.238	4	FALSE
+3	Pursta_DW848	Pursta_DW848	Pursta_DW848-US.NM	unassigned		Pursta	US.NM	35.1535	-106.63875	4	FALSE
+4	Purtri_DW846b	Purtri_DW846b	Purtri_DW846b-US.NM	unassigned		Purtri	US.NM	35.1535	-106.63875	4	FALSE
+5	ajan_11273b	ajan_11273b	ajan_11273b-CA.YT.Kluane	admixed	xajan_SWYukon	ajan	CA.YT.Kluane	61.3020389	-139.5219722	3	TRUE
+6	ajan_BABY109	ajan_BABY109	ajan_BABY109-CA.YT.NansenMt	unassigned		ajan	CA.YT.NansenMt	62.09865278	-137.3893139	1	FALSE
+7	ajan_BABY11273	ajan_BABY11273	ajan_BABY11273-CA.YT.Kluane	admixed	xajan_SWYukon	ajan	CA.YT.Kluane	61.3020389	-139.5219722	1	TRUE
+8	ajan_BABY1282	ajan_BABY1282	ajan_BABY1282-CA.YT.Nisling	uniform	ala-aja_YukonTerr	ajan	CA.YT.Nisling	61.8148583	-137.79605	1	TRUE
+9	ajan_BABY220	ajan_BABY220	ajan_BABY220-CA.YT.Takhini	uniform	ala-aja_YukonTerr	ajan	CA.YT.Takhini	60.8587	-135.9767139	1	TRUE
+10	ajan_BABY301	ajan_BABY301	ajan_BABY301-CA.YT.McIntyreMt	admixed	xajan_SWYukon	ajan	CA.YT.McIntyreMt	60.6193	-135.13886	1	TRUE
+11	ajan_BABY3957	ajan_BABY3957	ajan_BABY3957-US.AK.WrangellStElias	unassigned		ajan	US.AK.WrangellStElias	62.11639	-142.18917	3	FALSE
+12	ajan_BABY5187	ajan_BABY5187	ajan_BABY5187-CA.YT.Knorr	unassigned		ajan	CA.YT.Knorr	65.50379679	-134.3853045	3	FALSE
+13	ajan_BABY581	ajan_BABY581	ajan_BABY581-CA.YT.Kluane	admixed	xajan_SWYukon	ajan	CA.YT.Kluane	60.48226667	-138.1896528	3	TRUE
+14	ajan_BABY5951	ajan_BABY5951	ajan_BABY5951-CA.BC.VaughanMt	admixed	xintg_NBC	ajan	CA.BC.VaughanMt	59.71667	-133.5	3	TRUE
+15	ajan_BABY6544	ajan_BABY6544	ajan_BABY6544-CA.YT.Ivvavik	unassigned		ajan	CA.YT.Ivvavik	69.48007	-140.03851	3	FALSE
+16	ajan_BABY6568	ajan_BABY6568	ajan_BABY6568-CA.YT.KlotzMt	unassigned		ajan	CA.YT.KlotzMt	65.36507	-140.1853	3	FALSE
+17	ajan_BABY6724	ajan_BABY6724	ajan_BABY6724-US.AK.YukonCharleyNP	unassigned		ajan	US.AK.YukonCharleyNP	65.06218	-143.57007	3	FALSE
+18	ajan_BABY76	ajan_BABY76	ajan_BABY76-CA.YT.NansenMt	unassigned		ajan	CA.YT.NansenMt	62.09865278	-137.3893139	3	FALSE
+19	ajan_DW642	ajan_DW642	ajan_DW642-US.AK.Inter.WickDome	uniform	ajanensis_Wick_Dome	ajan	US.AK.Inter.WickDome	65.1913407	-148.0576173	AK2019	TRUE
+20	ajan_DW643	ajan_DW643	ajan_DW643-US.AK.Inter.WickDome	uniform	ajanensis_Wick_Dome	ajan	US.AK.Inter.WickDome	65.1913407	-148.0576173	AK2019	TRUE
+21	ajan_DW649	ajan_DW649	ajan_DW649-US.AK.Inter.WickDome	unassigned		ajan	US.AK.Inter.WickDome	65.2173558	-148.0593679	AK2019	FALSE
+22	ajan_DW654	ajan_DW654	ajan_DW654-US.AK.Inter.Steese	unassigned		ajan	US.AK.Inter.Steese	65.4029432	-145.9731088	AK2019	FALSE
+23	ajan_DW655	ajan_DW655	ajan_DW655-US.AK.Inter.Steese	uniform	ajanensis_Steese	ajan	US.AK.Inter.Steese	65.4029432	-145.9731088	AK2019	TRUE
+24	ajan_DW657	ajan_DW657	ajan_DW657-US.AK.AKmtsN	unassigned		ajan	US.AK.AKmtsN	63.807009	-148.9520006	AK2019	FALSE
+25	ajan_DW661	ajan_DW661	ajan_DW661-US.AK.AKmtsN	unassigned		ajan	US.AK.AKmtsN	63.807009	-148.9520006	AK2019	FALSE
+26	ajan_DW662	ajan_DW662	ajan_DW662-US.AK.Inter.Murphy	unassigned		ajan	US.AK.Inter.Murphy	64.9491118	-148.431554	AK2019	FALSE
+27	ajan_DW663	ajan_DW663	ajan_DW663-US.AK.Inter.Murphy	unassigned		ajan	US.AK.Inter.Murphy	64.9491118	-148.431554	AK2019	FALSE
+28	ajan_ODP48916	ajan_ODP48916	ajan_ODP48916-US.AK.Seward.Nome	uniform	ajanensis_Nome	ajan	US.AK.Seward.Nome	64.917917	-164.9616	3	TRUE
+29	ajan_ODP49343	ajan_ODP49343	ajan_ODP49343-US.AK.Brooks	admixed	xajan_Brooks	ajan	US.AK.Brooks	68.451417	-149.474433	3	TRUE
+30	ajan_ODP7385	ajan_ODP7385	ajan_ODP7385-RU.CHU.ChukchiPenkigney	admixed	xajan_Penkigney	ajan	RU.CHU.ChukchiPenkigney	64.78	-173.141667	1	TRUE
+31	ajan_ODP7387	ajan_ODP7387	ajan_ODP7387-RU.CHU.ChukchiPenkigney	unassigned		ajan	RU.CHU.ChukchiPenkigney	64.78	-173.141667	1	FALSE
+32	ajan_ODP7388	ajan_ODP7388	ajan_ODP7388-RU.CHU.ChukchiPenkigney	admixed	xajan_Penkigney	ajan	RU.CHU.ChukchiPenkigney	64.78	-173.141667	1	TRUE
+33	ajan_ODP7389	ajan_ODP7389	ajan_ODP7389-RU.CHU.ChukchiLavrentiya	unassigned		ajan	RU.CHU.ChukchiLavrentiya	65.645	-171.225	1	FALSE
+34	ajan_ODP7390	ajan_ODP7390	ajan_ODP7390-RU.CHU.ChukchiLavrentiya	unassigned		ajan	RU.CHU.ChukchiLavrentiya	65.645	-171.225	1	FALSE
+35	ajan_ODP7392	ajan_ODP7392	ajan_ODP7392-RU.CHU.ChukchiLavrentiya	unassigned		ajan	RU.CHU.ChukchiLavrentiya	65.645	-171.225	1	FALSE
+36	ajan_ODP7394	ajan_ODP7394	ajan_ODP7394-US.AK.Seward.Hwy40	admixed	xajan_Seward	ajan	US.AK.Seward.Hwy40	64.648333	-164.346667	1	TRUE
+37	ajan_ODP7396	ajan_ODP7396	ajan_ODP7396-US.AK.Seward.Hwy40	admixed	xajan_Seward	ajan	US.AK.Seward.Hwy40	64.648333	-164.346667	1	TRUE
+38	ajan_ODP7406	ajan_ODP7406	ajan_ODP7406-US.AK.Chugach1	admixed	xajan_SCAlaska	ajan	US.AK.Chugach1	61.246667	-149.535278	1	TRUE
+39	ajan_ODP7407	ajan_ODP7407	ajan_ODP7407-US.AK.Chugach1	admixed	xajan_SCAlaska	ajan	US.AK.Chugach1	61.246667	-149.535278	1	TRUE
+40	ajan_ODP8449	ajan_ODP8449	ajan_ODP8449-CA.BC.Horseranch	unassigned		ajan	CA.BC.Horseranch	59.465	-128.933611	2	FALSE
+41	ajan_ODP8472	ajan_ODP8472	ajan_ODP8472-CA.BC.Atlin	admixed	xintg_NBC	ajan	CA.BC.Atlin	59.703067	-133.360158	2	TRUE
+42	ajan_ODP8501	ajan_ODP8501	ajan_ODP8501-CA.BC.Meszah	admixed	xintg_NBC	ajan	CA.BC.Meszah	58.450007	-131.450307	2	TRUE
+43	ajan_ODP8504	ajan_ODP8504	ajan_ODP8504-CA.BC.Meszah	admixed	xintg_NBC	ajan	CA.BC.Meszah	58.450007	-131.450307	2	TRUE
+44	ajan_esa36	ajan_esa36	ajan_esa36-US.AK.Inter.Steese	uniform	ajanensis_Steese	ajan	US.AK.Inter.Steese	65.480409	-145.4189702	AK2019	TRUE
+45	ajan_esa56	ajan_esa56	ajan_esa56-US.AK.Inter.Steese	uniform	ajanensis_Steese	ajan	US.AK.Inter.Steese	65.480409	-145.4189702	AK2019	TRUE
+46	ajan_wdb38	ajan_wdb38	ajan_wdb38-US.AK.Inter.WickDome	uniform	ajanensis_Wick_Dome	ajan	US.AK.Inter.WickDome	65.2173558	-148.0593679	AK2019	TRUE
+47	ajancf_BRK02	ajancf_BRK02	ajancf_BRK02-US.AK.Brooks	admixed	xajan_Brooks	ajancf	US.AK.Brooks	68.4527	-149.478	4	TRUE
+48	ajancf_BRK03	ajancf_BRK03	ajancf_BRK03-US.AK.Brooks	admixed	xajan_Brooks	ajancf	US.AK.Brooks	68.4527	-149.478	4	TRUE
+49	ajancf_BRK04	ajancf_BRK04	ajancf_BRK04-US.AK.Brooks	admixed	xajan_Brooks	ajancf	US.AK.Brooks	68.4527	-149.478	4	TRUE
+50	ajancf_DEN01	ajancf_DEN01	ajancf_DEN01-US.AK.AKmtsS	admixed	xajan_AKmtnS	ajancf	US.AK.AKmtsS	63.0451	-147.134	4	TRUE
+51	ajancf_DEN06	ajancf_DEN06	ajancf_DEN06-US.AK.AKmtsS	admixed	xajan_AKmtnS	ajancf	US.AK.AKmtsS	63.0451	-147.134	4	TRUE
+52	ajancf_DEN15	ajancf_DEN15	ajancf_DEN15-US.AK.AKmtsS	admixed	xajan_AKmtnS	ajancf	US.AK.AKmtsS	63.0451	-147.134	4	TRUE
+53	ajancf_ODP7419	ajancf_ODP7419	ajancf_ODP7419-US.AK.Anchorage	admixed	xajan_SCAlaska	ajancf	US.AK.Anchorage	61.036161	-149.613094	2	TRUE
+54	ajancf_SLM01	ajancf_SLM01	ajancf_SLM01-US.AK.Seward.Nome	uniform	ajanensis_Nome	ajancf	US.AK.Seward.Nome	64.9178	-164.962	4	TRUE
+55	ajancf_SLM05	ajancf_SLM05	ajancf_SLM05-US.AK.Seward.Nome	uniform	ajanensis_Nome	ajancf	US.AK.Seward.Nome	64.9178	-164.962	4	TRUE
+56	ajancf_SLM10	ajancf_SLM10	ajancf_SLM10-US.AK.Seward.Nome	uniform	ajanensis_Nome	ajancf	US.AK.Seward.Nome	64.9178	-164.962	4	TRUE
+57	alas_BABY3048	alas_BABY3048	alas_BABY3048-CA.YT.Vuntut	unassigned		alas	CA.YT.Vuntut	68.35667	-139.2183	1	FALSE
+58	alas_BABY373	alas_BABY373	alas_BABY373-CA.YT.Daadazii	unassigned		alas	CA.YT.Daadazii	67.7763278	-136.681672	1	FALSE
+59	alas_BABY3796	alas_BABY3796	alas_BABY3796-US.AK.WrangellStElias	unassigned		alas	US.AK.WrangellStElias	62.42139	-141.31	1	FALSE
+60	alas_BABY422	alas_BABY422	alas_BABY422-CA.YT.Daadazii	unassigned		alas	CA.YT.Daadazii	67.524272	-136.497368	3	FALSE
+61	alas_BABY4577	alas_BABY4577	alas_BABY4577-CA.YT.Kluane	uniform	ala-aja_YukonTerr	alas	CA.YT.Kluane	61.70903	-140.32258	3	TRUE
+62	alas_BABY50	alas_BABY50	alas_BABY50-CA.YT.Tombstone	uniform	drummondii_AK-YT	drum	CA.YT.Tombstone	64.7500694	-138.719391	3	TRUE
+63	alas_BABY6558	alas_BABY6558	alas_BABY6558-CA.YT.Ivvavik	unassigned		alas	CA.YT.Ivvavik	69.02162	-140.61177	3	FALSE
+64	alas_DW640	alas_DW640	alas_DW640-US.AK.Inter.Steese	uniform	alaskensis_Alaska	alas	US.AK.Inter.Steese	65.480409	-145.4189702	AK2019	TRUE
+65	alas_DW641	alas_DW641	alas_DW641-US.AK.Inter.Steese	uniform	alaskensis_Alaska	alas	US.AK.Inter.Steese	65.480409	-145.4189702	AK2019	TRUE
+66	alas_DW645	alas_DW645	alas_DW645-US.AK.Inter.WickDome	unassigned		alas	US.AK.Inter.WickDome	65.2173558	-148.0593679	AK2019	FALSE
+67	alas_DW646	alas_DW646	alas_DW646-US.AK.Inter.WickDome	uniform	alaskensis_Alaska	alas	US.AK.Inter.WickDome	65.2173558	-148.0593679	AK2019	TRUE
+68	alas_DW651	alas_DW651	alas_DW651-US.AK.Inter.Steese	unassigned		alas	US.AK.Inter.Steese	65.4029432	-145.9731088	AK2019	FALSE
+69	alas_DW653	alas_DW653	alas_DW653-US.AK.Inter.Steese	uniform	alaskensis_Alaska	alas	US.AK.Inter.Steese	65.4029432	-145.9731088	AK2019	TRUE
+70	alas_ODP43138	alas_ODP43138	alas_ODP43138-CA.YT.Ogilvie	uniform	ala-aja_YukonTerr	alas	CA.YT.Ogilvie	64.633333	-138.366667	3	TRUE
+71	alas_ODP7410	alas_ODP7410	alas_ODP7410-RU.CHU.ChukchiPenkigney	admixed	xalas_Penkigney	alas	RU.CHU.ChukchiPenkigney	64.828333	-173.085	1	TRUE
+72	alas_ODP7411	alas_ODP7411	alas_ODP7411-RU.CHU.ChukchiPenkigney	unassigned		alas	RU.CHU.ChukchiPenkigney	64.828333	-173.085	1	FALSE
+73	alas_ODP7412	alas_ODP7412	alas_ODP7412-RU.CHU.ChukchiPenkigney	admixed	xalas_Penkigney	alas	RU.CHU.ChukchiPenkigney	64.828333	-173.085	1	TRUE
+74	alas_ODP7413	alas_ODP7413	alas_ODP7413-RU.CHU.ChukchiPenkigney	admixed	xalas_Penkigney	alas	RU.CHU.ChukchiPenkigney	64.828333	-173.085	1	TRUE
+75	alas_ODP7414	alas_ODP7414	alas_ODP7414-US.AK.Seward.Hwy40	unassigned		alas	US.AK.Seward.Hwy40	64.648333	-164.346667	2	FALSE
+76	alas_ODP7415	alas_ODP7415	alas_ODP7415-US.AK.Seward.Hwy40	admixed	xalas_Seward	alas	US.AK.Seward.Hwy40	64.648333	-164.346667	2	TRUE
+77	alas_ODP7424	alas_ODP7424	alas_ODP7424-US.AK.Seward.SolomonRiv	admixed	xalas_Seward	alas	US.AK.Seward.SolomonRiv	64.678333	-164.295278	2	TRUE
+78	alas_ODP7429	alas_ODP7429	alas_ODP7429-US.AK.Seward.KigluaikMts	admixed	xalas_Seward	alas	US.AK.Seward.KigluaikMts	64.933333	-164.998333	2	TRUE
+79	alas_ODP7432	alas_ODP7432	alas_ODP7432-US.AK.Seward.KigluaikMts	admixed	xalas_Seward	alas	US.AK.Seward.KigluaikMts	64.933333	-164.998333	2	TRUE
+80	alas_ODP8551	alas_ODP8551	alas_ODP8551-RU.CHU.ChukchiPenkigney	admixed	xalas_Penkigney	alas	RU.CHU.ChukchiPenkigney	64.871667	-172.666667	2	TRUE
+81	cauc_ODP43219	cauc_ODP43219	cauc_ODP43219-GE.Kazbegi	unassigned		cauc	GE.Kazbegi	42.655694	44.660222	1	FALSE
+82	cauc_ODP43221	cauc_ODP43221	cauc_ODP43221-GE.Kazbegi	unassigned		cauc	GE.Kazbegi	42.655694	44.660222	1	FALSE
+83	cauc_ODP43223	cauc_ODP43223	cauc_ODP43223-GE.Kazbegi	uniform	caucasica_Caucasus	cauc	GE.Kazbegi	42.655694	44.660222	1	TRUE
+84	cauc_ODP43226	cauc_ODP43226	cauc_ODP43226-GE.Kazbegi	uniform	caucasica_Caucasus	cauc	GE.Kazbegi	42.655694	44.660222	1	TRUE
+85	cauc_ODP7438	cauc_ODP7438	cauc_ODP7438-GE.MtskhetaMtianeti	uniform	caucasica_Caucasus	cauc	GE.MtskhetaMtianeti	42.664722	44.583333	2	TRUE
+86	cauc_ODP7452	cauc_ODP7452	cauc_ODP7452-GE.MtskhetaMtianeti	uniform	caucasica_Caucasus	cauc	GE.MtskhetaMtianeti	42.534722	44.475278	2	TRUE
+87	cren_ODP53249	cren_ODP53249	cren_ODP53249-RU.Yak.VerkhoyanskMts	uniform	crenulata_Verkhoyansk	cren	RU.Yak.VerkhoyanskMts	71.081667	127.548333	3	TRUE
+88	cren_ODP53870	cren_ODP53870	cren_ODP53870-RU.Yak.VerkhoyanskMts	uniform	crenulata_Verkhoyansk	cren	RU.Yak.VerkhoyanskMts	71.686667	127.283333	1	TRUE
+89	cren_ODP53871	cren_ODP53871	cren_ODP53871-RU.Yak.VerkhoyanskMts	uniform	crenulata_Verkhoyansk	cren	RU.Yak.VerkhoyanskMts	71.686667	127.283333	1	TRUE
+90	cren_ODP53872	cren_ODP53872	cren_ODP53872-RU.Yak.VerkhoyanskMts	uniform	crenulata_Verkhoyansk	cren	RU.Yak.VerkhoyanskMts	71.686667	127.283333	1	TRUE
+91	cren_ODP53873	cren_ODP53873	cren_ODP53873-RU.Yak.VerkhoyanskMts	unassigned		cren	RU.Yak.VerkhoyanskMts	71.686667	127.283333	1	FALSE
+92	cren_ODP7483	cren_ODP7483	cren_ODP7483-RU.Yak.VerkhoyanskMts	uniform	crenulata_Verkhoyansk	cren	RU.Yak.VerkhoyanskMts	71.686667	127.283333	1	TRUE
+93	drum_BABY3858	drum_BABY3858	drum_BABY3858-US.AK.TetlinNWR	unassigned		drum	US.AK.TetlinNWR	62.54222	-142.49222	3	FALSE
+94	drum_BABY4356	drum_BABY4356	drum_BABY4356-CA.YT.WhiteMt	uniform	drummondii_AK-YT	drum	CA.YT.WhiteMt	60.2636	-133.929556	3	TRUE
+95	drum_BABY55	drum_BABY55	drum_BABY55-CA.YT.Aishihik	admixed	xajan_SWYukon	ajan	CA.YT.Aishihik	61.003907	-137.041936	3	TRUE
+96	drum_BABY6104	drum_BABY6104	drum_BABY6104-CA.YT.Keele	unassigned		drum	CA.YT.Keele	66.98336	-140.78209	3	FALSE
+97	drum_BABY63	drum_BABY63	drum_BABY63-CA.YT.BeatonMt	uniform	drummondii_AK-YT	drum	CA.YT.BeatonMt	60.04218611	-137.0716556	3	TRUE
+98	drum_DW671	drum_DW671	drum_DW671-AK.AKmtsN	unassigned		drum	AK.AKmtsN	63.8815	-149.0346	AK2019	FALSE
+99	drum_ODP7484	drum_ODP7484	drum_ODP7484-CA.NL.HumberRv	unassigned		drum	CA.NL.HumberRv	48.987496	-57.712493	2	FALSE
+100	drum_ODP7486	drum_ODP7486	drum_ODP7486-US.AK.Chugach2	uniform	drummondii_AK-YT	drum	US.AK.Chugach2	61.25	-145.333333	2	TRUE
+101	drum_ODP7487	drum_ODP7487	drum_ODP7487-US.AK.Chugach2	unassigned		drum	US.AK.Chugach2	61.25	-145.333333	2	FALSE
+102	drum_ODP7492	drum_ODP7492	drum_ODP7492-CA.BC.Stikine	unassigned		drum	CA.BC.Stikine	58	-130	2	FALSE
+103	drum_ODP7493	drum_ODP7493	drum_ODP7493-CA.BC.Stikine	unassigned		drum	CA.BC.Stikine	58	-130	2	FALSE
+104	drum_ODP7499	drum_ODP7499	drum_ODP7499-CA.QC.Gaspesie	unassigned		drum	CA.QC.Gaspesie	49.111512	-66.508362	2	FALSE
+105	gran_ODP59146	gran_ODP59146	gran_ODP59146-RU.Yak.Chekurovka	uniform	grandis_Chekurovka	gran	RU.Yak.Chekurovka	71.058333	127.508333	1	TRUE
+106	gran_ODP59147	gran_ODP59147	gran_ODP59147-RU.Yak.Chekurovka	uniform	grandis_Chekurovka	gran	RU.Yak.Chekurovka	71.058333	127.508333	3	TRUE
+107	gran_ODP59148	gran_ODP59148	gran_ODP59148-RU.Yak.Chekurovka	uniform	grandis_Chekurovka	gran	RU.Yak.Chekurovka	71.058333	127.508333	1	TRUE
+108	gran_ODP7506	gran_ODP7506	gran_ODP7506-RU.Yak.Chekurovka	uniform	grandis_Chekurovka	gran	RU.Yak.Chekurovka	71.058333	127.508333	1	TRUE
+109	hook_BTH01	hook_BTH01	hook_BTH01-US.WY.Beartooth	unassigned		hook	US.WY.Beartooth	45.0008	-109.401	4	FALSE
+110	hook_BTH03	hook_BTH03	hook_BTH03-US.WY.Beartooth	unassigned		hook	US.WY.Beartooth	45.0008	-109.401	4	FALSE
+111	hook_DW679	hook_DW679	hook_DW679-US.CO.BoulderCo	unassigned		hook	US.CO.BoulderCo	40.0649335	-105.583441	3	FALSE
+112	hook_DW683	hook_DW683	hook_DW683-US.CO.BoulderCo	unassigned		hook	US.CO.BoulderCo	40.0649335	-105.583441	3	FALSE
+113	hook_DW684	hook_DW684	hook_DW684-US.CO.BoulderCo	unassigned		hook	US.CO.BoulderCo	40.063668	-105.584011	3	FALSE
+114	hook_DW685	hook_DW685	hook_DW685-US.CO.BoulderCo	admixed	xhook_NColorado	hook	US.CO.BoulderCo	40.063668	-105.584011	3	TRUE
+115	hook_DW689	hook_DW689	hook_DW689-US.CO.HuerfanoCo	uniform	hookeriana_CO	hook	US.CO.HuerfanoCo	37.2946299	-105.1645673	3	TRUE
+116	hook_DW690	hook_DW690	hook_DW690-US.CO.HuerfanoCo	unassigned		hook	US.CO.HuerfanoCo	37.2946299	-105.1645673	3	FALSE
+117	hook_DW695	hook_DW695	hook_DW695-US.CO.HuerfanoCo	uniform	hookeriana_CO	hook	US.CO.HuerfanoCo	37.2944789	-105.1612728	3	TRUE
+118	hook_DW697	hook_DW697	hook_DW697-US.CO.ClearCrCo	unassigned		hook	US.CO.ClearCrCo	39.6645468	-105.877378	3	FALSE
+119	hook_DW701	hook_DW701	hook_DW701-US.CO.ClearCrCo	unassigned		hook	US.CO.ClearCrCo	39.6645468	-105.877378	3	FALSE
+120	hook_DW703	hook_DW703	hook_DW703-US.CO.SummitCo	unassigned		hook	US.CO.SummitCo	39.6581443	-105.8784351	3	FALSE
+121	hook_DW705	hook_DW705	hook_DW705-US.CO.SummitCo	unassigned		hook	US.CO.SummitCo	39.3843162	-106.1001125	3	FALSE
+122	hook_DW708	hook_DW708	hook_DW708-US.CO.SummitCo	unassigned		hook	US.CO.SummitCo	39.3843162	-106.1001125	3	FALSE
+123	hook_DW709	hook_DW709	hook_DW709-US.CO.SummitCo	unassigned		hook	US.CO.SummitCo	39.3843162	-106.1001125	3	FALSE
+124	hook_DW712	hook_DW712	hook_DW712-US.CO.SummitCo	unassigned		hook	US.CO.SummitCo	39.3843162	-106.1001125	3	FALSE
+125	hook_DW725	hook_DW725	hook_DW725-US.CO.LarimerCo	admixed	xhook_NColorado	hook	US.CO.LarimerCo	40.4387982	-105.7622352	3	TRUE
+126	hook_DW732	hook_DW732	hook_DW732-US.CO.LarimerCo	admixed	xhook_NColorado	hook	US.CO.LarimerCo	40.4334125	-105.769293	3	TRUE
+127	hook_DW737	hook_DW737	hook_DW737-US.CO.LarimerCo	admixed	xhook_NColorado	hook	US.CO.LarimerCo	40.4334125	-105.769293	3	TRUE
+128	hook_GLA03	hook_GLA03	hook_GLA03-US.MT.GNP.Piegan	unassigned		hook	US.MT.GNP.Piegan	48.715	-113.696	4	FALSE
+129	hook_GLA04	hook_GLA04	hook_GLA04-US.MT.GNP.Piegan	admixed	xhook_Montana	hook	US.MT.GNP.Piegan	48.715	-113.696	4	TRUE
+130	hook_GLA05	hook_GLA05	hook_GLA05-US.MT.GNP.Piegan	admixed	xhook_Montana	hook	US.MT.GNP.Piegan	48.715	-113.696	4	TRUE
+131	hook_MED01	hook_MED01	hook_MED01-US.MT.GNP.2MedLake	admixed	xhook_Montana	hook	US.MT.GNP.2MedLake	48.4792	-113.333	4	TRUE
+132	hook_MED02	hook_MED02	hook_MED02-US.MT.GNP.2MedLake	unassigned		hook	US.MT.GNP.2MedLake	48.4792	-113.333	4	FALSE
+133	hook_MED04	hook_MED04	hook_MED04-US.MT.GNP.2MedLake	admixed	xhook_Montana	hook	US.MT.GNP.2MedLake	48.4792	-113.333	4	TRUE
+134	hook_ODP8463	hook_ODP8463	hook_ODP8463-US.CO.ParkCo	unassigned		hook	US.CO.ParkCo	39.2925	-106.169167	2	FALSE
+135	hook_ODP8464	hook_ODP8464	hook_ODP8464-US.CO.ParkCo	unassigned		hook	US.CO.ParkCo	39.2925	-106.169167	2	FALSE
+136	hook_RM14942	hook_RM14942	hook_RM14942-US.CO.SanJuanCo	uniform	hookeriana_CO	hook	US.CO.SanJuanCo	37.705271	-107.49076	3	TRUE
+137	hook_RM14945	hook_RM14945	hook_RM14945-US.CO.SanJuanCo	uniform	hookeriana_CO	hook	US.CO.SanJuanCo	37.705271	-107.49076	3	TRUE
+138	hook_RM14946	hook_RM14946	hook_RM14946-US.CO.SanJuanCo	unassigned		hook	US.CO.SanJuanCo	37.705271	-107.49076	3	FALSE
+139	hookcf_BABY426	hookcf_BABY426	hookcf_BABY426-CA.YT.Daadazii	unassigned		hookcf	CA.YT.Daadazii	67.521	-136.491038	3	FALSE
+140	hookcf_BABY8318	hookcf_BABY8318	hookcf_BABY8318-CA.YT.AnnieLake	unassigned		hookcf	CA.YT.AnnieLake	60.24374	-135.33467	3	FALSE
+141	hybr_DW638	hybr_DW638	hybr_DW638-US.AK.Inter.Steese	unassigned		hybr	US.AK.Inter.Steese	65.480409	-145.4189702	AK2019	FALSE
+142	hybr_DW656	hybr_DW656	hybr_DW656-US.AK.Inter.Steese	unassigned		hybr	US.AK.Inter.Steese	65.4029432	-145.9731088	AK2019	FALSE
+143	hybr_wdb41	hybr_wdb41	hybr_wdb41-US.AK.Inter.WickDome	unassigned		hybr	US.AK.Inter.WickDome	65.2173558	-148.0593679	AK2019	FALSE
+144	inci_BABY10073	inci_BABY10073	inci_BABY10073-CA.NT.Mackenzie	unassigned		inci	CA.NT.Mackenzie	64.57065	-128.71538	1	FALSE
+145	inci_BABY11354	inci_BABY11354	inci_BABY11354-CA.YT.Daadazii	unassigned		inci	CA.YT.Daadazii	67.517423	-136.50041	1	FALSE
+146	inci_BABY5748	inci_BABY5748	inci_BABY5748-CA.YT.Richardson	unassigned		inci	CA.YT.Richardson	67.89496	-136.50287	3	FALSE
+147	inci_BABY6523	inci_BABY6523	inci_BABY6523-CA.YT.Keele	admixed	xintg_Keele	inci	CA.YT.Keele	66.96724	-140.80138	3	TRUE
+148	inci_BABY8977	inci_BABY8977	inci_BABY8977-CA.NU.Vuntut	unassigned		inci	CA.NU.Vuntut	68.61054	-140.72762	3	FALSE
+149	inci_ODP7509	inci_ODP7509	inci_ODP7509-RU.CHU.ChukchiPenkigney	admixed	xajan_Penkigney	inci	RU.CHU.ChukchiPenkigney	64.828333	-173.085	2	TRUE
+150	inci_ODP7510	inci_ODP7510	inci_ODP7510-RU.CHU.ChukchiPenkigney	admixed	xajan_Penkigney	inci	RU.CHU.ChukchiPenkigney	64.828333	-173.085	2	TRUE
+151	inci_ODP7514	inci_ODP7514	inci_ODP7514-RU.CHU.Wrangel	unassigned		inci	RU.CHU.Wrangel	70.936667	-179.56	2	FALSE
+152	inci_ODP7518	inci_ODP7518	inci_ODP7518-US.AK.Seward.Hwy40	admixed	xajan_Seward	inci	US.AK.Seward.Hwy40	64.648333	-164.346667	2	TRUE
+153	inci_ODP7519	inci_ODP7519	inci_ODP7519-US.AK.Seward.Hwy40	admixed	xajan_Seward	inci	US.AK.Seward.Hwy40	64.648333	-164.346667	2	TRUE
+154	inci_ODP7522	inci_ODP7522	inci_ODP7522-US.AK.Anchorage	admixed	xajan_SCAlaska	inci	US.AK.Anchorage	61.036161	-149.613094	2	TRUE
+155	inci_ODP7523	inci_ODP7523	inci_ODP7523-US.AK.Anchorage	admixed	xajan_SCAlaska	inci	US.AK.Anchorage	61.036161	-149.613094	2	TRUE
+156	int_DW669	int_DW669	int_DW669-AK.AKmtsN	unassigned		int	AK.AKmtsN	63.8815	-149.0346	AK2019	FALSE
+157	int_DW673	int_DW673	int_DW673-AK.AKmtsN	unassigned		int	AK.AKmtsN	63.807009	-148.9520006	AK2019	FALSE
+158	int_DW675	int_DW675	int_DW675-AK.AKmtsN	unassigned		int	AK.AKmtsN	63.807009	-148.9520006	AK2019	FALSE
+159	intg_BABY1589	intg_BABY1589	intg_BABY1589-CA.YT.Dempster	admixed	xintg_EngDemp	intg	CA.YT.Dempster	64.8191	-138.3504	1	TRUE
+160	intg_BABY6522B	intg_BABY6522B	intg_BABY6522B-CA.YT.Keele	admixed	xintg_Keele	intg	CA.YT.Keele	66.98336	-140.78209	3	TRUE
+161	intg_ODP7461	intg_ODP7461	intg_ODP7461-GL.NW.Qaanaaq	uniform	intg_NWGL	intg	GL.NW.Qaanaaq	76.567222	-68.793333	2	TRUE
+162	intg_ODP7465	intg_ODP7465	intg_ODP7465-GL.NW.Qaanaaq	uniform	intg_NWGL	intg	GL.NW.Qaanaaq	76.567222	-68.793333	2	TRUE
+163	intg_ODP7528	intg_ODP7528	intg_ODP7528-GL.NW.Thule	uniform	intg_NWGL	intg	GL.NW.Thule	76.583333	-68.5	2	TRUE
+164	intg_ODP7529	intg_ODP7529	intg_ODP7529-GL.NW.Thule	uniform	intg_NWGL	intg	GL.NW.Thule	76.583333	-68.5	2	TRUE
+165	intg_ODP7530	intg_ODP7530	intg_ODP7530-RU.CHU.ChukchiPenkigney	admixed	xintg_Penkigney	intg	RU.CHU.ChukchiPenkigney	64.828333	-173.085	2	TRUE
+166	intg_ODP7533	intg_ODP7533	intg_ODP7533-RU.CHU.ChukchiPenkigney	admixed	xintg_Penkigney	intg	RU.CHU.ChukchiPenkigney	64.828333	-173.085	2	TRUE
+167	intg_ODP7536	intg_ODP7536	intg_ODP7536-RU.CHU.ChukchiLavrentiya	admixed	xintg_Penkigney	intg	RU.CHU.ChukchiLavrentiya	65.645	-171.225	2	TRUE
+168	intg_ODP7539	intg_ODP7539	intg_ODP7539-RU.CHU.Wrangel	unassigned		intg	RU.CHU.Wrangel	70.936667	-179.56	2	FALSE
+169	intg_ODP7542	intg_ODP7542	intg_ODP7542-US.AK.Nslope	unassigned		intg	US.AK.Nslope	70.466667	-157.416667	2	FALSE
+170	intg_ODP7544	intg_ODP7544	intg_ODP7544-US.AK.Nslope	unassigned		intg	US.AK.Nslope	70.466667	-157.416667	2	FALSE
+171	intg_ODP7546	intg_ODP7546	intg_ODP7546-US.AK.Seward.Hwy40	admixed	xintg_Seward	intg	US.AK.Seward.Hwy40	64.648333	-164.346667	2	TRUE
+172	intg_ODP7554	intg_ODP7554	intg_ODP7554-GL.W.Ilulissat	uniform	integrifolia_Ilulissat	intg	GL.W.Ilulissat	70.616667	-51.958056	2	TRUE
+173	intg_ODP7555	intg_ODP7555	intg_ODP7555-GL.W.Ilulissat	uniform	integrifolia_Ilulissat	intg	GL.W.Ilulissat	70.616667	-51.958056	2	TRUE
+174	intg_ODP7559	intg_ODP7559	intg_ODP7559-GL.W.Ilulissat	uniform	integrifolia_Ilulissat	intg	GL.W.Ilulissat	70.616667	-51.958056	2	TRUE
+175	intg_ODP7568	intg_ODP7568	intg_ODP7568-GL.W.Upernavik	uniform	integrifolia_Upernavik	intg	GL.W.Upernavik	73.373056	-56.049722	2	TRUE
+176	intg_ODP7569	intg_ODP7569	intg_ODP7569-GL.W.Upernavik	uniform	integrifolia_Upernavik	intg	GL.W.Upernavik	73.373056	-56.049722	2	TRUE
+177	intg_ODP7571	intg_ODP7571	intg_ODP7571-GL.W.Upernavik	uniform	integrifolia_Upernavik	intg	GL.W.Upernavik	73.373056	-56.049722	2	TRUE
+178	intg_ODP7579	intg_ODP7579	intg_ODP7579-CA.NU.DepotBay	unassigned		intg	CA.NU.DepotBay	72.933333	-94.23	2	FALSE
+179	intg_ODP7599	intg_ODP7599	intg_ODP7599-CA.NT.Inuvik	unassigned		intg	CA.NT.Inuvik	68.326025	-133.611165	2	FALSE
+180	intg_ODP7604	intg_ODP7604	intg_ODP7604-CA.NT.Inuvik	unassigned		intg	CA.NT.Inuvik	68.326025	-133.611165	2	FALSE
+181	intg_ODP7620	intg_ODP7620	intg_ODP7620-GL.S.Narsarsuaq	unassigned		intg	GL.S.Narsarsuaq	61.181278	-45.374417	2	FALSE
+182	intg_ODP7623	intg_ODP7623	intg_ODP7623-GL.S.Narsarsuaq	unassigned		intg	GL.S.Narsarsuaq	61.181278	-45.374417	2	FALSE
+183	intg_ODP7629	intg_ODP7629	intg_ODP7629-GL.W.Nuuk	unassigned		intg	GL.W.Nuuk	64.153778	-51.679222	2	FALSE
+184	intg_ODP7638	intg_ODP7638	intg_ODP7638-US.AK.Seward.KigluaikMts	admixed	xintg_Seward	intg	US.AK.Seward.KigluaikMts	64.916667	-164.966667	2	TRUE
+185	intg_ODP7640	intg_ODP7640	intg_ODP7640-US.AK.Seward.KigluaikMts	admixed	xintg_Seward	intg	US.AK.Seward.KigluaikMts	64.916667	-164.966667	2	TRUE
+186	intg_ODP7643	intg_ODP7643	intg_ODP7643-CA.BC.Engineer	admixed	xintg_EngDemp	intg	CA.YT.Engineer	65.363733	-138.311174	2	TRUE
+187	intg_ODP7644	intg_ODP7644	intg_ODP7644-CA.BC.Engineer	admixed	xintg_EngDemp	intg	CA.YT.Engineer	65.363733	-138.311174	2	TRUE
+188	intg_ODP7653	intg_ODP7653	intg_ODP7653-CA.NU.Baffin	unassigned		intg	CA.NU.Baffin	63.75	-68.51	2	FALSE
+189	intg_ODP7656	intg_ODP7656	intg_ODP7656-CA.NU.Baffin	unassigned		intg	CA.NU.Baffin	63.75	-68.51	2	FALSE
+190	intg_ODP7658	intg_ODP7658	intg_ODP7658-CA.NL.EddieCove	uniform	integrifolia_ECanada	intg	CA.NL.EddieCove	50.753	-57.187	2	TRUE
+191	intg_ODP7659	intg_ODP7659	intg_ODP7659-CA.NL.EddieCove	uniform	integrifolia_ECanada	intg	CA.NL.EddieCove	50.753	-57.187	2	TRUE
+192	intg_ODP8653	intg_ODP8653	intg_ODP8653-CA.QC.Gaspesie	uniform	integrifolia_ECanada	intg	CA.QC.Gaspesie	48.8985	-64.37273	3	TRUE
+193	intgsyl_BABY10075	intgsyl_BABY10075	intgsyl_BABY10075-CA.NT.Mackenzie	unassigned		intgsyl	CA.NT.Mackenzie	64.57065	-128.71538	1	FALSE
+194	intgsyl_BABY5065	intgsyl_BABY5065	intgsyl_BABY5065-CA.YT.Shingle	unassigned		intgsyl	CA.YT.Shingle	69.00361754	-137.5110351	3	FALSE
+195	intgsyl_BABY8811	intgsyl_BABY8811	intgsyl_BABY8811-CA.NU.Victoria	unassigned		intgsyl	CA.NU.Victoria	69.15651	-104.91067	3	FALSE
+196	intgsylcan_BABY4355	intgsylcan_BABY4355	intgsylcan_BABY4355-CA.YT.WhiteMt	unassigned		intgsylcan	CA.YT.WhiteMt	60.2636	-133.929556	3	FALSE
+197	intxala_BABY6522A	intxala_BABY6522A	intxala_BABY6522A-CA.YT.Keele	admixed	xintg_Keele	intxala	CA.YT.Keele	66.98336	-140.78209	3	TRUE
+198	octo_ABI01	octo_ABI01	octo_ABI01-SE.Abisko	admixed	xocto_Abisko	octo	SE.Abisko	68.363	18.718	4	TRUE
+199	octo_ABI02	octo_ABI02	octo_ABI02-SE.Abisko	admixed	xocto_Abisko	octo	SE.Abisko	68.363	18.718	4	TRUE
+200	octo_ABI03	octo_ABI03	octo_ABI03-SE.Abisko	admixed	xocto_Abisko	octo	SE.Abisko	68.363	18.718	4	TRUE
+201	octo_AKU01	octo_AKU01	octo_AKU01-IS.NE.Akureyri	uniform	octo_NEIceland	octo	IS.NE.Akureyri	65.9625	-18.8237	4	TRUE
+202	octo_AKU02	octo_AKU02	octo_AKU02-IS.NE.Akureyri	unassigned		octo	IS.NE.Akureyri	65.9625	-18.8237	4	FALSE
+203	octo_AKU03	octo_AKU03	octo_AKU03-IS.NE.Akureyri	uniform	octo_NEIceland	octo	IS.NE.Akureyri	65.9625	-18.8237	4	TRUE
+204	octo_ANE01	octo_ANE01	octo_ANE01-FR.Pyrenees.Atl	uniform	octo_Pyrenees	octo	FR.Pyrenees.Atl	42.79887	-0.43303	4	TRUE
+205	octo_ANE02	octo_ANE02	octo_ANE02-FR.Pyrenees.Atl	uniform	octo_Pyrenees	octo	FR.Pyrenees.Atl	42.79887	-0.43303	4	TRUE
+206	octo_BAK01	octo_BAK01	octo_BAK01-MK.SarPlanina	admixed	xocto_StaraSar	octo	MK.SarPlanina	41.9878	20.8083	4	TRUE
+207	octo_BAK02	octo_BAK02	octo_BAK02-MK.SarPlanina	admixed	xocto_StaraSar	octo	MK.SarPlanina	41.9878	20.8083	4	TRUE
+208	octo_BOB06	octo_BOB06	octo_BOB06-BG.Stara	unassigned		octo	BG.Stara	42.7906	24.5417	4	FALSE
+209	octo_BOB13	octo_BOB13	octo_BOB13-BG.Stara	unassigned		octo	BG.Stara	42.7906	24.5417	4	FALSE
+210	octo_CHVD23502	octo_CHVD23502	octo_CHVD23502-CH.Vaud	uniform	octo_French_Alps	octo	CH.Vaud	46.47	7.13	4	TRUE
+211	octo_CHVD23508	octo_CHVD23508	octo_CHVD23508-CH.Vaud	unassigned		octo	CH.Vaud	46.47	7.13	4	FALSE
+212	octo_EA8946-201	octo_EA8946-201	octo_EA8946-201-AT.Hohe	unassigned		octo	AT.Hohe	47.39555556	10.00027778	4	FALSE
+213	octo_EA8946-205	octo_EA8946-205	octo_EA8946-205-AT.Hohe	unassigned		octo	AT.Hohe	47.39555556	10.00027778	4	FALSE
+214	octo_EA8946-206	octo_EA8946-206	octo_EA8946-206-AT.Hohe	unassigned		octo	AT.Hohe	47.39555556	10.00027778	4	FALSE
+215	octo_EA9049-301	octo_EA9049-301	octo_EA9049-301-AT.Gurktaler	admixed	xocto_Austria	octo	AT.Gurktaler	46.91414667	13.93348	4	TRUE
+216	octo_EA9049-305	octo_EA9049-305	octo_EA9049-305-AT.Gurktaler	admixed	xocto_Austria	octo	AT.Gurktaler	46.91414667	13.93348	4	TRUE
+217	octo_END01	octo_END01	octo_END01-NO.SJ.Longyearbyen	admixed	xsubi_Longyear	octo	NO.SJ.Longyearbyen	78.18875	15.78259	4	TRUE
+218	octo_END02	octo_END02	octo_END02-NO.SJ.Longyearbyen	admixed	xsubi_Longyear	octo	NO.SJ.Longyearbyen	78.18875	15.78259	4	TRUE
+219	octo_END03	octo_END03	octo_END03-NO.SJ.Longyearbyen	admixed	xsubi_Longyear	octo	NO.SJ.Longyearbyen	78.18875	15.78259	4	TRUE
+220	octo_FAE01	octo_FAE01	octo_FAE01-DK.FO.Eysturoy	uniform	octo_Faroe	octo	DK.FO.Eysturoy	62.296929	7.013205	4	TRUE
+221	octo_FAE03	octo_FAE03	octo_FAE03-DK.FO.Eysturoy	uniform	octo_Faroe	octo	DK.FO.Eysturoy	62.296929	7.013205	4	TRUE
+222	octo_FAE05	octo_FAE05	octo_FAE05-DK.FO.Eysturoy	uniform	octo_Faroe	octo	DK.FO.Eysturoy	62.296929	7.013205	4	TRUE
+223	octo_GAV01	octo_GAV01	octo_GAV01-FR.Pyrenees.Cent	uniform	octo_Pyrenees	octo	FR.Pyrenees.Cent	42.7007	-0.0032	4	TRUE
+224	octo_GAV07	octo_GAV07	octo_GAV07-FR.Pyrenees.Cent	unassigned		octo	FR.Pyrenees.Cent	42.7007	-0.0032	4	FALSE
+225	octo_HAR01	octo_HAR01	octo_HAR01-SE.Harjedalen	admixed	xocto_Harjedalen	octo	SE.Harjedalen	62.5639	12.2803	4	TRUE
+226	octo_HAR02	octo_HAR02	octo_HAR02-SE.Harjedalen	admixed	xocto_Harjedalen	octo	SE.Harjedalen	62.5639	12.2803	4	TRUE
+227	octo_HAR03	octo_HAR03	octo_HAR03-SE.Harjedalen	admixed	xocto_Harjedalen	octo	SE.Harjedalen	62.5639	12.2803	4	TRUE
+228	octo_IZO01	octo_IZO01	octo_IZO01-FR.HautesAlps	unassigned		octo	FR.HautesAlps	44.8081	6.7372	4	FALSE
+229	octo_IZO02	octo_IZO02	octo_IZO02-FR.HautesAlps	unassigned		octo	FR.HautesAlps	44.8081	6.7372	4	FALSE
+230	octo_IZO03	octo_IZO03	octo_IZO03-FR.HautesAlps	uniform	octo_French_Alps	octo	FR.HautesAlps	44.8081	6.7372	4	TRUE
+231	octo_JAT01	octo_JAT01	octo_JAT01-SK.BelanskeTatry	unassigned		octo	SK.BelanskeTatry	49.2367	20.2564	4	FALSE
+232	octo_JAT08	octo_JAT08	octo_JAT08-SK.BelanskeTatry	uniform	octo_WCarpathians	octo	SK.BelanskeTatry	49.2367	20.2564	4	TRUE
+233	octo_JOT02	octo_JOT02	octo_JOT02-NO.Jotunheimen	admixed	xocto_SNorway	octo	NO.Jotunheimen	61.642	8.0603	4	TRUE
+234	octo_JOT03	octo_JOT03	octo_JOT03-NO.Jotunheimen	unassigned		octo	NO.Jotunheimen	61.642	8.0603	4	FALSE
+235	octo_JOT04	octo_JOT04	octo_JOT04-NO.Jotunheimen	admixed	xocto_SNorway	octo	NO.Jotunheimen	61.642	8.0603	4	TRUE
+236	octo_KOL02	octo_KOL02	octo_KOL02-RU.KhibynyMts	unassigned		octo	RU.KhibynyMts	67.64199	33.65208	4	FALSE
+237	octo_KOL03	octo_KOL03	octo_KOL03-RU.KhibynyMts	unassigned		octo	RU.KhibynyMts	67.64709	33.65179	4	FALSE
+238	octo_KOL04	octo_KOL04	octo_KOL04-RU.KhibynyMts	unassigned		octo	RU.KhibynyMts	67.64709	33.65179	4	FALSE
+239	octo_KVA05	octo_KVA05	octo_KVA05-ME.Komovi	admixed	xocto_KomProk	octo	ME.Komovi	42.6972	19.6742	4	TRUE
+240	octo_KVA12	octo_KVA12	octo_KVA12-ME.Komovi	admixed	xocto_KomProk	octo	ME.Komovi	42.6972	19.6742	4	TRUE
+241	octo_KVA19	octo_KVA19	octo_KVA19-ME.Komovi	admixed	xocto_KomProk	octo	ME.Komovi	42.6972	19.6742	4	TRUE
+242	octo_MEN05	octo_MEN05	octo_MEN05-SK.Tatry	unassigned		octo	SK.Tatry	49.1719	20.0628	4	FALSE
+243	octo_MEN13	octo_MEN13	octo_MEN13-SK.Tatry	unassigned		octo	SK.Tatry	49.1719	20.0628	4	FALSE
+244	octo_ODP26005	octo_ODP26005	octo_ODP26005-NO.Oppland	admixed	xocto_SNorway	octo	NO.Oppland	61.641583	8.060472	3	TRUE
+245	octo_ODP43158	octo_ODP43158	octo_ODP43158-RO.S.CaraimanMt	uniform	octo_Caraiman	octo	RO.S.CaraimanMt	45.412778	25.490833	3	TRUE
+246	octo_ODP43161	octo_ODP43161	octo_ODP43161-RO.S.CaraimanMt	uniform	octo_Caraiman	octo	RO.S.CaraimanMt	45.412778	25.490833	3	TRUE
+247	octo_ODP43166	octo_ODP43166	octo_ODP43166-PL.TatraMts	uniform	octo_WCarpathians	octo	PL.TatraMts	49.244444	19.913056	1	TRUE
+248	octo_ODP43168	octo_ODP43168	octo_ODP43168-PL.TatraMts	unassigned		octo	PL.TatraMts	49.244444	19.913056	1	FALSE
+249	octo_ODP43172	octo_ODP43172	octo_ODP43172-PL.TatraMts	unassigned		octo	PL.TatraMts	49.244444	19.913056	3	FALSE
+250	octo_ODP43175	octo_ODP43175	octo_ODP43175-PL.TatraMts	unassigned		octo	PL.TatraMts	49.244444	19.913056	1	FALSE
+251	octo_ODP43180	octo_ODP43180	octo_ODP43180-RU.Komi	uniform	subincisa_Komi	octo	RU.Komi	65.341	60.712	1	TRUE
+252	octo_ODP43187	octo_ODP43187	octo_ODP43187-NO.SJ.NyFriesland	unassigned		octo	NO.SJ.NyFriesland	79.127408	16.169375	3	FALSE
+253	octo_ODP43200	octo_ODP43200	octo_ODP43200-IT.Abruzzo	unassigned		octo	IT.Abruzzo	42.100278	14.059167	3	FALSE
+254	octo_ODP43206	octo_ODP43206	octo_ODP43206-IT.Abruzzo	unassigned		octo	IT.Abruzzo	42.100278	14.059167	1	FALSE
+255	octo_ODP43208	octo_ODP43208	octo_ODP43208-RU.Taymyr.Khatanga	admixed	xsubi_ETaymyr	octo	RU.Taymyr.Khatanga	71.969722	102.574167	1	TRUE
+256	octo_ODP43228	octo_ODP43228	octo_ODP43228-NO.SJ.WedelJarlsberg	unassigned		octo	NO.SJ.WedelJarlsberg	77.561111	15.001303	1	FALSE
+257	octo_ODP43229	octo_ODP43229	octo_ODP43229-RU.Nenets	unassigned		octo	RU.Nenets	68.336	53.3	3	FALSE
+258	octo_ODP43232	octo_ODP43232	octo_ODP43232-RU.Nenets	unassigned		octo	RU.Nenets	68.336	53.3	1	FALSE
+259	octo_ODP43241	octo_ODP43241	octo_ODP43241-RU.YamaloNenets	unassigned		octo	RU.YamaloNenets	66.841	65.5	1	FALSE
+260	octo_ODP43245	octo_ODP43245	octo_ODP43245-RU.YamaloNenets	uniform	subincisa_Komi	octo	RU.YamaloNenets	66.841	65.5	1	TRUE
+261	octo_ODP43247	octo_ODP43247	octo_ODP43247-RU.YamaloNenets	uniform	subincisa_Komi	octo	RU.YamaloNenets	66.841	65.5	3	TRUE
+262	octo_ODP7796	octo_ODP7796	octo_ODP7796-FR.Pyrenees.Cent	unassigned		octo	FR.Pyrenees.Cent	42.812052	-0.430108	1	FALSE
+263	octo_ODP7797	octo_ODP7797	octo_ODP7797-FR.Pyrenees.Cent	uniform	octo_Pyrenees	octo	FR.Pyrenees.Cent	42.812052	-0.430108	1	TRUE
+264	octo_ODP7815	octo_ODP7815	octo_ODP7815-AT.Karnten	admixed	xocto_Austria	octo	AT.Karnten	46.438889	14.299167	2	TRUE
+265	octo_ODP7830	octo_ODP7830	octo_ODP7830-NO.SJ.WedelJarlsberg	uniform	subincisa_Svalbard	octo	NO.SJ.WedelJarlsberg	77.561111	15.001303	2	TRUE
+266	octo_ODP7879	octo_ODP7879	octo_ODP7879-NO.SJ.James1	unassigned		octo	NO.SJ.James1	78.6726	14.8364	1	FALSE
+267	octo_ODP7912	octo_ODP7912	octo_ODP7912-NO.SJ.NyFriesland	uniform	subincisa_Svalbard	octo	NO.SJ.NyFriesland	79.127408	16.169375	2	TRUE
+268	octo_ODP7937	octo_ODP7937	octo_ODP7937-NO.SJ.Andree	unassigned		octo	NO.SJ.Andree	79.63	14.12	1	FALSE
+269	octo_ODP7943	octo_ODP7943	octo_ODP7943-NO.SJ.Andree	unassigned		octo	NO.SJ.Andree	79.63	14.12	1	FALSE
+270	octo_ODP7950	octo_ODP7950	octo_ODP7950-GL.NE.Zackenberg	unassigned		sp	GL.NE.Zackenberg	74.466667	-20.55	1	FALSE
+271	octo_ODP7956	octo_ODP7956	octo_ODP7956-GL.NE.Zackenberg	unassigned		sp	GL.NE.Zackenberg	74.466667	-20.55	1	FALSE
+272	octo_ODP7960	octo_ODP7960	octo_ODP7960-RU.Taymyr.Dikson	unassigned		octo	RU.Taymyr.Dikson	73.503611	80.660833	1	FALSE
+273	octo_ODP7964	octo_ODP7964	octo_ODP7964-RU.Taymyr.Dikson	unassigned		octo	RU.Taymyr.Dikson	73.503611	80.660833	2	FALSE
+274	octo_ODP7972	octo_ODP7972	octo_ODP7972-RU.Taymyr.Dudinka	unassigned		octo	RU.Taymyr.Dudinka	69.449444	86.204167	1	FALSE
+275	octo_ODP7975	octo_ODP7975	octo_ODP7975-RU.Taymyr.Dudinka	unassigned		octo	RU.Taymyr.Dudinka	69.449444	86.204167	1	FALSE
+276	octo_ODP7982	octo_ODP7982	octo_ODP7982-SE.Latujavagge	admixed	xocto_Abisko	octo	SE.Latujavagge	68.35	18.48	2	TRUE
+277	octo_ODP7986	octo_ODP7986	octo_ODP7986-SE.Latujavagge	admixed	xocto_Abisko	octo	SE.Latujavagge	68.35	18.48	2	TRUE
+278	octo_ODP7992	octo_ODP7992	octo_ODP7992-SE.Latujavagge	unassigned		octo	SE.Latujavagge	68.35	18.48	1	FALSE
+279	octo_ODP7994	octo_ODP7994	octo_ODP7994-UK.SCT.Glencoe	admixed	xocto_Glencoe	octo	UK.SCT.Glencoe	56.578389	-5.083306	2	TRUE
+280	octo_ODP8001	octo_ODP8001	octo_ODP8001-UK.SCT.Glencoe	admixed	xocto_Glencoe	octo	UK.SCT.Glencoe	56.578389	-5.083306	1	TRUE
+281	octo_ODP8005	octo_ODP8005	octo_ODP8005-UK.SCT.Glencoe	admixed	xocto_Glencoe	octo	UK.SCT.Glencoe	56.578389	-5.083306	2	TRUE
+282	octo_ODP8018	octo_ODP8018	octo_ODP8018-RU.N.Ural	unassigned		octo	RU.N.Ural	60.433333	59.55	1	FALSE
+283	octo_ODP8025	octo_ODP8025	octo_ODP8025-RU.N.Ural	unassigned		octo	RU.N.Ural	60.433333	59.55	1	FALSE
+284	octo_ODP8033	octo_ODP8033	octo_ODP8033-RU.YamaloNenets.S	unassigned		octo	RU.YamaloNenets.S	68.2	68.9	1	FALSE
+285	octo_ODP8036	octo_ODP8036	octo_ODP8036-RU.YamaloNenets.S	unassigned		octo	RU.YamaloNenets.S	68.2	68.9	1	FALSE
+286	octo_ODP8039	octo_ODP8039	octo_ODP8039-RU.YamaloNenets.S	unassigned		octo	RU.YamaloNenets.S	68.2	68.9	1	FALSE
+287	octo_ODP8043	octo_ODP8043	octo_ODP8043-NO.SJ.Haakon7	unassigned		octo	NO.SJ.Haakon7	78.9432	12.4391	1	FALSE
+288	octo_ODP8072	octo_ODP8072	octo_ODP8072-NO.SJ.GustavAdolf	uniform	subincisa_Svalbard	octo	NO.SJ.GustavAdolf	79.7733	21.7201	2	TRUE
+289	octo_ODP8099	octo_ODP8099	octo_ODP8099-BG.Pirin	unassigned		octo	BG.Pirin	41.75	23.4	2	FALSE
+290	octo_ODP8108	octo_ODP8108	octo_ODP8108-BG.Pirin	unassigned		octo	BG.Pirin	41.75	23.4	2	FALSE
+291	octo_ODP8109	octo_ODP8109	octo_ODP8109-RO.S.CaraimanMt	uniform	octo_Caraiman	octo	RO.S.CaraimanMt	45.412778	25.490833	2	TRUE
+292	octo_ODP8112	octo_ODP8112	octo_ODP8112-RU.Taymyr.AryNas	admixed	xsubi_ETaymyr	octo	RU.Taymyr.AryNas	72.464444	101.863611	1	TRUE
+293	octo_ODP8117	octo_ODP8117	octo_ODP8117-RU.Taymyr.AryNas	admixed	xsubi_ETaymyr	octo	RU.Taymyr.AryNas	72.464444	101.863611	1	TRUE
+294	octo_ODP8143	octo_ODP8143	octo_ODP8143-GL.E.Jameson	admixed	xocto_EGreenland	sp	GL.E.Jameson	70.745611	-22.689833	2	TRUE
+295	octo_ODP8154	octo_ODP8154	octo_ODP8154-GL.E.Jameson	admixed	xocto_EGreenland	sp	GL.E.Jameson	70.711778	-22.654583	1	TRUE
+296	octo_ODP8160	octo_ODP8160	octo_ODP8160-FR.Isere	uniform	octo_French_Alps	octo	FR.Isere	45.208333	5.975	1	TRUE
+297	octo_ODP8170	octo_ODP8170	octo_ODP8170-FR.Isere	uniform	octo_French_Alps	octo	FR.Isere	45.208333	5.975	2	TRUE
+298	octo_ODP8172	octo_ODP8172	octo_ODP8172-RO.Rodnei	uniform	octo_Rodnei	octo	RO.Rodnei	47.583333	24.633333	2	TRUE
+299	octo_ODP8175	octo_ODP8175	octo_ODP8175-RO.Rodnei	uniform	octo_Rodnei	octo	RO.Rodnei	47.583333	24.633333	2	TRUE
+300	octo_ODP8183	octo_ODP8183	octo_ODP8183-RO.Rodnei	uniform	octo_Rodnei	octo	RO.Rodnei	47.583333	24.633333	2	TRUE
+301	octo_ODP8193	octo_ODP8193	octo_ODP8193-RU.Komi	uniform	subincisa_Komi	octo	RU.Komi	65.341	60.712	2	TRUE
+302	octo_ODP8196	octo_ODP8196	octo_ODP8196-RU.YamaloNenets	unassigned		octo	RU.YamaloNenets	66.841	65.5	2	FALSE
+303	octo_ODP8206	octo_ODP8206	octo_ODP8206-NO.Oppland	admixed	xocto_SNorway	octo	NO.Oppland	61.651667	8.125	1	TRUE
+304	octo_ODP8229	octo_ODP8229	octo_ODP8229-NO.NordTrondelag	unassigned		octo	NO.NordTrondelag	65.045278	11.589444	1	FALSE
+305	octo_ODP8237	octo_ODP8237	octo_ODP8237-NO.NordTrondelag	unassigned		octo	NO.NordTrondelag	65.045278	11.589444	1	FALSE
+306	octo_ODP8244	octo_ODP8244	octo_ODP8244-NO.Hordaland	admixed	xocto_SNorway	octo	NO.Hordaland	60.607778	7.549444	1	TRUE
+307	octo_ODP8249	octo_ODP8249	octo_ODP8249-NO.Hordaland	unassigned		octo	NO.Hordaland	60.607778	7.549444	1	FALSE
+308	octo_ODP8261	octo_ODP8261	octo_ODP8261-NO.SJ.Nordensiold	admixed	xsubi_Longyear	octo	NO.SJ.Nordensiold	78.06	13.63	1	TRUE
+309	octo_ODP8269	octo_ODP8269	octo_ODP8269-NO.SJ.Nordensiold	uniform	subincisa_Svalbard	octo	NO.SJ.Nordensiold	78.163056	16.283333	1	TRUE
+310	octo_ODP8286	octo_ODP8286	octo_ODP8286-NO.SJ.Nordensiold	unassigned		octo	NO.SJ.Nordensiold	78.134722	14.995556	1	FALSE
+311	octo_ODP8297	octo_ODP8297	octo_ODP8297-NO.Finnmark	unassigned		octo	NO.Finnmark	71.075278	25.801667	1	FALSE
+312	octo_ODP8312	octo_ODP8312	octo_ODP8312-NO.SJ.Haakon7	unassigned		octo	NO.SJ.Haakon7	79.195278	11.919722	2	FALSE
+313	octo_ODP8327	octo_ODP8327	octo_ODP8327-NO.SJ.Oscar2	uniform	subincisa_Svalbard	octo	NO.SJ.Oscar2	78.906389	11.496111	2	TRUE
+314	octo_ODP8335	octo_ODP8335	octo_ODP8335-NO.SJ.Haakon7	unassigned		octo	NO.SJ.Haakon7	78.963056	12.0475	1	FALSE
+315	octo_ODP8351	octo_ODP8351	octo_ODP8351-NO.SJ.Oscar2	unassigned		octo	NO.SJ.Oscar2	78.921111	11.951111	2	FALSE
+316	octo_ODP8360	octo_ODP8360	octo_ODP8360-NO.Troms	unassigned		octo	NO.Troms	69.584444	19.009722	1	FALSE
+317	octo_ODP8365	octo_ODP8365	octo_ODP8365-NO.Troms	unassigned		octo	NO.Troms	69.584444	19.009722	1	FALSE
+318	octo_ODP8372	octo_ODP8372	octo_ODP8372-NO.Nordland	unassigned		octo	NO.Nordland	69.28	16.433333	1	FALSE
+319	octo_ODP8377	octo_ODP8377	octo_ODP8377-NO.Nordland	unassigned		octo	NO.Nordland	69.28	16.433333	1	FALSE
+320	octo_ODP8388	octo_ODP8388	octo_ODP8388-IS.NE.Akureyri	uniform	octo_NEIceland	octo	IS.NE.Akureyri	65.690222	-18.034389	2	TRUE
+321	octo_ODP8398	octo_ODP8398	octo_ODP8398-IS.W.Hvalfjordur	unassigned		octo	IS.W.Hvalfjordur	64.353056	-21.642778	1	FALSE
+322	octo_ODP8411	octo_ODP8411	octo_ODP8411-IS.W.Fjords	unassigned		octo	IS.W.Fjords	65.765778	-21.636361	2	FALSE
+323	octo_ODP8420	octo_ODP8420	octo_ODP8420-IS.W.Fjords	unassigned		octo	IS.W.Fjords	65.765778	-21.636361	1	FALSE
+324	octo_ODP8425	octo_ODP8425	octo_ODP8425-IS.NE.Hverfjall	unassigned		octo	IS.NE.Hverfjall	65.6105	-16.916861	1	FALSE
+325	octo_ODP8428	octo_ODP8428	octo_ODP8428-IS.NE.Hverfjall	uniform	octo_NEIceland	octo	IS.NE.Hverfjall	65.6105	-16.916861	1	TRUE
+326	octo_ODP8478	octo_ODP8478	octo_ODP8478-AT.Kalkapen	admixed	xocto_Austria	octo	AT.Kalkapen	47.691667	15.691667	2	TRUE
+327	octo_ODP8488	octo_ODP8488	octo_ODP8488-AT.Salzburg	unassigned		octo	AT.Salzburg	47.166667	12.846111	2	FALSE
+328	octo_OFE02	octo_OFE02	octo_OFE02-CH.Ofenpass	unassigned		octo	CH.Ofenpass	46.639	10.292	4	FALSE
+329	octo_OFE03	octo_OFE03	octo_OFE03-CH.Ofenpass	unassigned		octo	CH.Ofenpass	46.639	10.292	4	FALSE
+330	octo_PRO01	octo_PRO01	octo_PRO01-XK.Prokletije	admixed	xocto_KomProk	octo	XK.Prokletije	42.6472	20.1072	4	TRUE
+331	octo_PRO06	octo_PRO06	octo_PRO06-XK.Prokletije	admixed	xocto_KomProk	octo	XK.Prokletije	42.6472	20.1072	4	TRUE
+332	octo_Q56d04	octo_Q56d04	octo_Q56d04-RO.RetezatMic	uniform	octo_Retezat	octo	RO.RetezatMic	45.2825	22.8489	4	TRUE
+333	octo_Q56d05	octo_Q56d05	octo_Q56d05-RO.RetezatMic	uniform	octo_Retezat	octo	RO.RetezatMic	45.2825	22.8489	4	TRUE
+334	octo_Q56d11	octo_Q56d11	octo_Q56d11-RO.RetezatMic	uniform	octo_Retezat	octo	RO.RetezatMic	45.2825	22.8489	4	TRUE
+335	octo_ROZ03	octo_ROZ03	octo_ROZ03-SK.MalaFatraMts	unassigned		octo	SK.MalaFatraMts	49.2314	19.0986	4	FALSE
+336	octo_ROZ10	octo_ROZ10	octo_ROZ10-SK.MalaFatraMts	uniform	octo_WCarpathians	octo	SK.MalaFatraMts	49.2314	19.0986	4	TRUE
+337	octo_SMO11	octo_SMO11	octo_SMO11-PL.PieninyMts	uniform	octo_WCarpathians	octo	PL.PieninyMts	49.4031	20.575	4	TRUE
+338	octo_SMO12	octo_SMO12	octo_SMO12-PL.PieninyMts	uniform	octo_WCarpathians	octo	PL.PieninyMts	49.4031	20.575	4	TRUE
+339	octo_SUV10	octo_SUV10	octo_SUV10-RS.Stara	admixed	xocto_StaraSar	octo	RS.Stara	43.1858	22.1644	4	TRUE
+340	octo_SUV18	octo_SUV18	octo_SUV18-RS.Stara	admixed	xocto_StaraSar	octo	RS.Stara	43.1858	22.1644	4	TRUE
+341	octo_THV01	octo_THV01	octo_THV01-IS.Southern	uniform	octo_SIceland	octo	IS.Southern	64.3873	-20.9755	4	TRUE
+342	octo_THV03	octo_THV03	octo_THV03-IS.Southern	uniform	octo_SIceland	octo	IS.Southern	64.3873	-20.9755	4	TRUE
+343	octo_THV05	octo_THV05	octo_THV05-IS.Southern	uniform	octo_SIceland	octo	IS.Southern	64.3873	-20.9755	4	TRUE
+344	octocf_VAR01	octocf_VAR01	octocf_VAR01-NO.Varanger	admixed	xsubi_Varanger	octocf	NO.Varanger	70.3	31.01	4	TRUE
+345	octocf_VAR02	octocf_VAR02	octocf_VAR02-NO.Varanger	admixed	xsubi_Varanger	octocf	NO.Varanger	70.3	31.01	4	TRUE
+346	octocf_VAR03	octocf_VAR03	octocf_VAR03-NO.Varanger	admixed	xsubi_Varanger	octocf	NO.Varanger	70.3	31.01	4	TRUE
+347	oxyd_ODP43145	oxyd_ODP43145	oxyd_ODP43145-RU.AltaiRep	uniform	oxyodonta_Altai	oxyd	RU.AltaiRep	50.330556	87.736111		TRUE
+348	oxyd_ODP43147	oxyd_ODP43147	oxyd_ODP43147-RU.AltaiRep	uniform	oxyodonta_Altai	oxyd	RU.AltaiRep	50.330556	87.736111	1	TRUE
+349	oxyd_ODP43150	oxyd_ODP43150	oxyd_ODP43150-RU.AltaiRep	uniform	oxyodonta_Altai	oxyd	RU.AltaiRep	50.330556	87.736111	1	TRUE
+350	oxyd_ODP43154	oxyd_ODP43154	oxyd_ODP43154-RU.AltaiRep	uniform	oxyodonta_Altai	oxyd	RU.AltaiRep	50.330556	87.736111	1	TRUE
+351	oxyd_ODP8546	oxyd_ODP8546	oxyd_ODP8546-RU.AltaiRep	uniform	oxyodonta_Altai	oxyd	RU.AltaiRep	50.330556	87.736111	1	TRUE
+352	oxydcf_SAY02	oxydcf_SAY02	oxydcf_SAY02-RU.EastSayanMts	admixed	xoxyd_Sayan	oxydcf	RU.EastSayanMts	51.9455	102.440022	4	TRUE
+353	oxydcf_SAY05	oxydcf_SAY05	oxydcf_SAY05-RU.EastSayanMts	admixed	xoxyd_Sayan	oxydcf	RU.EastSayanMts	51.9455	102.440022	4	TRUE
+354	oxydcf_SAY09	oxydcf_SAY09	oxydcf_SAY09-RU.EastSayanMts	admixed	xoxyd_Sayan	oxydcf	RU.EastSayanMts	51.9455	102.440022	4	TRUE
+355	punc_ODP53237	punc_ODP53237	punc_ODP53237-RU.CHU.Anadyr	admixed	xpunc_Anadyr	punc	RU.CHU.Anadyr	64.6165	177.152883	3	TRUE
+356	punc_ODP53362	punc_ODP53362	punc_ODP53362-RU.CHU.Anadyr	admixed	xpunc_Anadyr	punc	RU.CHU.Anadyr	64.6165	177.152883	3	TRUE
+357	punc_ODP53628	punc_ODP53628	punc_ODP53628-RU.Yak.Tiksi	uniform	punctata_Yakutia	punc	RU.Yak.Tiksi	71.6375	128.856667	3	TRUE
+358	punc_ODP53651	punc_ODP53651	punc_ODP53651-RU.Yak.Sokol	uniform	punctata_Yakutia	punc	RU.Yak.Sokol	72.401667	126.798333	3	TRUE
+359	punc_ODP53656	punc_ODP53656	punc_ODP53656-RU.Yak.VerkhoyanskMts	uniform	punctata_Yakutia	punc	RU.Yak.VerkhoyanskMts	71.06	127.589167	3	TRUE
+360	punc_ODP59151	punc_ODP59151	punc_ODP59151-RU.Yak.TitAry	uniform	punctata_Yakutia	punc	RU.Yak.TitAry	71.985833	127.0875	1	TRUE
+361	punc_ODP63371	punc_ODP63371	punc_ODP63371-RU.Yak.Chekurovka	unassigned		punc	RU.Yak.Chekurovka	71.048333	127.523333	3	FALSE
+362	punc_ODP63378	punc_ODP63378	punc_ODP63378-RU.Yak.KharaulakhMts	unassigned		punc	RU.Yak.KharaulakhMts	72.003333	127.128333	3	FALSE
+363	punc_ODP63467	punc_ODP63467	punc_ODP63467-RU.CHU.AnadyrS	admixed	xpunc_Anadyr	punc	RU.CHU.AnadyrS	64.628611	177.445278	3	TRUE
+364	punc_ODP63471	punc_ODP63471	punc_ODP63471-RU.CHU.AnadyrS	admixed	xpunc_Anadyr	punc	RU.CHU.AnadyrS	64.628611	177.445278	3	TRUE
+365	punc_ODP63475	punc_ODP63475	punc_ODP63475-RU.CHU.AnadyrS	admixed	xpunc_Anadyr	punc	RU.CHU.AnadyrS	64.628611	177.445278	3	TRUE
+366	punc_ODP8549	punc_ODP8549	punc_ODP8549-RU.CHU.ChukchiPenkigney	admixed	xalas_Penkigney	punc	RU.CHU.ChukchiPenkigney	64.871667	-172.666667	2	TRUE
+367	punc_ODP8553	punc_ODP8553	punc_ODP8553-RU.CHU.Wrangel	unassigned		punc	RU.CHU.Wrangel	70.936667	-179.56	2	FALSE
+368	punc_ODP8555	punc_ODP8555	punc_ODP8555-RU.CHU.Wrangel	unassigned		punc	RU.CHU.Wrangel	70.936667	-179.56	2	FALSE
+369	punc_ODP8560	punc_ODP8560	punc_ODP8560-RU.Yak.TitAry	uniform	punctata_Yakutia	punc	RU.Yak.TitAry	71.985833	127.0875	1	TRUE
+370	punccf_ODP8559	punccf_ODP8559	punccf_ODP8559-RU.Yak.VerkhoyanskMts	unassigned		punccf	RU.Yak.VerkhoyanskMts	71.686667	127.283333	3	FALSE
+371	sp_ODP59155	sp_ODP59155	sp_ODP59155-GL.N.Nansen	unassigned		intg	GL.N.Nansen	82.958833	-41.44875	3	FALSE
+372	sp_ODP59289	sp_ODP59289	sp_ODP59289-GL.N.Nansen	unassigned		intg	GL.N.Nansen	82.958833	-41.44875	3	FALSE
+373	sp_ODP8577	sp_ODP8577	sp_ODP8577-GL.E.Mastersvig	admixed	xocto_EGreenland	sp	GL.E.Mastersvig	72.240031	-23.906314	3	TRUE
+374	sp_ODP8583	sp_ODP8583	sp_ODP8583-GL.E.Mastersvig	admixed	xocto_EGreenland	sp	GL.E.Mastersvig	72.240031	-23.906314	3	TRUE
+375	sp_ODP8593	sp_ODP8593	sp_ODP8593-GL.N.Centrum	unassigned		intg	GL.N.Centrum	80.14495	-22.664517	3	FALSE
+376	sp_ODP8598	sp_ODP8598	sp_ODP8598-GL.N.Centrum	unassigned		intg	GL.N.Centrum	80.14495	-22.664517	3	FALSE
+377	sp_ODP8605	sp_ODP8605	sp_ODP8605-GL.NE.Borgefjord	unassigned		sp	GL.NE.Borgefjord	76.6985	-21.813683	3	FALSE
+378	sp_ODP8609	sp_ODP8609	sp_ODP8609-GL.NE.Borgefjord	unassigned		sp	GL.NE.Borgefjord	76.6985	-21.813683	3	FALSE
+379	sp_ODP8620	sp_ODP8620	sp_ODP8620-GL.NE.KCX	unassigned		sp	GL.NE.KCX	74.1	-21.333333	3	FALSE
+380	sp_ODP8646	sp_ODP8646	sp_ODP8646-US.AK.Brooks	unassigned		sp	US.AK.Brooks	68.082667	-149.564361	3	FALSE
+381	sp_ODP8648	sp_ODP8648	sp_ODP8648-US.AK.Brooks	unassigned		sp	US.AK.Brooks	68.082667	-149.564361	3	FALSE
+382	sp_POB02	sp_POB02	sp_POB02-RU.Yak.Pobeda	uniform	Pobeda	sp	RU.Yak.Pobeda	64.4517	144.938	4	TRUE
+383	sp_POB04	sp_POB04	sp_POB04-RU.Yak.Pobeda	uniform	Pobeda	sp	RU.Yak.Pobeda	64.4517	144.938	4	TRUE
+384	sp_POB10	sp_POB10	sp_POB10-RU.Yak.Pobeda	uniform	Pobeda	sp	RU.Yak.Pobeda	64.4517	144.938	4	TRUE
