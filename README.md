@@ -179,6 +179,39 @@ geographic population, and
 `results/refugia/uniform_lineage_diversity_summary.tsv`, which reports the
 mean, median, and range across uniform populations in every lineage.
 
+### 9. Polar phylogeographic map and population-genetic panels
+
+The map reproduces the component alignment of the selected K16--K19 ADMIXTURE
+solutions, ending with K19 replicate 10. The four selected Q matrices,
+`sample_order.txt`, and the active-tree order used to initialize component
+colors are stored in `data/admixture_K19/`. The supplied LGM spatial layer is
+reprojected with the samples into Arctic Polar Stereographic coordinates
+(EPSG:3995).
+
+```bash
+Rscript scripts/13_prepare_k19_map_data.R \
+  data/admixture_K19 \
+  data/Dryas_sampledata_popgen.csv \
+  results/map
+
+Rscript scripts/14_plot_phylogeography.R \
+  results/map/aligned_K19_sample_map_data.tsv \
+  results/map/aligned_K19_population_summary.tsv \
+  data/LGM_boundary/LGM_boundary.shp \
+  results/diversity \
+  results/refugia/uniform_population_refugia_metrics.tsv \
+  data/phylogeographic_regions.tsv \
+  figures/14_dryas_phylogeography.pdf
+```
+
+The sample pies are deterministically offset within `geoID`, so repeated runs
+have identical layouts. Pie outlines identify uniform, admixed, and unselected
+samples. Approximate hypothesis regions are controlled by
+`data/phylogeographic_regions.tsv`; their radii are visual annotations rather
+than inferred biological boundaries. Useful plotting controls include
+`MAP_JITTER_RADIUS_KM`, `MAP_PIE_RADIUS_KM`, `MAP_MIN_LATITUDE`,
+`FIGURE_WIDTH`, and `FIGURE_HEIGHT`.
+
 ## Statistical interpretation
 
 - SNP heterozygosity is conditional on retained variable sites and is not
