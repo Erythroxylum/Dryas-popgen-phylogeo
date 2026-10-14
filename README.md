@@ -121,6 +121,27 @@ NBOOT=1000 Rscript scripts/07_bootstrap_sequence_pi.R \
   results/diversity/filtered_sequence_pi_bootstrap_ci.tsv
 ```
 
+### 7. Pairwise sequence divergence
+
+Calculate absolute sequence divergence (dXY) from the same callable positions,
+retained variants, sample assignments, and excluded batch-associated loci used
+for sequence-level nucleotide diversity. The compressed NPZ is an intermediate
+locus-by-population-pair object and is ignored by Git.
+
+```bash
+python scripts/08_filtered_sequence_dxy.py \
+  data/s384.loci.gz \
+  data/s384_batchclean_ab25_locusFDR05_mac4_dp15-150_miss10.sorted.vcf.gz \
+  results/metadata/sample_to_population.tsv \
+  results/metadata/identifier_aliases.tsv \
+  results/divergence/filtered_sequence_pairwise_dxy \
+  --exclude-loci data/exclude_loci_strict_FDR05.txt
+
+NBOOT=1000 python scripts/09_bootstrap_sequence_dxy.py \
+  results/divergence/filtered_sequence_pairwise_dxy_per_locus.npz \
+  results/divergence/filtered_sequence_pairwise_dxy
+```
+
 `--position-base 0` is the ipyrad default assumed by the script. The script
 fails if any selected sample cannot be resolved through `sampleID`, `s384`, or
 `oldfilename`.
