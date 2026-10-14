@@ -1,0 +1,14 @@
+region_id	label	region_type	longitude	latitude	radius_km	show
+beringia	Beringia	mixed	-165	66	900	TRUE
+east_siberia	Eastern Siberia	refugium	130	66	650	TRUE
+northwest_greenland	Northwest Greenland	refugium	-70	77	400	TRUE
+caucasus	Caucasus	refugium	44	43	250	TRUE
+altai	Altai	refugium	88	50	325	TRUE
+pyrenees	Pyrenees	refugium	0.5	42.8	250	TRUE
+alps	Alps	refugium	10	46	250	TRUE
+carpathians	Carpathians	refugium	24	47	350	TRUE
+komi_urals	Komi–Urals	refugium	60	66	350	TRUE
+northern_north_america	Northern North America	contact	-130	64	700	TRUE
+taymyr	Taymyr	contact	100	74	450	TRUE
+northern_fennoscandia	Northern Fennoscandia	contact	22	69	375	TRUE
+east_greenland	East Greenland	contact	-25	71	450	TRUE
