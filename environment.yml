@@ -11,6 +11,11 @@ dependencies:
   - r-vcfr
   - r-tidyverse
   - r-patchwork
+  - r-sf
+  - r-scatterpie
+  - r-rnaturalearth
+  - r-rnaturalearthdata
+  - r-ggrepel
   - bcftools>=1.17
   - htslib
   - python>=3.11
