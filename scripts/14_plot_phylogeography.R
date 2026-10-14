@@ -33,7 +33,7 @@ output_file <- args[7]
 dir.create(dirname(output_file), recursive = TRUE, showWarnings = FALSE)
 
 pie_radius_km <- as.numeric(Sys.getenv("MAP_PIE_RADIUS_KM", "60"))
-map_min_latitude <- as.numeric(Sys.getenv("MAP_MIN_LATITUDE", "35"))
+map_min_latitude <- as.numeric(Sys.getenv("MAP_MIN_LATITUDE", "25"))
 map_width <- as.numeric(Sys.getenv("MAP_WIDTH", "10"))
 map_height <- as.numeric(Sys.getenv("MAP_HEIGHT", "10"))
 figure_width <- as.numeric(Sys.getenv("FIGURE_WIDTH", "17"))
@@ -104,10 +104,14 @@ crop_xy <- st_coordinates(st_transform(crop_points, 3995))
 map_limit <- max(sqrt(rowSums(crop_xy^2)))
 
 map_plot <- ggplot() +
-  geom_sf(data = land, fill = "#D9D9D9", color = "#B8B8B8", linewidth = 0.12) +
+  geom_sf(data = land, fill = "#F2F2F2", color = NA) +
   geom_sf(
     data = lgm, fill = "#CFE8F3", color = "#6BAED6",
     linewidth = 0.25, alpha = 0.30
+  ) +
+  # Redraw present-day national and coastal boundaries above the LGM layer.
+  geom_sf(
+    data = land, fill = NA, color = "#9E9E9E", linewidth = 0.22
   )
 
 if (nrow(regions)) {
@@ -203,7 +207,10 @@ pi_class_plot <- ggplot(pi_data, aes(x = pop_gen, y = pi, color = pop_gen)) +
   geom_jitter(width = 0.12, height = 0, size = 1.7, alpha = 0.78) +
   scale_color_manual(values = class_colors[c("uniform", "admixed")], guide = "none") +
   scale_x_discrete(labels = c(uniform = "Uniform", admixed = "Admixed")) +
-  labs(title = "Population nucleotide diversity", x = NULL, y = expression(pi)) +
+  labs(
+    title = "Population nucleotide diversity",
+    x = "Population type", y = expression(pi)
+  ) +
   theme_classic(base_size = base_size)
 
 # Within-lineage private allelic richness is defined only for lineages with at
@@ -240,7 +247,7 @@ private_plot <- ggplot(
   labs(
     title = "Locally unique variation",
     subtitle = "Uniform populations compared within lineage",
-    x = "Within-lineage private allelic richness", y = NULL
+    x = "Within-lineage private allelic richness", y = "Population"
   ) +
   theme_classic(base_size = base_size) +
   theme(axis.text.y = element_text(size = base_size * 0.66))
