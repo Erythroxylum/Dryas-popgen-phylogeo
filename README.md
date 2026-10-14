@@ -146,6 +146,39 @@ NBOOT=1000 python scripts/09_bootstrap_sequence_dxy.py \
 fails if any selected sample cannot be resolved through `sampleID`, `s384`, or
 `oldfilename`.
 
+### 8. Diversity of uniform populations within evolutionary lineages
+
+The revised `spID` column assigns each sample to an evolutionary lineage. This
+analysis retains only `pop_gen == uniform` populations. It recalculates private
+allelic richness for each geographic population relative only to the other
+uniform populations in its lineage, then combines those estimates with the
+existing population-level pi, observed heterozygosity, and expected
+heterozygosity estimates. A lineage represented by one uniform population has
+no within-lineage contrast, so its private-allele estimate is reported as
+undefined rather than zero.
+
+First rerun metadata validation so the edited `spID` values are copied into the
+sample crosswalk:
+
+```bash
+Rscript scripts/01_validate_metadata.R \
+  data/Dryas_sampledata_popgen.csv \
+  data/s384_batchclean_ab25_locusFDR05_mac4_dp15-150_miss10.sorted.vcf.gz \
+  results/metadata
+```
+
+Then run the lineage-aware calculations:
+
+```bash
+NBOOT=1000 bash scripts/12_run_refugia_statistics.sh
+```
+
+The principal outputs are
+`results/refugia/uniform_population_refugia_metrics.tsv`, which retains each
+geographic population, and
+`results/refugia/uniform_lineage_diversity_summary.tsv`, which reports the
+mean, median, and range across uniform populations in every lineage.
+
 ## Statistical interpretation
 
 - SNP heterozygosity is conditional on retained variable sites and is not
