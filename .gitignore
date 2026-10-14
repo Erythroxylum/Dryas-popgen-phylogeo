@@ -1,12 +1,31 @@
 results/
 data/*.vcf
 data/*.vcf.gz
+data/*.vcf.gz.*
 data/*.tbi
 data/*.csi
+data/*.bcf
+data/*.bcf.*
 data/*.loci
 data/*.loci.gz
+data/*.fasta
+data/*.fa
+data/*.phy
 *.RData
 *.Rhistory
-results/**/*.npz
 .DS_Store
+
+# Track result tables and figures
+!results/
+!results/**/
+
+# Exclude large derived genomic and R-object files
+results/vcf/
+results/**/*.vcf
+results/**/*.vcf.gz
+results/**/*.bcf
+results/**/*.rds
+results/**/*.RDS
+results/**/*.RData
+results/**/*.npz
 
