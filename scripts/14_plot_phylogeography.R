@@ -42,6 +42,12 @@ base_size <- as.numeric(Sys.getenv("FIGURE_BASE_SIZE", "9"))
 map_land_color <- Sys.getenv("MAP_LAND_COLOR", "#F2F2F2")
 map_sea_color <- Sys.getenv("MAP_SEA_COLOR", "#FFFFFF")
 map_border_color <- Sys.getenv("MAP_BORDER_COLOR", "#777777")
+beringia_center_lon <- as.numeric(Sys.getenv("BERINGIA_CENTER_LON", "180"))
+beringia_center_lat <- as.numeric(Sys.getenv("BERINGIA_CENTER_LAT", "65"))
+beringia_half_width_km <- as.numeric(Sys.getenv("BERINGIA_HALF_WIDTH_KM", "2250"))
+beringia_jitter_radius_km <- as.numeric(Sys.getenv("BERINGIA_JITTER_RADIUS_KM", "45"))
+beringia_map_width <- as.numeric(Sys.getenv("BERINGIA_MAP_WIDTH", "12"))
+beringia_map_height <- as.numeric(Sys.getenv("BERINGIA_MAP_HEIGHT", "9"))
 
 read_tsv <- function(path) {
   if (!file.exists(path)) stop("Input file not found: ", path)
@@ -61,7 +67,8 @@ snp_point <- read_tsv(file.path(diversity_dir, "population_snp_diversity.tsv"))
 q_columns <- grep("^Q[0-9]{2}$", names(samples), value = TRUE)
 if (length(q_columns) != 19) stop("Expected Q01--Q19 in sample map data")
 needed_sample <- c(
-  "sampleID", "pop_gen", "pop_gen_population", "x_plot", "y_plot", q_columns
+  "sampleID", "geoID", "Latitude", "Longitude", "pop_gen",
+  "pop_gen_population", "x_plot", "y_plot", q_columns
 )
 if (length(setdiff(needed_sample, names(samples)))) {
   stop("Sample map table lacks required plotting columns")
@@ -337,6 +344,161 @@ map_plot <- map_plot +
     plot.margin = margin(4, 1, 4, 4)
   )
 
+# A second map isolates Beringia in a square Lambert azimuthal equal-area
+# projection. Coordinates and deterministic within-locality offsets are
+# recalculated in this projection rather than reusing the polar-map offsets.
+beringia_crs <- st_crs(sprintf(
+  paste0(
+    "+proj=laea +lat_0=%s +lon_0=%s +datum=WGS84 ",
+    "+units=m +no_defs"
+  ),
+  beringia_center_lat, beringia_center_lon
+))
+if (!is.finite(beringia_half_width_km) || beringia_half_width_km <= 0) {
+  stop("BERINGIA_HALF_WIDTH_KM must be a positive number")
+}
+if (!is.finite(beringia_jitter_radius_km) || beringia_jitter_radius_km < 0) {
+  stop("BERINGIA_JITTER_RADIUS_KM must be a non-negative number")
+}
+
+beringia_samples_sf <- st_as_sf(
+  samples, coords = c("Longitude", "Latitude"), crs = 4326, remove = FALSE
+)
+beringia_samples_sf <- st_transform(beringia_samples_sf, beringia_crs)
+beringia_xy <- st_coordinates(beringia_samples_sf)
+samples$beringia_x <- beringia_xy[, 1]
+samples$beringia_y <- beringia_xy[, 2]
+
+beringia_group <- trimws(as.character(samples$geoID))
+missing_beringia_group <- is.na(beringia_group) | !nzchar(beringia_group)
+beringia_group[missing_beringia_group] <- paste0(
+  "sample_", samples$sampleID[missing_beringia_group]
+)
+golden_angle <- pi * (3 - sqrt(5))
+for (idx in split(seq_len(nrow(samples)), beringia_group)) {
+  idx <- idx[order(samples$sampleID[idx])]
+  n <- length(idx)
+  if (n < 2 || beringia_jitter_radius_km == 0) next
+  center_x <- mean(samples$beringia_x[idx])
+  center_y <- mean(samples$beringia_y[idx])
+  point_rank <- seq_len(n) - 1
+  radius <- beringia_jitter_radius_km * 1000 * sqrt(point_rank / max(point_rank))
+  angle <- point_rank * golden_angle
+  samples$beringia_x[idx] <- center_x + radius * cos(angle)
+  samples$beringia_y[idx] <- center_y + radius * sin(angle)
+}
+
+beringia_land <- st_transform(land, beringia_crs)
+beringia_lgm <- st_transform(lgm, beringia_crs)
+if (nrow(regions)) {
+  beringia_region_points <- st_transform(region_points, beringia_crs)
+  beringia_region_buffers <- st_buffer(
+    beringia_region_points, dist = regions$radius_km * 1000
+  )
+}
+
+beringia_plot <- ggplot() +
+  geom_sf(data = beringia_land, fill = map_land_color, color = NA) +
+  geom_sf(
+    data = beringia_lgm, fill = "#CFE8F3", color = "#6BAED6",
+    linewidth = 0.25, alpha = 0.30
+  ) +
+  geom_sf(
+    data = beringia_land, fill = NA,
+    color = map_border_color, linewidth = 0.20
+  )
+
+if (nrow(regions)) {
+  beringia_plot <- beringia_plot +
+    geom_sf(
+      data = beringia_region_buffers,
+      aes(color = region_class), fill = NA, linewidth = 0.65
+    ) +
+    scale_color_manual(
+      values = region_colors,
+      breaks = names(region_colors),
+      labels = region_labels[names(region_colors)],
+      name = "Geographic regions",
+      guide = guide_legend(ncol = 1, order = 1)
+    ) +
+    ggnewscale::new_scale_color()
+}
+
+beringia_plot <- beringia_plot + geom_point(
+  data = samples,
+  aes(x = beringia_x, y = beringia_y, color = signature),
+  alpha = 0, size = 0.01
+)
+
+for (signature_class in names(outline_colors)) {
+  z <- samples[samples$signature == signature_class, , drop = FALSE]
+  if (!nrow(z)) next
+  beringia_plot <- beringia_plot + scatterpie::geom_scatterpie(
+    data = z,
+    aes(x = beringia_x, y = beringia_y, r = pie_radius_km * 1000),
+    cols = q_columns,
+    color = outline_colors[signature_class], linewidth = 0.38,
+    alpha = 0.98
+  )
+}
+
+beringia_limit <- beringia_half_width_km * 1000
+beringia_plot <- beringia_plot +
+  scale_fill_manual(
+    values = component_colors,
+    breaks = q_columns,
+    labels = component_labels[q_columns],
+    name = "K19 ancestry component"
+  ) +
+  scale_color_manual(
+    values = outline_colors,
+    breaks = signature_levels,
+    labels = signature_labels[signature_levels],
+    name = "Diversity signature"
+  ) +
+  guides(
+    fill = guide_legend(ncol = 1, order = 3, override.aes = list(alpha = 1)),
+    color = guide_legend(
+      ncol = 1, order = 2,
+      override.aes = list(alpha = 1, size = 2.8)
+    )
+  ) +
+  coord_sf(
+    crs = beringia_crs,
+    xlim = c(-beringia_limit, beringia_limit),
+    ylim = c(-beringia_limit, beringia_limit),
+    expand = FALSE
+  ) +
+  labs(
+    title = "Beringia: ancestry and diversity signatures",
+    subtitle = paste0(
+      "Lambert azimuthal equal-area projection centered at ",
+      beringia_center_lat, " N, ", beringia_center_lon, " E"
+    ),
+    x = "Longitude", y = "Latitude",
+    caption = "Gray pie outlines indicate samples outside the focal population comparison."
+  ) +
+  theme_minimal(base_size = base_size) +
+  theme(
+    aspect.ratio = 1,
+    panel.background = element_rect(fill = map_sea_color, color = NA),
+    panel.grid.major = element_line(color = "#D2D2D2", linewidth = 0.22),
+    panel.grid.minor = element_blank(),
+    panel.border = element_rect(fill = NA, color = "black", linewidth = 0.32),
+    plot.background = element_rect(fill = map_sea_color, color = NA),
+    plot.title = element_text(face = "bold"),
+    axis.title = element_text(color = "black"),
+    axis.text = element_text(color = "black"),
+    legend.position = "left",
+    legend.box = "vertical",
+    legend.box.just = "left",
+    legend.text = element_text(size = base_size * 0.72),
+    legend.title = element_text(size = base_size * 0.80, face = "bold"),
+    legend.key.height = grid::unit(2.8, "mm"),
+    legend.key.width = grid::unit(4.2, "mm"),
+    plot.margin = margin(4, 1, 4, 4)
+  )
+
 # Population pi with its locus-bootstrap intervals.
 pi_ci_small <- pi_ci[c("population", "lower_95", "upper_95")]
 names(pi_ci_small)[-1] <- c("pi_lower_95", "pi_upper_95")
@@ -541,6 +703,14 @@ ggsave(signature_pdf, signature_plot, width = 4, height = 5, units = "in")
 map_only <- sub("\\.pdf$", "_map.pdf", output_file, ignore.case = TRUE)
 ggsave(map_only, map_plot, width = map_width, height = map_height, units = "in")
 
+beringia_map <- sub(
+  "\\.pdf$", "_beringia_map.pdf", output_file, ignore.case = TRUE
+)
+ggsave(
+  beringia_map, beringia_plot,
+  width = beringia_map_width, height = beringia_map_height, units = "in"
+)
+
 pi_class_plot <- pi_class_plot + theme(plot.margin = margin(4, 8, 4, 1))
 private_plot <- private_plot + theme(plot.margin = margin(4, 8, 4, 1))
 side_panels <- pi_class_plot / private_plot / relationship_plot +
@@ -554,6 +724,7 @@ ggsave(
 )
 
 message("Map-only figure: ", map_only)
+message("Beringia equal-area map: ", beringia_map)
 message("Composite figure: ", output_file)
 message("Refugial-signature figure: ", signature_pdf)
 message("Refugial-signature assignments: ", signature_output)
