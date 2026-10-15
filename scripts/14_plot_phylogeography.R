@@ -33,6 +33,9 @@ output_file <- args[7]
 dir.create(dirname(output_file), recursive = TRUE, showWarnings = FALSE)
 
 pie_radius_km <- as.numeric(Sys.getenv("MAP_PIE_RADIUS_KM", "60"))
+beringia_pie_radius_km <- as.numeric(Sys.getenv(
+  "BERINGIA_PIE_RADIUS_KM", as.character(pie_radius_km)
+))
 map_min_latitude <- as.numeric(Sys.getenv("MAP_MIN_LATITUDE", "25"))
 map_width <- as.numeric(Sys.getenv("MAP_WIDTH", "12"))
 map_height <- as.numeric(Sys.getenv("MAP_HEIGHT", "10"))
@@ -385,6 +388,9 @@ if (!is.finite(beringia_half_width_km) || beringia_half_width_km <= 0) {
 if (!is.finite(beringia_jitter_radius_km) || beringia_jitter_radius_km < 0) {
   stop("BERINGIA_JITTER_RADIUS_KM must be a non-negative number")
 }
+if (!is.finite(beringia_pie_radius_km) || beringia_pie_radius_km <= 0) {
+  stop("BERINGIA_PIE_RADIUS_KM must be a positive number")
+}
 
 beringia_samples_sf <- st_as_sf(
   samples, coords = c("Longitude", "Latitude"), crs = 4326, remove = FALSE
@@ -464,7 +470,7 @@ for (signature_class in names(outline_colors)) {
   if (!nrow(z)) next
   beringia_plot <- beringia_plot + scatterpie::geom_scatterpie(
     data = z,
-    aes(x = beringia_x, y = beringia_y, r = pie_radius_km * 1000),
+    aes(x = beringia_x, y = beringia_y, r = beringia_pie_radius_km * 1000),
     cols = q_columns,
     color = outline_colors[signature_class], linewidth = 0.38,
     alpha = 0.98
