@@ -218,6 +218,13 @@ Stereographic projection. Useful plotting controls include
 `MAP_LAND_COLOR`, `MAP_SEA_COLOR`, `MAP_BORDER_COLOR`, `FIGURE_WIDTH`, and
 `FIGURE_HEIGHT`.
 
+The same command also writes a square-cropped Beringia map named
+`*_beringia_map.pdf`. It uses a Lambert azimuthal equal-area projection
+centered by default at 65 N, 180 E. The crop and output can be adjusted with
+`BERINGIA_CENTER_LON`, `BERINGIA_CENTER_LAT`, `BERINGIA_HALF_WIDTH_KM`,
+`BERINGIA_JITTER_RADIUS_KM`, `BERINGIA_MAP_WIDTH`, and
+`BERINGIA_MAP_HEIGHT`. The default half-width is 2,250 km.
+
 The plotting step also writes
 `results/map/population_refugial_signatures.tsv` and a standalone
 `*_refugial_signatures.pdf` (4 x 5 inches). Drummondii is excluded from this
