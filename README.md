@@ -205,8 +205,10 @@ Rscript scripts/14_plot_phylogeography.R \
 ```
 
 The sample pies are deterministically offset within `geoID`, so repeated runs
-have identical layouts. Pie outlines identify uniform, admixed, and unselected
-samples. Approximate hypothesis regions are controlled by
+have identical layouts. Pie outlines use the four diversity-signature colors
+defined by population pi and private allelic richness; unselected samples are
+gray. The 19 component names and high-contrast colors are editable in
+`data/K19_component_labels.tsv`. Approximate hypothesis regions are controlled by
 `data/phylogeographic_regions.tsv`; their radii are visual annotations rather
 than inferred biological boundaries. The map follows the attached
 `mapmixture` style using Natural Earth 1:50m country polygons, geographic
@@ -215,6 +217,15 @@ Stereographic projection. Useful plotting controls include
 `MAP_JITTER_RADIUS_KM`, `MAP_PIE_RADIUS_KM`, `MAP_MIN_LATITUDE`,
 `MAP_LAND_COLOR`, `MAP_SEA_COLOR`, `MAP_BORDER_COLOR`, `FIGURE_WIDTH`, and
 `FIGURE_HEIGHT`.
+
+The plotting step also writes
+`results/map/population_refugial_signatures.tsv` and a standalone
+`*_refugial_signatures.pdf`. By default, medians across the 56 selected
+populations divide high from low nucleotide diversity and private allelic
+richness. These cutoffs can be replaced with `SIGNATURE_PI_CUTOFF` and
+`SIGNATURE_PRIVATE_CUTOFF`. Point labels in the standalone quadrant plot are
+controlled by `SIGNATURE_LABEL_MODE=all|extremes|none`; the `extremes` option
+uses `SIGNATURE_LABELS_PER_CLASS` labels in each quadrant.
 
 ## Statistical interpretation
 
