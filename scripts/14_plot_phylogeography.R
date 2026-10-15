@@ -34,7 +34,7 @@ dir.create(dirname(output_file), recursive = TRUE, showWarnings = FALSE)
 
 pie_radius_km <- as.numeric(Sys.getenv("MAP_PIE_RADIUS_KM", "60"))
 map_min_latitude <- as.numeric(Sys.getenv("MAP_MIN_LATITUDE", "25"))
-map_width <- as.numeric(Sys.getenv("MAP_WIDTH", "10"))
+map_width <- as.numeric(Sys.getenv("MAP_WIDTH", "12"))
 map_height <- as.numeric(Sys.getenv("MAP_HEIGHT", "10"))
 figure_width <- as.numeric(Sys.getenv("FIGURE_WIDTH", "20"))
 figure_height <- as.numeric(Sys.getenv("FIGURE_HEIGHT", "12.5"))
@@ -42,13 +42,6 @@ base_size <- as.numeric(Sys.getenv("FIGURE_BASE_SIZE", "9"))
 map_land_color <- Sys.getenv("MAP_LAND_COLOR", "#F2F2F2")
 map_sea_color <- Sys.getenv("MAP_SEA_COLOR", "#FFFFFF")
 map_border_color <- Sys.getenv("MAP_BORDER_COLOR", "#777777")
-signature_label_mode <- tolower(Sys.getenv("SIGNATURE_LABEL_MODE", "all"))
-signature_labels_per_class <- as.integer(
-  Sys.getenv("SIGNATURE_LABELS_PER_CLASS", "3")
-)
-if (!(signature_label_mode %in% c("all", "extremes", "none"))) {
-  stop("SIGNATURE_LABEL_MODE must be all, extremes, or none")
-}
 
 read_tsv <- function(path) {
   if (!file.exists(path)) stop("Input file not found: ", path)
@@ -101,9 +94,16 @@ environment_cutoff <- function(name, values) {
   value
 }
 
-pi_cutoff <- environment_cutoff("SIGNATURE_PI_CUTOFF", signature_data$pi)
+is_drummondii <- grepl("drummond", signature_data$population, ignore.case = TRUE)
+classification_reference <- signature_data[!is_drummondii, , drop = FALSE]
+if (!nrow(classification_reference)) stop("No non-drummondii populations remain")
+
+pi_cutoff <- environment_cutoff(
+  "SIGNATURE_PI_CUTOFF", classification_reference$pi
+)
 private_cutoff <- environment_cutoff(
-  "SIGNATURE_PRIVATE_CUTOFF", signature_data$private_allelic_richness
+  "SIGNATURE_PRIVATE_CUTOFF",
+  classification_reference$private_allelic_richness
 )
 
 signature_data$signature <- ifelse(
@@ -121,6 +121,7 @@ signature_data$signature <- ifelse(
     )
   )
 )
+signature_data$signature[is_drummondii] <- "not_applicable"
 
 signature_levels <- c(
   "isolated_relict", "persistent_refugium",
@@ -138,11 +139,15 @@ signature_colors <- c(
   founder_population = "#0072B2",
   secondary_contact = "#D55E00"
 )
-outline_colors <- c(signature_colors, not_selected = "#777777")
-outline_labels <- c(signature_labels, not_selected = "Not selected")
+plot_signature_colors <- c(signature_colors, not_applicable = "#777777")
+plot_signature_labels <- c(
+  signature_labels, not_applicable = "Drummondii (excluded)"
+)
+outline_colors <- c(plot_signature_colors, not_selected = "#B3B3B3")
+outline_labels <- c(plot_signature_labels, not_selected = "Not selected")
 
 signature_data$signature <- factor(
-  signature_data$signature, levels = signature_levels
+  signature_data$signature, levels = c(signature_levels, "not_applicable")
 )
 samples$signature <- as.character(signature_data$signature[
   match(samples$pop_gen_population, signature_data$population)
@@ -172,7 +177,7 @@ write.table(
   data.frame(
     metric = c("pi", "private_allelic_richness"),
     cutoff = c(pi_cutoff, private_cutoff),
-    default_rule = "median_across_selected_populations",
+    default_rule = "median_across_selected_non_drummondii_populations",
     stringsAsFactors = FALSE
   ),
   signature_threshold_output,
@@ -255,7 +260,7 @@ if (nrow(regions)) {
       breaks = names(region_colors),
       labels = region_labels[names(region_colors)],
       name = "Geographic regions",
-      guide = guide_legend(order = 1)
+      guide = guide_legend(ncol = 1, order = 1)
     ) +
     ggnewscale::new_scale_color()
 }
@@ -294,8 +299,9 @@ map_plot <- map_plot +
     name = "Diversity signature"
   ) +
   guides(
-    fill = guide_legend(ncol = 3, order = 3, override.aes = list(alpha = 1)),
-    color = guide_legend(order = 2, override.aes = list(alpha = 1, size = 2.8))
+    fill = guide_legend(ncol = 1, order = 3, override.aes = list(alpha = 1)),
+    color = guide_legend(ncol = 1, order = 2,
+                         override.aes = list(alpha = 1, size = 2.8))
   ) +
   coord_sf(
     crs = st_crs(3995),
@@ -317,9 +323,12 @@ map_plot <- map_plot +
     plot.title = element_text(face = "bold"),
     axis.title = element_text(color = "black"),
     axis.text = element_text(color = "black"),
-    legend.position = "bottom",
+    legend.position = "left",
     legend.box = "vertical",
-    legend.key.height = grid::unit(3.2, "mm"),
+    legend.box.just = "left",
+    legend.text = element_text(size = base_size * 0.72),
+    legend.title = element_text(size = base_size * 0.80, face = "bold"),
+    legend.key.height = grid::unit(2.8, "mm"),
     legend.key.width = grid::unit(4.2, "mm"),
     plot.margin = margin(4, 1, 4, 4)
   )
@@ -342,7 +351,7 @@ pi_class_plot <- ggplot(pi_data, aes(x = pop_gen, y = pi)) +
     aes(color = signature), width = 0.12, height = 0,
     size = 1.8, alpha = 0.82
   ) +
-  scale_color_manual(values = signature_colors, guide = "none") +
+  scale_color_manual(values = plot_signature_colors, guide = "none") +
   scale_x_discrete(labels = c(uniform = "Uniform", admixed = "Admixed")) +
   labs(
     title = "Population nucleotide diversity",
@@ -381,7 +390,7 @@ private_plot <- ggplot(
     linewidth = 0.55
   ) +
   geom_point(size = 1.8) +
-  scale_color_manual(values = signature_colors, guide = "none") +
+  scale_color_manual(values = plot_signature_colors, guide = "none") +
   labs(
     title = "Locally unique variation",
     subtitle = "Uniform populations compared within lineage",
@@ -417,7 +426,7 @@ relationship_plot <- ggplot(
     box.padding = 0.28, point.padding = 0.12, force = 1.4
   ) +
   scale_color_manual(
-    values = signature_colors, guide = "none"
+    values = plot_signature_colors, guide = "none"
   ) +
   labs(
     title = "Diversity and mixed ancestry",
@@ -432,31 +441,11 @@ relationship_plot <- ggplot(
     plot.margin = margin(4, 20, 4, 1)
   )
 
-# Standalone four-quadrant summary. Point color is reused in panels A--D.
-signature_data$plot_label <- ""
-if (signature_label_mode == "all") {
-  signature_data$plot_label <- gsub("_", " ", signature_data$population)
-} else if (signature_label_mode == "extremes") {
-  pi_scale <- sd(signature_data$pi)
-  private_scale <- sd(signature_data$private_allelic_richness)
-  if (!is.finite(pi_scale) || pi_scale == 0) pi_scale <- 1
-  if (!is.finite(private_scale) || private_scale == 0) private_scale <- 1
-  signature_data$distance_from_cutoffs <-
-    abs(signature_data$pi - pi_cutoff) / pi_scale +
-    abs(signature_data$private_allelic_richness - private_cutoff) / private_scale
-  for (level in signature_levels) {
-    idx <- which(as.character(signature_data$signature) == level)
-    if (!length(idx)) next
-    idx <- idx[order(signature_data$distance_from_cutoffs[idx], decreasing = TRUE)]
-    idx <- head(idx, signature_labels_per_class)
-    signature_data$plot_label[idx] <- gsub(
-      "_", " ", signature_data$population[idx]
-    )
-  }
-}
-
-x_range <- range(signature_data$pi)
-y_range <- range(signature_data$private_allelic_richness)
+# Standalone four-quadrant summary. Drummondii is excluded because it is not
+# equivalent to the ingroup populations in the refugial comparison.
+signature_plot_data <- signature_data[!is_drummondii, , drop = FALSE]
+x_range <- range(signature_plot_data$pi)
+y_range <- range(signature_plot_data$private_allelic_richness)
 x_span <- diff(x_range)
 y_span <- diff(y_range)
 if (x_span == 0) x_span <- 1
@@ -474,53 +463,27 @@ quadrant_text <- data.frame(
   hjust = c(0, 1, 0, 1),
   vjust = c(1, 1, 0, 0),
   label = c(
-    "Isolated relict\nlow pi, high private",
-    "Persistent refugium\nhigh pi, high private",
-    "Founder population\nlow pi, low private",
-    "Secondary contact\nhigh pi, low private"
+    "Isolated relict:\nlow pi, high private alleles",
+    "Persistent refugium:\nhigh pi, high private alleles",
+    "Founder population:\nlow pi, low private alleles",
+    "Secondary contact:\nhigh pi, low private alleles"
   )
 )
 
 signature_plot <- ggplot(
-  signature_data,
+  signature_plot_data,
   aes(x = pi, y = private_allelic_richness)
 ) +
-  annotate(
-    "rect", xmin = -Inf, xmax = pi_cutoff,
-    ymin = private_cutoff, ymax = Inf,
-    fill = signature_colors["isolated_relict"], alpha = 0.08
-  ) +
-  annotate(
-    "rect", xmin = pi_cutoff, xmax = Inf,
-    ymin = private_cutoff, ymax = Inf,
-    fill = signature_colors["persistent_refugium"], alpha = 0.08
-  ) +
-  annotate(
-    "rect", xmin = -Inf, xmax = pi_cutoff,
-    ymin = -Inf, ymax = private_cutoff,
-    fill = signature_colors["founder_population"], alpha = 0.08
-  ) +
-  annotate(
-    "rect", xmin = pi_cutoff, xmax = Inf,
-    ymin = -Inf, ymax = private_cutoff,
-    fill = signature_colors["secondary_contact"], alpha = 0.08
-  ) +
   geom_vline(xintercept = pi_cutoff, color = "#4D4D4D", linewidth = 0.45) +
   geom_hline(yintercept = private_cutoff, color = "#4D4D4D", linewidth = 0.45) +
   geom_point(
-    aes(color = signature, shape = pop_gen),
-    size = 2.7, alpha = 0.90
-  ) +
-  geom_text_repel(
-    aes(label = plot_label, color = signature),
-    size = 2.35, seed = 20261015, min.segment.length = 0,
-    box.padding = 0.25, point.padding = 0.15, max.overlaps = Inf,
-    show.legend = FALSE
+    aes(color = signature), shape = 21, fill = "white",
+    size = 2.6, stroke = 0.95, alpha = 1
   ) +
   geom_text(
     data = quadrant_text,
-    aes(x = x, y = y, label = label, color = signature,
-        hjust = hjust, vjust = vjust),
+    aes(x = x, y = y, label = label, hjust = hjust, vjust = vjust),
+    color = "black",
     fontface = "bold", size = 3.0, lineheight = 0.95,
     inherit.aes = FALSE, show.legend = FALSE
   ) +
@@ -530,32 +493,37 @@ signature_plot <- ggplot(
     labels = signature_labels[signature_levels],
     name = "Diversity signature"
   ) +
-  scale_shape_manual(
-    values = c(uniform = 16, admixed = 17),
-    labels = c(uniform = "Uniform", admixed = "Admixed"),
-    name = "Population assignment"
-  ) +
   labs(
     title = "Population diversity signatures",
-    subtitle = "High and low categories are separated by across-population medians",
+    subtitle = "High and low categories are separated by non-drummondii population medians",
     x = expression("Nucleotide diversity (" * pi * ")"),
     y = "Private allelic richness",
     caption = paste0(
       "Quadrants are descriptive hypotheses, not demographic-model tests. ",
-      "Private alleles are rarefied and defined relative to all selected populations."
+      "Private alleles are rarefied and defined relative to selected non-drummondii populations."
     )
   ) +
   theme_classic(base_size = base_size + 1) +
+  guides(
+    color = guide_legend(
+      ncol = 2,
+      override.aes = list(shape = 21, fill = "white", size = 2.6)
+    )
+  ) +
   theme(
     legend.position = "bottom",
     plot.title = element_text(face = "bold"),
-    plot.caption = element_text(hjust = 0, size = base_size * 0.72)
+    plot.caption = element_text(hjust = 0, size = base_size * 0.72),
+    panel.background = element_rect(fill = "white", color = NA),
+    plot.background = element_rect(fill = "white", color = NA),
+    legend.background = element_rect(fill = "white", color = NA),
+    legend.key = element_rect(fill = "white", color = NA)
   )
 
 signature_pdf <- sub(
   "\\.pdf$", "_refugial_signatures.pdf", output_file, ignore.case = TRUE
 )
-ggsave(signature_pdf, signature_plot, width = 11, height = 8.5, units = "in")
+ggsave(signature_pdf, signature_plot, width = 4, height = 5, units = "in")
 
 map_only <- sub("\\.pdf$", "_map.pdf", output_file, ignore.case = TRUE)
 ggsave(map_only, map_plot, width = map_width, height = map_height, units = "in")
