@@ -144,7 +144,10 @@ plot_signature_labels <- c(
   signature_labels, not_applicable = "Drummondii (excluded)"
 )
 outline_colors <- c(plot_signature_colors, not_selected = "#B3B3B3")
-outline_labels <- c(plot_signature_labels, not_selected = "Not selected")
+outline_labels <- c(
+  plot_signature_labels,
+  not_selected = "Outside focal population comparison"
+)
 
 signature_data$signature <- factor(
   signature_data$signature, levels = c(signature_levels, "not_applicable")
@@ -294,8 +297,8 @@ map_plot <- map_plot +
   ) +
   scale_color_manual(
     values = outline_colors,
-    breaks = names(outline_colors),
-    labels = outline_labels[names(outline_colors)],
+    breaks = signature_levels,
+    labels = signature_labels[signature_levels],
     name = "Diversity signature"
   ) +
   guides(
@@ -311,7 +314,8 @@ map_plot <- map_plot +
   labs(
     title = "Geographic structure and secondary contact in Dryas",
     subtitle = "Sample-level K19 ancestry; pale blue indicates the supplied LGM boundary layer",
-    x = "Longitude", y = "Latitude"
+    x = "Longitude", y = "Latitude",
+    caption = "Gray pie outlines indicate samples outside the focal population comparison."
   ) +
   theme_minimal(base_size = base_size) +
   theme(
@@ -444,22 +448,18 @@ relationship_plot <- ggplot(
 # Standalone four-quadrant summary. Drummondii is excluded because it is not
 # equivalent to the ingroup populations in the refugial comparison.
 signature_plot_data <- signature_data[!is_drummondii, , drop = FALSE]
-x_range <- range(signature_plot_data$pi)
-y_range <- range(signature_plot_data$private_allelic_richness)
-x_span <- diff(x_range)
-y_span <- diff(y_range)
-if (x_span == 0) x_span <- 1
-if (y_span == 0) y_span <- 1
+percentile_rank <- function(x) {
+  if (length(x) <= 1L || length(unique(x)) <= 1L) return(rep(50, length(x)))
+  100 * (rank(x, ties.method = "average") - 1) / (length(x) - 1)
+}
+signature_plot_data$pi_percentile <- percentile_rank(signature_plot_data$pi)
+signature_plot_data$private_percentile <- percentile_rank(
+  signature_plot_data$private_allelic_richness
+)
 quadrant_text <- data.frame(
   signature = factor(signature_levels, levels = signature_levels),
-  x = c(
-    x_range[1] + 0.04 * x_span, x_range[2] - 0.04 * x_span,
-    x_range[1] + 0.04 * x_span, x_range[2] - 0.04 * x_span
-  ),
-  y = c(
-    y_range[2] - 0.04 * y_span, y_range[2] - 0.04 * y_span,
-    y_range[1] + 0.04 * y_span, y_range[1] + 0.04 * y_span
-  ),
+  x = c(3, 97, 3, 97),
+  y = c(97, 97, 3, 3),
   hjust = c(0, 1, 0, 1),
   vjust = c(1, 1, 0, 0),
   label = c(
@@ -472,10 +472,10 @@ quadrant_text <- data.frame(
 
 signature_plot <- ggplot(
   signature_plot_data,
-  aes(x = pi, y = private_allelic_richness)
+  aes(x = pi_percentile, y = private_percentile)
 ) +
-  geom_vline(xintercept = pi_cutoff, color = "#4D4D4D", linewidth = 0.45) +
-  geom_hline(yintercept = private_cutoff, color = "#4D4D4D", linewidth = 0.45) +
+  geom_vline(xintercept = 50, color = "#4D4D4D", linewidth = 0.45) +
+  geom_hline(yintercept = 50, color = "#4D4D4D", linewidth = 0.45) +
   geom_point(
     aes(color = signature), shape = 21, fill = "white",
     size = 2.6, stroke = 0.95, alpha = 1
@@ -484,7 +484,7 @@ signature_plot <- ggplot(
     data = quadrant_text,
     aes(x = x, y = y, label = label, hjust = hjust, vjust = vjust),
     color = "black",
-    fontface = "bold", size = 3.0, lineheight = 0.95,
+    fontface = "bold", size = 2.6, lineheight = 0.95,
     inherit.aes = FALSE, show.legend = FALSE
   ) +
   scale_color_manual(
@@ -495,13 +495,21 @@ signature_plot <- ggplot(
   ) +
   labs(
     title = "Population diversity signatures",
-    subtitle = "High and low categories are separated by non-drummondii population medians",
-    x = expression("Nucleotide diversity (" * pi * ")"),
-    y = "Private allelic richness",
+    subtitle = "Rank-standardized diversity space; drummondii excluded",
+    x = expression("Nucleotide diversity (" * pi * ") percentile"),
+    y = "Private allelic richness percentile",
     caption = paste0(
-      "Quadrants are descriptive hypotheses, not demographic-model tests. ",
-      "Private alleles are rarefied and defined relative to selected non-drummondii populations."
+      "Descriptive hypotheses; raw-value median cutoffs exclude drummondii. ",
+      "Private alleles are rarefied."
     )
+  ) +
+  scale_x_continuous(
+    limits = c(0, 100), breaks = seq(0, 100, 25),
+    expand = expansion(mult = 0.02)
+  ) +
+  scale_y_continuous(
+    limits = c(0, 100), breaks = seq(0, 100, 25),
+    expand = expansion(mult = 0.02)
   ) +
   theme_classic(base_size = base_size + 1) +
   guides(
@@ -512,8 +520,13 @@ signature_plot <- ggplot(
   ) +
   theme(
     legend.position = "bottom",
-    plot.title = element_text(face = "bold"),
-    plot.caption = element_text(hjust = 0, size = base_size * 0.72),
+    plot.title = element_text(face = "bold", size = 10.5),
+    plot.subtitle = element_text(size = 7.5),
+    plot.caption = element_text(hjust = 0, size = 5.8),
+    axis.title = element_text(size = 8.2),
+    axis.text = element_text(size = 7),
+    legend.title = element_text(size = 7.2),
+    legend.text = element_text(size = 6.8),
     panel.background = element_rect(fill = "white", color = NA),
     plot.background = element_rect(fill = "white", color = NA),
     legend.background = element_rect(fill = "white", color = NA),
