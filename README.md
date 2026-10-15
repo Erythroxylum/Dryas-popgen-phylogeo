@@ -226,7 +226,7 @@ The same command also writes a square-cropped Beringia map named
 `*_beringia_map.pdf`. It uses a Lambert azimuthal equal-area projection
 centered by default at 65 N, 180 E. The crop and output can be adjusted with
 `BERINGIA_CENTER_LON`, `BERINGIA_CENTER_LAT`, `BERINGIA_HALF_WIDTH_KM`,
-`BERINGIA_JITTER_RADIUS_KM`, `BERINGIA_MAP_WIDTH`, and
+`BERINGIA_PIE_RADIUS_KM`, `BERINGIA_JITTER_RADIUS_KM`, `BERINGIA_MAP_WIDTH`, and
 `BERINGIA_MAP_HEIGHT`. The default half-width is 2,250 km.
 
 The plotting step also writes
