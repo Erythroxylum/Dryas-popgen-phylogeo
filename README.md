@@ -219,7 +219,10 @@ Stereographic projection. Useful plotting controls include
 `FIGURE_HEIGHT`. The supplied LGM polygons are drawn as a light-blue shaded
 area without polygon outlines, avoiding dark accumulation around small or
 overlapping polygon fragments. Their visibility can be adjusted with
-`LGM_FILL_COLOR` and `LGM_FILL_ALPHA`.
+`LGM_FILL_COLOR` and `LGM_FILL_ALPHA`. Before projection, features entirely
+south of `LGM_MIN_LATITUDE` are omitted to prevent unprojectable Southern
+Hemisphere geometries from becoming missing coordinates; the default threshold
+is 0 degrees latitude.
 
 The same command also writes a wide Beringia map named
 `*_beringia_map.pdf`. It uses a Lambert azimuthal equal-area projection
