@@ -237,15 +237,28 @@ population_data <- population_data[order(
   population_data$pop_gen, population_data$population
 ), , drop = FALSE]
 
-component_colors <- if (requireNamespace("viridisLite", quietly = TRUE)) {
-  viridisLite::turbo(22)[seq_len(19)]
-} else {
-  hcl.colors(22, "Turbo")[seq_len(19)]
+component_label_file <- file.path(
+  dirname(admixture_dir), "K19_component_labels.tsv"
+)
+if (!file.exists(component_label_file)) {
+  stop("Missing K19 component label table: ", component_label_file)
 }
+component_key <- read.delim(
+  component_label_file, check.names = FALSE, stringsAsFactors = FALSE
+)
+needed_component <- c("component", "label", "color")
+if (length(setdiff(needed_component, names(component_key)))) {
+  stop("K19_component_labels.tsv requires component, label, and color")
+}
+if (!setequal(component_key$component, q_columns)) {
+  stop("K19_component_labels.tsv must contain Q01--Q19 exactly once")
+}
+component_key <- component_key[match(q_columns, component_key$component), ]
 component_table <- data.frame(
   displayed_component = q_columns,
   original_K19_component = raw_component,
-  color = component_colors,
+  label = component_key$label,
+  color = component_key$color,
   stringsAsFactors = FALSE
 )
 
