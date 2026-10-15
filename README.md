@@ -220,12 +220,14 @@ Stereographic projection. Useful plotting controls include
 
 The plotting step also writes
 `results/map/population_refugial_signatures.tsv` and a standalone
-`*_refugial_signatures.pdf`. By default, medians across the 56 selected
+`*_refugial_signatures.pdf` (4 x 5 inches). Drummondii is excluded from this
+quadrant plot and from its default cutoffs because it is not equivalent to the
+ingroup populations in the refugial comparison; it remains visible in the map
+and side panels in gray. By default, medians across the remaining selected
 populations divide high from low nucleotide diversity and private allelic
 richness. These cutoffs can be replaced with `SIGNATURE_PI_CUTOFF` and
-`SIGNATURE_PRIVATE_CUTOFF`. Point labels in the standalone quadrant plot are
-controlled by `SIGNATURE_LABEL_MODE=all|extremes|none`; the `extremes` option
-uses `SIGNATURE_LABELS_PER_CLASS` labels in each quadrant.
+`SIGNATURE_PRIVATE_CUTOFF`. Points are unlabeled hollow circles whose outlines
+show the assigned diversity signature.
 
 ## Statistical interpretation
 
