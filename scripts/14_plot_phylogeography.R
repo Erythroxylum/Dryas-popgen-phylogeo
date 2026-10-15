@@ -45,12 +45,21 @@ base_size <- as.numeric(Sys.getenv("FIGURE_BASE_SIZE", "9"))
 map_land_color <- Sys.getenv("MAP_LAND_COLOR", "#F2F2F2")
 map_sea_color <- Sys.getenv("MAP_SEA_COLOR", "#FFFFFF")
 map_border_color <- Sys.getenv("MAP_BORDER_COLOR", "#777777")
+lgm_fill_color <- Sys.getenv("LGM_FILL_COLOR", "#BDD7E7")
+lgm_fill_alpha <- as.numeric(Sys.getenv("LGM_FILL_ALPHA", "0.70"))
 beringia_center_lon <- as.numeric(Sys.getenv("BERINGIA_CENTER_LON", "180"))
 beringia_center_lat <- as.numeric(Sys.getenv("BERINGIA_CENTER_LAT", "65"))
 beringia_half_width_km <- as.numeric(Sys.getenv("BERINGIA_HALF_WIDTH_KM", "2250"))
+beringia_half_width_x_km <- as.numeric(Sys.getenv(
+  "BERINGIA_HALF_WIDTH_X_KM", as.character(beringia_half_width_km * 1.40)
+))
+beringia_half_height_km <- as.numeric(Sys.getenv(
+  "BERINGIA_HALF_HEIGHT_KM", as.character(beringia_half_width_km * 0.80)
+))
 beringia_jitter_radius_km <- as.numeric(Sys.getenv("BERINGIA_JITTER_RADIUS_KM", "45"))
 beringia_map_width <- as.numeric(Sys.getenv("BERINGIA_MAP_WIDTH", "12"))
 beringia_map_height <- as.numeric(Sys.getenv("BERINGIA_MAP_HEIGHT", "9"))
+beringia_legend_ncol <- as.integer(Sys.getenv("BERINGIA_LEGEND_NCOL", "4"))
 
 read_tsv <- function(path) {
   if (!file.exists(path)) stop("Input file not found: ", path)
@@ -75,6 +84,9 @@ needed_sample <- c(
 )
 if (length(setdiff(needed_sample, names(samples)))) {
   stop("Sample map table lacks required plotting columns")
+}
+if (!is.finite(lgm_fill_alpha) || lgm_fill_alpha < 0 || lgm_fill_alpha > 1) {
+  stop("LGM_FILL_ALPHA must be between zero and one")
 }
 
 needed_snp <- c("population", "pop_gen", "private_allelic_richness")
@@ -254,7 +266,7 @@ map_limit <- max(sqrt(rowSums(crop_xy^2)))
 map_plot <- ggplot() +
   geom_sf(data = land, fill = map_land_color, color = NA) +
   geom_sf(
-    data = lgm, fill = "#CFE8F3", color = NA, alpha = 0.42
+    data = lgm, fill = lgm_fill_color, color = NA, alpha = lgm_fill_alpha
   ) +
   # Redraw present-day national and coastal boundaries above the LGM layer.
   geom_sf(
@@ -346,7 +358,7 @@ map_plot <- map_plot +
     plot.margin = margin(4, 1, 4, 4)
   )
 
-# A second map isolates Beringia in a square Lambert azimuthal equal-area
+# A second map isolates Beringia in a wide Lambert azimuthal equal-area
 # projection. Coordinates and deterministic within-locality offsets are
 # recalculated in this projection rather than reusing the polar-map offsets.
 beringia_crs <- st_crs(sprintf(
@@ -359,11 +371,20 @@ beringia_crs <- st_crs(sprintf(
 if (!is.finite(beringia_half_width_km) || beringia_half_width_km <= 0) {
   stop("BERINGIA_HALF_WIDTH_KM must be a positive number")
 }
+if (!is.finite(beringia_half_width_x_km) || beringia_half_width_x_km <= 0) {
+  stop("BERINGIA_HALF_WIDTH_X_KM must be a positive number")
+}
+if (!is.finite(beringia_half_height_km) || beringia_half_height_km <= 0) {
+  stop("BERINGIA_HALF_HEIGHT_KM must be a positive number")
+}
 if (!is.finite(beringia_jitter_radius_km) || beringia_jitter_radius_km < 0) {
   stop("BERINGIA_JITTER_RADIUS_KM must be a non-negative number")
 }
 if (!is.finite(beringia_pie_radius_km) || beringia_pie_radius_km <= 0) {
   stop("BERINGIA_PIE_RADIUS_KM must be a positive number")
+}
+if (is.na(beringia_legend_ncol) || beringia_legend_ncol < 1) {
+  stop("BERINGIA_LEGEND_NCOL must be a positive integer")
 }
 
 beringia_samples_sf <- st_as_sf(
@@ -405,7 +426,8 @@ if (nrow(regions)) {
 beringia_plot <- ggplot() +
   geom_sf(data = beringia_land, fill = map_land_color, color = NA) +
   geom_sf(
-    data = beringia_lgm, fill = "#CFE8F3", color = NA, alpha = 0.42
+    data = beringia_lgm,
+    fill = lgm_fill_color, color = NA, alpha = lgm_fill_alpha
   ) +
   geom_sf(
     data = beringia_land, fill = NA,
@@ -446,7 +468,8 @@ for (signature_class in names(outline_colors)) {
   )
 }
 
-beringia_limit <- beringia_half_width_km * 1000
+beringia_x_limit <- beringia_half_width_x_km * 1000
+beringia_y_limit <- beringia_half_height_km * 1000
 beringia_plot <- beringia_plot +
   scale_fill_manual(
     values = component_colors,
@@ -461,16 +484,19 @@ beringia_plot <- beringia_plot +
     name = "Diversity signature"
   ) +
   guides(
-    fill = guide_legend(ncol = 1, order = 3, override.aes = list(alpha = 1)),
+    fill = guide_legend(
+      ncol = beringia_legend_ncol, order = 3,
+      override.aes = list(alpha = 1)
+    ),
     color = guide_legend(
-      ncol = 1, order = 2,
+      ncol = min(beringia_legend_ncol, length(signature_levels)), order = 2,
       override.aes = list(alpha = 1, size = 2.8)
     )
   ) +
   coord_sf(
     crs = beringia_crs,
-    xlim = c(-beringia_limit, beringia_limit),
-    ylim = c(-beringia_limit, beringia_limit),
+    xlim = c(-beringia_x_limit, beringia_x_limit),
+    ylim = c(-beringia_y_limit, beringia_y_limit),
     expand = FALSE
   ) +
   labs(
@@ -484,7 +510,7 @@ beringia_plot <- beringia_plot +
   ) +
   theme_minimal(base_size = base_size) +
   theme(
-    aspect.ratio = 1,
+    aspect.ratio = beringia_half_height_km / beringia_half_width_x_km,
     panel.background = element_rect(fill = map_sea_color, color = NA),
     panel.grid.major = element_line(color = "#D2D2D2", linewidth = 0.22),
     panel.grid.minor = element_blank(),
@@ -493,9 +519,9 @@ beringia_plot <- beringia_plot +
     plot.title = element_text(face = "bold"),
     axis.title = element_text(color = "black"),
     axis.text = element_text(color = "black"),
-    legend.position = "left",
+    legend.position = "bottom",
     legend.box = "vertical",
-    legend.box.just = "left",
+    legend.box.just = "center",
     legend.text = element_text(size = base_size * 0.72),
     legend.title = element_text(size = base_size * 0.80, face = "bold"),
     legend.key.height = grid::unit(2.8, "mm"),
