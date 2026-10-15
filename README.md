@@ -218,14 +218,18 @@ Stereographic projection. Useful plotting controls include
 `MAP_LAND_COLOR`, `MAP_SEA_COLOR`, `MAP_BORDER_COLOR`, `FIGURE_WIDTH`, and
 `FIGURE_HEIGHT`. The supplied LGM polygons are drawn as a light-blue shaded
 area without polygon outlines, avoiding dark accumulation around small or
-overlapping polygon fragments.
+overlapping polygon fragments. Their visibility can be adjusted with
+`LGM_FILL_COLOR` and `LGM_FILL_ALPHA`.
 
-The same command also writes a square-cropped Beringia map named
+The same command also writes a wide Beringia map named
 `*_beringia_map.pdf`. It uses a Lambert azimuthal equal-area projection
 centered by default at 65 N, 180 E. The crop and output can be adjusted with
 `BERINGIA_CENTER_LON`, `BERINGIA_CENTER_LAT`, `BERINGIA_HALF_WIDTH_KM`,
-`BERINGIA_PIE_RADIUS_KM`, `BERINGIA_JITTER_RADIUS_KM`, `BERINGIA_MAP_WIDTH`, and
-`BERINGIA_MAP_HEIGHT`. The default half-width is 2,250 km.
+`BERINGIA_HALF_WIDTH_X_KM`, `BERINGIA_HALF_HEIGHT_KM`,
+`BERINGIA_PIE_RADIUS_KM`, `BERINGIA_JITTER_RADIUS_KM`, `BERINGIA_MAP_WIDTH`,
+`BERINGIA_MAP_HEIGHT`, and `BERINGIA_LEGEND_NCOL`. If only
+`BERINGIA_HALF_WIDTH_KM` is supplied, the horizontal and vertical half-extents
+default to 1.4 and 0.8 times that value, respectively, producing a wide map.
 
 The plotting step also writes
 `results/map/population_refugial_signatures.tsv` and a standalone
