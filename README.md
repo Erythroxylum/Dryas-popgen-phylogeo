@@ -227,7 +227,12 @@ and side panels in gray. By default, medians across the remaining selected
 populations divide high from low nucleotide diversity and private allelic
 richness. These cutoffs can be replaced with `SIGNATURE_PI_CUTOFF` and
 `SIGNATURE_PRIVATE_CUTOFF`. Points are unlabeled hollow circles whose outlines
-show the assigned diversity signature.
+show the assigned diversity signature. For legibility, the standalone plot
+shows percentile ranks of pi and private allelic richness rather than raw
+values. This rank standardization spreads populations across the plotting
+space without changing the raw-value median cutoffs or signature assignments.
+Gray map outlines provide geographic context for samples outside the focal
+population comparison but are omitted from the diversity-signature legend.
 
 ## Statistical interpretation
 
