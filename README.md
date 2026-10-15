@@ -216,10 +216,11 @@ graticules, and a framed projected panel, while retaining an Arctic Polar
 Stereographic projection. Useful plotting controls include
 `MAP_JITTER_RADIUS_KM`, `MAP_PIE_RADIUS_KM`, `MAP_MIN_LATITUDE`,
 `MAP_LAND_COLOR`, `MAP_SEA_COLOR`, `MAP_BORDER_COLOR`, `FIGURE_WIDTH`, and
-`FIGURE_HEIGHT`. The supplied LGM polygons are drawn as a light-blue shaded
-area without polygon outlines, avoiding dark accumulation around small or
-overlapping polygon fragments. Their visibility can be adjusted with
-`LGM_FILL_COLOR` and `LGM_FILL_ALPHA`. Before projection, features entirely
+`FIGURE_HEIGHT`. LGM polygon inputs are drawn as light-blue shaded areas using
+`LGM_FILL_COLOR` and `LGM_FILL_ALPHA`. The supplied `LGM_boundary.shp` is a
+polyline layer, so it is drawn as a blue boundary using `LGM_LINE_COLOR`,
+`LGM_LINE_WIDTH`, and `LGM_LINE_ALPHA`; a polyline cannot provide interior
+ice shading. Before projection, features entirely
 south of `LGM_MIN_LATITUDE` are omitted to prevent unprojectable Southern
 Hemisphere geometries from becoming missing coordinates; the default threshold
 is 0 degrees latitude.
