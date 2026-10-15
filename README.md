@@ -208,9 +208,13 @@ The sample pies are deterministically offset within `geoID`, so repeated runs
 have identical layouts. Pie outlines identify uniform, admixed, and unselected
 samples. Approximate hypothesis regions are controlled by
 `data/phylogeographic_regions.tsv`; their radii are visual annotations rather
-than inferred biological boundaries. Useful plotting controls include
+than inferred biological boundaries. The map follows the attached
+`mapmixture` style using Natural Earth 1:50m country polygons, geographic
+graticules, and a framed projected panel, while retaining an Arctic Polar
+Stereographic projection. Useful plotting controls include
 `MAP_JITTER_RADIUS_KM`, `MAP_PIE_RADIUS_KM`, `MAP_MIN_LATITUDE`,
-`FIGURE_WIDTH`, and `FIGURE_HEIGHT`.
+`MAP_LAND_COLOR`, `MAP_SEA_COLOR`, `MAP_BORDER_COLOR`, `FIGURE_WIDTH`, and
+`FIGURE_HEIGHT`.
 
 ## Statistical interpretation
 
