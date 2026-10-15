@@ -16,6 +16,7 @@ dependencies:
   - r-rnaturalearth
   - r-rnaturalearthdata
   - r-ggrepel
+  - r-ggnewscale
   - bcftools>=1.17
   - htslib
   - python>=3.11
