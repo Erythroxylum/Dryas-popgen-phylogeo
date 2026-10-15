@@ -216,11 +216,9 @@ graticules, and a framed projected panel, while retaining an Arctic Polar
 Stereographic projection. Useful plotting controls include
 `MAP_JITTER_RADIUS_KM`, `MAP_PIE_RADIUS_KM`, `MAP_MIN_LATITUDE`,
 `MAP_LAND_COLOR`, `MAP_SEA_COLOR`, `MAP_BORDER_COLOR`, `FIGURE_WIDTH`, and
-`FIGURE_HEIGHT`. LGM polygons are dissolved before plotting so shared and
-overlapping edges are not repeatedly drawn. `LGM_BOUNDARY_LINEWIDTH` controls
-the external boundary weight, while `LGM_MIN_OUTLINE_AREA_KM2` excludes tiny
-components from the boundary only; those components remain visible in the
-pale-blue fill.
+`FIGURE_HEIGHT`. The supplied LGM polygons are drawn as a light-blue shaded
+area without polygon outlines, avoiding dark accumulation around small or
+overlapping polygon fragments.
 
 The same command also writes a square-cropped Beringia map named
 `*_beringia_map.pdf`. It uses a Lambert azimuthal equal-area projection
