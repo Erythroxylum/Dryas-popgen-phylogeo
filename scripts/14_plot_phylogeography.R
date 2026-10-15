@@ -39,6 +39,9 @@ map_height <- as.numeric(Sys.getenv("MAP_HEIGHT", "10"))
 figure_width <- as.numeric(Sys.getenv("FIGURE_WIDTH", "17"))
 figure_height <- as.numeric(Sys.getenv("FIGURE_HEIGHT", "11"))
 base_size <- as.numeric(Sys.getenv("FIGURE_BASE_SIZE", "9"))
+map_land_color <- Sys.getenv("MAP_LAND_COLOR", "#F2F2F2")
+map_sea_color <- Sys.getenv("MAP_SEA_COLOR", "#FFFFFF")
+map_border_color <- Sys.getenv("MAP_BORDER_COLOR", "#777777")
 
 read_tsv <- function(path) {
   if (!file.exists(path)) stop("Input file not found: ", path)
@@ -67,7 +70,10 @@ region_colors <- c(
 )
 component_colors <- setNames(viridisLite::turbo(22)[seq_len(19)], q_columns)
 
-land <- rnaturalearth::ne_countries(scale = 110, returnclass = "sf")
+# Match the mapmixture basemap: Natural Earth 1:50m country polygons with
+# visible national boundaries. The plot remains in Arctic Polar Stereographic
+# coordinates so the full circum-Arctic distribution is represented evenly.
+land <- rnaturalearthdata::countries50[, "geometry"]
 land <- st_transform(st_make_valid(land), 3995)
 lgm <- st_read(lgm_file, quiet = TRUE)
 if (is.na(st_crs(lgm))) stop("LGM boundary has no coordinate reference system")
@@ -104,14 +110,14 @@ crop_xy <- st_coordinates(st_transform(crop_points, 3995))
 map_limit <- max(sqrt(rowSums(crop_xy^2)))
 
 map_plot <- ggplot() +
-  geom_sf(data = land, fill = "#F2F2F2", color = NA) +
+  geom_sf(data = land, fill = map_land_color, color = NA) +
   geom_sf(
     data = lgm, fill = "#CFE8F3", color = "#6BAED6",
     linewidth = 0.25, alpha = 0.30
   ) +
   # Redraw present-day national and coastal boundaries above the LGM layer.
   geom_sf(
-    data = land, fill = NA, color = "#9E9E9E", linewidth = 0.22
+    data = land, fill = NA, color = map_border_color, linewidth = 0.18
   )
 
 if (nrow(regions)) {
@@ -180,13 +186,18 @@ map_plot <- map_plot +
   labs(
     title = "Geographic structure and secondary contact in Dryas",
     subtitle = "Sample-level K19 ancestry; pale blue indicates the supplied LGM boundary layer",
-    x = NULL, y = NULL
+    x = "Longitude", y = "Latitude"
   ) +
-  theme_void(base_size = base_size) +
+  theme_minimal(base_size = base_size) +
   theme(
-    panel.background = element_rect(fill = "white", color = NA),
-    plot.background = element_rect(fill = "white", color = NA),
+    panel.background = element_rect(fill = map_sea_color, color = NA),
+    panel.grid.major = element_line(color = "#D2D2D2", linewidth = 0.22),
+    panel.grid.minor = element_blank(),
+    panel.border = element_rect(fill = NA, color = "black", linewidth = 0.32),
+    plot.background = element_rect(fill = map_sea_color, color = NA),
     plot.title = element_text(face = "bold"),
+    axis.title = element_text(color = "black"),
+    axis.text = element_text(color = "black"),
     legend.position = "bottom",
     legend.box = "vertical",
     legend.key.height = grid::unit(3.2, "mm"),
