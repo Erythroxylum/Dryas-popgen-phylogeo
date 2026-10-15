@@ -47,6 +47,7 @@ map_sea_color <- Sys.getenv("MAP_SEA_COLOR", "#FFFFFF")
 map_border_color <- Sys.getenv("MAP_BORDER_COLOR", "#777777")
 lgm_fill_color <- Sys.getenv("LGM_FILL_COLOR", "#BDD7E7")
 lgm_fill_alpha <- as.numeric(Sys.getenv("LGM_FILL_ALPHA", "0.70"))
+lgm_min_latitude <- as.numeric(Sys.getenv("LGM_MIN_LATITUDE", "0"))
 beringia_center_lon <- as.numeric(Sys.getenv("BERINGIA_CENTER_LON", "180"))
 beringia_center_lat <- as.numeric(Sys.getenv("BERINGIA_CENTER_LAT", "65"))
 beringia_half_width_km <- as.numeric(Sys.getenv("BERINGIA_HALF_WIDTH_KM", "2250"))
@@ -87,6 +88,10 @@ if (length(setdiff(needed_sample, names(samples)))) {
 }
 if (!is.finite(lgm_fill_alpha) || lgm_fill_alpha < 0 || lgm_fill_alpha > 1) {
   stop("LGM_FILL_ALPHA must be between zero and one")
+}
+if (!is.finite(lgm_min_latitude) || lgm_min_latitude < -90 ||
+    lgm_min_latitude > 90) {
+  stop("LGM_MIN_LATITUDE must be between -90 and 90")
 }
 
 needed_snp <- c("population", "pop_gen", "private_allelic_richness")
@@ -233,7 +238,31 @@ land <- rnaturalearthdata::countries50[, "geometry"]
 land <- st_transform(st_make_valid(land), 3995)
 lgm <- st_read(lgm_file, quiet = TRUE)
 if (is.na(st_crs(lgm))) stop("LGM boundary has no coordinate reference system")
-lgm <- st_transform(st_make_valid(lgm), 3995)
+lgm_wgs84 <- st_transform(lgm, 4326)
+lgm_ymax <- vapply(
+  st_geometry(lgm_wgs84),
+  function(g) unname(st_bbox(g)["ymax"]),
+  numeric(1)
+)
+keep_lgm <- is.finite(lgm_ymax) & lgm_ymax >= lgm_min_latitude
+lgm_wgs84 <- lgm_wgs84[keep_lgm, , drop = FALSE]
+if (!nrow(lgm_wgs84)) {
+  stop("No LGM features remain north of LGM_MIN_LATITUDE")
+}
+lgm_wgs84 <- st_make_valid(lgm_wgs84)
+lgm_geometry_types <- names(table(st_geometry_type(lgm_wgs84)))
+if (!any(lgm_geometry_types %in% c("POLYGON", "MULTIPOLYGON", "GEOMETRYCOLLECTION"))) {
+  warning(
+    "The LGM shapefile contains no polygon geometry, so an interior ice fill ",
+    "cannot be drawn. Geometry types: ", paste(lgm_geometry_types, collapse = ", ")
+  )
+}
+lgm <- st_transform(lgm_wgs84, 3995)
+message(
+  "Northern LGM features retained: ", nrow(lgm_wgs84),
+  "; geometry types: ",
+  paste(lgm_geometry_types, collapse = ", ")
+)
 
 show_region <- tolower(trimws(as.character(regions$show))) %in% c("true", "t", "1", "yes")
 regions <- regions[show_region, , drop = FALSE]
