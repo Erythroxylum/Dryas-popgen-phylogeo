@@ -10,7 +10,7 @@ if (length(args) != 7) {
 
 required <- c(
   "ggplot2", "sf", "scatterpie", "rnaturalearthdata",
-  "ggrepel", "ggnewscale", "patchwork"
+  "ggrepel", "ggnewscale", "patchwork", "scales"
 )
 missing_packages <- required[!vapply(required, requireNamespace, logical(1), quietly = TRUE)]
 if (length(missing_packages)) {
@@ -695,18 +695,32 @@ relationship_plot <- ggplot(
 # Standalone four-quadrant summary. Drummondii is excluded because it is not
 # equivalent to the ingroup populations in the refugial comparison.
 signature_plot_data <- signature_data[!is_drummondii, , drop = FALSE]
-percentile_rank <- function(x) {
-  if (length(x) <= 1L || length(unique(x)) <= 1L) return(rep(50, length(x)))
-  100 * (rank(x, ties.method = "average") - 1) / (length(x) - 1)
+if (any(signature_plot_data$pi <= 0)) {
+  stop("The refugial-signature log pi axis requires pi > 0")
 }
-signature_plot_data$pi_percentile <- percentile_rank(signature_plot_data$pi)
-signature_plot_data$private_percentile <- percentile_rank(
-  signature_plot_data$private_allelic_richness
-)
+if (any(signature_plot_data$private_allelic_richness < 0)) {
+  stop("Private allelic richness cannot be negative")
+}
+x_log_range <- range(log10(signature_plot_data$pi))
+y_sqrt_range <- range(sqrt(signature_plot_data$private_allelic_richness))
+x_log_span <- diff(x_log_range)
+y_sqrt_span <- diff(y_sqrt_range)
+if (x_log_span == 0) x_log_span <- 1
+if (y_sqrt_span == 0) y_sqrt_span <- 1
 quadrant_text <- data.frame(
   signature = factor(signature_levels, levels = signature_levels),
-  x = c(3, 97, 3, 97),
-  y = c(97, 97, 3, 3),
+  x = 10^c(
+    x_log_range[1] + 0.03 * x_log_span,
+    x_log_range[2] - 0.03 * x_log_span,
+    x_log_range[1] + 0.03 * x_log_span,
+    x_log_range[2] - 0.03 * x_log_span
+  ),
+  y = c(
+    (y_sqrt_range[2] - 0.03 * y_sqrt_span)^2,
+    (y_sqrt_range[2] - 0.03 * y_sqrt_span)^2,
+    (y_sqrt_range[1] + 0.03 * y_sqrt_span)^2,
+    (y_sqrt_range[1] + 0.03 * y_sqrt_span)^2
+  ),
   hjust = c(0, 1, 0, 1),
   vjust = c(1, 1, 0, 0),
   label = c(
@@ -719,10 +733,10 @@ quadrant_text <- data.frame(
 
 signature_plot <- ggplot(
   signature_plot_data,
-  aes(x = pi_percentile, y = private_percentile)
+  aes(x = pi, y = private_allelic_richness)
 ) +
-  geom_vline(xintercept = 50, color = "#4D4D4D", linewidth = 0.45) +
-  geom_hline(yintercept = 50, color = "#4D4D4D", linewidth = 0.45) +
+  geom_vline(xintercept = pi_cutoff, color = "#4D4D4D", linewidth = 0.45) +
+  geom_hline(yintercept = private_cutoff, color = "#4D4D4D", linewidth = 0.45) +
   geom_point(
     aes(color = signature), shape = 21, fill = "white",
     size = 2.6, stroke = 0.95, alpha = 1
@@ -742,21 +756,25 @@ signature_plot <- ggplot(
   ) +
   labs(
     title = "Population diversity signatures",
-    subtitle = "Rank-standardized diversity space; drummondii excluded",
-    x = expression("Nucleotide diversity (" * pi * ") percentile"),
-    y = "Private allelic richness percentile",
+    subtitle = paste0(
+      "Log10 pi; square-root private allelic richness\n",
+      "Drummondii excluded"
+    ),
+    x = expression("Nucleotide diversity (" * pi * "; log scale)"),
+    y = "Private allelic richness (square-root scale)",
     caption = paste0(
-      "Descriptive hypotheses; raw-value median cutoffs exclude drummondii. ",
+      "Axes show original values on transformed scales;\n",
+      "assignments use raw-value medians. ",
       "Private alleles are rarefied."
     )
   ) +
-  scale_x_continuous(
-    limits = c(0, 100), breaks = seq(0, 100, 25),
-    expand = expansion(mult = 0.02)
+  scale_x_log10(
+    labels = scales::label_scientific(digits = 2),
+    expand = expansion(mult = 0.04)
   ) +
-  scale_y_continuous(
-    limits = c(0, 100), breaks = seq(0, 100, 25),
-    expand = expansion(mult = 0.02)
+  scale_y_sqrt(
+    labels = scales::label_number(accuracy = 0.001),
+    expand = expansion(mult = 0.04)
   ) +
   theme_classic(base_size = base_size + 1) +
   guides(
