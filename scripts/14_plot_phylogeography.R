@@ -48,6 +48,9 @@ map_border_color <- Sys.getenv("MAP_BORDER_COLOR", "#777777")
 lgm_fill_color <- Sys.getenv("LGM_FILL_COLOR", "#BDD7E7")
 lgm_fill_alpha <- as.numeric(Sys.getenv("LGM_FILL_ALPHA", "0.70"))
 lgm_min_latitude <- as.numeric(Sys.getenv("LGM_MIN_LATITUDE", "0"))
+lgm_line_color <- Sys.getenv("LGM_LINE_COLOR", "#6BAED6")
+lgm_line_width <- as.numeric(Sys.getenv("LGM_LINE_WIDTH", "0.35"))
+lgm_line_alpha <- as.numeric(Sys.getenv("LGM_LINE_ALPHA", "0.65"))
 beringia_center_lon <- as.numeric(Sys.getenv("BERINGIA_CENTER_LON", "180"))
 beringia_center_lat <- as.numeric(Sys.getenv("BERINGIA_CENTER_LAT", "65"))
 beringia_half_width_km <- as.numeric(Sys.getenv("BERINGIA_HALF_WIDTH_KM", "2250"))
@@ -92,6 +95,12 @@ if (!is.finite(lgm_fill_alpha) || lgm_fill_alpha < 0 || lgm_fill_alpha > 1) {
 if (!is.finite(lgm_min_latitude) || lgm_min_latitude < -90 ||
     lgm_min_latitude > 90) {
   stop("LGM_MIN_LATITUDE must be between -90 and 90")
+}
+if (!is.finite(lgm_line_width) || lgm_line_width <= 0) {
+  stop("LGM_LINE_WIDTH must be a positive number")
+}
+if (!is.finite(lgm_line_alpha) || lgm_line_alpha < 0 || lgm_line_alpha > 1) {
+  stop("LGM_LINE_ALPHA must be between zero and one")
 }
 
 needed_snp <- c("population", "pop_gen", "private_allelic_richness")
@@ -250,19 +259,22 @@ if (!nrow(lgm_wgs84)) {
   stop("No LGM features remain north of LGM_MIN_LATITUDE")
 }
 lgm_wgs84 <- st_make_valid(lgm_wgs84)
-lgm_geometry_types <- names(table(st_geometry_type(lgm_wgs84)))
-if (!any(lgm_geometry_types %in% c("POLYGON", "MULTIPOLYGON", "GEOMETRYCOLLECTION"))) {
-  warning(
-    "The LGM shapefile contains no polygon geometry, so an interior ice fill ",
-    "cannot be drawn. Geometry types: ", paste(lgm_geometry_types, collapse = ", ")
-  )
-}
+lgm_geometry_types <- sort(unique(as.character(st_geometry_type(lgm_wgs84))))
+lgm_has_polygon <- any(
+  lgm_geometry_types %in% c("POLYGON", "MULTIPOLYGON", "GEOMETRYCOLLECTION")
+)
 lgm <- st_transform(lgm_wgs84, 3995)
 message(
   "Northern LGM features retained: ", nrow(lgm_wgs84),
   "; geometry types: ",
   paste(lgm_geometry_types, collapse = ", ")
 )
+if (!lgm_has_polygon) {
+  message(
+    "LGM input is line geometry: drawing a blue boundary layer; ",
+    "LGM_FILL_COLOR and LGM_FILL_ALPHA do not apply."
+  )
+}
 
 show_region <- tolower(trimws(as.character(regions$show))) %in% c("true", "t", "1", "yes")
 regions <- regions[show_region, , drop = FALSE]
@@ -293,14 +305,21 @@ crop_xy <- st_coordinates(st_transform(crop_points, 3995))
 map_limit <- max(sqrt(rowSums(crop_xy^2)))
 
 map_plot <- ggplot() +
-  geom_sf(data = land, fill = map_land_color, color = NA) +
-  geom_sf(
+  geom_sf(data = land, fill = map_land_color, color = NA)
+if (lgm_has_polygon) {
+  map_plot <- map_plot + geom_sf(
     data = lgm, fill = lgm_fill_color, color = NA, alpha = lgm_fill_alpha
-  ) +
-  # Redraw present-day national and coastal boundaries above the LGM layer.
-  geom_sf(
-    data = land, fill = NA, color = map_border_color, linewidth = 0.18
   )
+} else {
+  map_plot <- map_plot + geom_sf(
+    data = lgm, fill = NA, color = lgm_line_color,
+    linewidth = lgm_line_width, alpha = lgm_line_alpha
+  )
+}
+# Redraw present-day national and coastal boundaries above the LGM layer.
+map_plot <- map_plot + geom_sf(
+  data = land, fill = NA, color = map_border_color, linewidth = 0.18
+)
 
 if (nrow(regions)) {
   map_plot <- map_plot +
@@ -453,15 +472,22 @@ if (nrow(regions)) {
 }
 
 beringia_plot <- ggplot() +
-  geom_sf(data = beringia_land, fill = map_land_color, color = NA) +
-  geom_sf(
+  geom_sf(data = beringia_land, fill = map_land_color, color = NA)
+if (lgm_has_polygon) {
+  beringia_plot <- beringia_plot + geom_sf(
     data = beringia_lgm,
     fill = lgm_fill_color, color = NA, alpha = lgm_fill_alpha
-  ) +
-  geom_sf(
-    data = beringia_land, fill = NA,
-    color = map_border_color, linewidth = 0.20
   )
+} else {
+  beringia_plot <- beringia_plot + geom_sf(
+    data = beringia_lgm, fill = NA, color = lgm_line_color,
+    linewidth = lgm_line_width, alpha = lgm_line_alpha
+  )
+}
+beringia_plot <- beringia_plot + geom_sf(
+  data = beringia_land, fill = NA,
+  color = map_border_color, linewidth = 0.20
+)
 
 if (nrow(regions)) {
   beringia_plot <- beringia_plot +
