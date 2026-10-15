@@ -45,8 +45,6 @@ base_size <- as.numeric(Sys.getenv("FIGURE_BASE_SIZE", "9"))
 map_land_color <- Sys.getenv("MAP_LAND_COLOR", "#F2F2F2")
 map_sea_color <- Sys.getenv("MAP_SEA_COLOR", "#FFFFFF")
 map_border_color <- Sys.getenv("MAP_BORDER_COLOR", "#777777")
-lgm_boundary_linewidth <- as.numeric(Sys.getenv("LGM_BOUNDARY_LINEWIDTH", "0.70"))
-lgm_min_outline_area_km2 <- as.numeric(Sys.getenv("LGM_MIN_OUTLINE_AREA_KM2", "500"))
 beringia_center_lon <- as.numeric(Sys.getenv("BERINGIA_CENTER_LON", "180"))
 beringia_center_lat <- as.numeric(Sys.getenv("BERINGIA_CENTER_LAT", "65"))
 beringia_half_width_km <- as.numeric(Sys.getenv("BERINGIA_HALF_WIDTH_KM", "2250"))
@@ -224,26 +222,6 @@ land <- st_transform(st_make_valid(land), 3995)
 lgm <- st_read(lgm_file, quiet = TRUE)
 if (is.na(st_crs(lgm))) stop("LGM boundary has no coordinate reference system")
 lgm <- st_transform(st_make_valid(lgm), 3995)
-if (!is.finite(lgm_boundary_linewidth) || lgm_boundary_linewidth <= 0) {
-  stop("LGM_BOUNDARY_LINEWIDTH must be a positive number")
-}
-if (!is.finite(lgm_min_outline_area_km2) || lgm_min_outline_area_km2 < 0) {
-  stop("LGM_MIN_OUTLINE_AREA_KM2 must be a non-negative number")
-}
-
-# Dissolve overlapping and adjacent ice polygons before drawing their border.
-# All components remain in the pale fill, but very small components are omitted
-# from the outline so dense polygon fragments do not appear as dark patches.
-lgm <- st_sf(geometry = st_union(st_geometry(lgm)))
-lgm_parts <- suppressWarnings(st_cast(lgm, "POLYGON"))
-lgm_part_area_km2 <- as.numeric(
-  st_area(st_transform(lgm_parts, 6931))
-) / 1e6
-lgm_outline <- lgm_parts[lgm_part_area_km2 >= lgm_min_outline_area_km2, ]
-if (!nrow(lgm_outline)) {
-  warning("LGM outline-area threshold removed every component; using full outline")
-  lgm_outline <- lgm
-}
 
 show_region <- tolower(trimws(as.character(regions$show))) %in% c("true", "t", "1", "yes")
 regions <- regions[show_region, , drop = FALSE]
@@ -276,11 +254,7 @@ map_limit <- max(sqrt(rowSums(crop_xy^2)))
 map_plot <- ggplot() +
   geom_sf(data = land, fill = map_land_color, color = NA) +
   geom_sf(
-    data = lgm, fill = "#CFE8F3", color = NA, alpha = 0.30
-  ) +
-  geom_sf(
-    data = lgm_outline, fill = NA, color = "#3182BD",
-    linewidth = lgm_boundary_linewidth, alpha = 0.90
+    data = lgm, fill = "#CFE8F3", color = NA, alpha = 0.42
   ) +
   # Redraw present-day national and coastal boundaries above the LGM layer.
   geom_sf(
@@ -421,7 +395,6 @@ for (idx in split(seq_len(nrow(samples)), beringia_group)) {
 
 beringia_land <- st_transform(land, beringia_crs)
 beringia_lgm <- st_transform(lgm, beringia_crs)
-beringia_lgm_outline <- st_transform(lgm_outline, beringia_crs)
 if (nrow(regions)) {
   beringia_region_points <- st_transform(region_points, beringia_crs)
   beringia_region_buffers <- st_buffer(
@@ -432,11 +405,7 @@ if (nrow(regions)) {
 beringia_plot <- ggplot() +
   geom_sf(data = beringia_land, fill = map_land_color, color = NA) +
   geom_sf(
-    data = beringia_lgm, fill = "#CFE8F3", color = NA, alpha = 0.30
-  ) +
-  geom_sf(
-    data = beringia_lgm_outline, fill = NA, color = "#3182BD",
-    linewidth = lgm_boundary_linewidth, alpha = 0.90
+    data = beringia_lgm, fill = "#CFE8F3", color = NA, alpha = 0.42
   ) +
   geom_sf(
     data = beringia_land, fill = NA,
