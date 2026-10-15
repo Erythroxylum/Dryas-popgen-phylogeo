@@ -245,9 +245,11 @@ populations divide high from low nucleotide diversity and private allelic
 richness. These cutoffs can be replaced with `SIGNATURE_PI_CUTOFF` and
 `SIGNATURE_PRIVATE_CUTOFF`. Points are unlabeled hollow circles whose outlines
 show the assigned diversity signature. For legibility, the standalone plot
-shows percentile ranks of pi and private allelic richness rather than raw
-values. This rank standardization spreads populations across the plotting
-space without changing the raw-value median cutoffs or signature assignments.
+uses a log10 x-axis for pi and a square-root y-axis for private allelic
+richness. Tick labels remain in the original units. The square-root scale
+accommodates zero private-allele values without an arbitrary pseudocount, and
+the transformations do not change the raw-value median cutoffs or signature
+assignments.
 Gray map outlines provide geographic context for samples outside the focal
 population comparison but are omitted from the diversity-signature legend.
 
