@@ -42,6 +42,20 @@ map_height <- as.numeric(Sys.getenv("MAP_HEIGHT", "10"))
 figure_width <- as.numeric(Sys.getenv("FIGURE_WIDTH", "20"))
 figure_height <- as.numeric(Sys.getenv("FIGURE_HEIGHT", "12.5"))
 base_size <- as.numeric(Sys.getenv("FIGURE_BASE_SIZE", "9"))
+signature_width <- as.numeric(Sys.getenv("SIGNATURE_WIDTH", "4"))
+signature_height <- as.numeric(Sys.getenv("SIGNATURE_HEIGHT", "5"))
+signature_x_expand_left <- as.numeric(Sys.getenv(
+  "SIGNATURE_X_EXPAND_LEFT", "0.04"
+))
+signature_x_expand_right <- as.numeric(Sys.getenv(
+  "SIGNATURE_X_EXPAND_RIGHT", "0.18"
+))
+signature_y_expand_bottom <- as.numeric(Sys.getenv(
+  "SIGNATURE_Y_EXPAND_BOTTOM", "0.18"
+))
+signature_y_expand_top <- as.numeric(Sys.getenv(
+  "SIGNATURE_Y_EXPAND_TOP", "0.04"
+))
 map_land_color <- Sys.getenv("MAP_LAND_COLOR", "#F2F2F2")
 map_sea_color <- Sys.getenv("MAP_SEA_COLOR", "#FFFFFF")
 map_border_color <- Sys.getenv("MAP_BORDER_COLOR", "#777777")
@@ -101,6 +115,19 @@ if (!is.finite(lgm_line_width) || lgm_line_width <= 0) {
 }
 if (!is.finite(lgm_line_alpha) || lgm_line_alpha < 0 || lgm_line_alpha > 1) {
   stop("LGM_LINE_ALPHA must be between zero and one")
+}
+signature_controls <- c(
+  SIGNATURE_WIDTH = signature_width,
+  SIGNATURE_HEIGHT = signature_height,
+  SIGNATURE_X_EXPAND_LEFT = signature_x_expand_left,
+  SIGNATURE_X_EXPAND_RIGHT = signature_x_expand_right,
+  SIGNATURE_Y_EXPAND_BOTTOM = signature_y_expand_bottom,
+  SIGNATURE_Y_EXPAND_TOP = signature_y_expand_top
+)
+if (any(!is.finite(signature_controls)) ||
+    any(signature_controls[c("SIGNATURE_WIDTH", "SIGNATURE_HEIGHT")] <= 0) ||
+    any(signature_controls[grep("EXPAND", names(signature_controls))] < 0)) {
+  stop("Signature dimensions must be positive and axis expansions non-negative")
 }
 
 needed_snp <- c("population", "pop_gen", "private_allelic_richness")
@@ -755,11 +782,6 @@ signature_plot <- ggplot(
     name = "Diversity signature"
   ) +
   labs(
-    title = "Population diversity signatures",
-    subtitle = paste0(
-      "Log10 pi; square-root private allelic richness\n",
-      "Drummondii excluded"
-    ),
     x = expression("Nucleotide diversity (" * pi * "; log scale)"),
     y = "Private allelic richness (square-root scale)",
     caption = paste0(
@@ -770,11 +792,15 @@ signature_plot <- ggplot(
   ) +
   scale_x_log10(
     labels = scales::label_scientific(digits = 2),
-    expand = expansion(mult = 0.04)
+    expand = expansion(
+      mult = c(signature_x_expand_left, signature_x_expand_right)
+    )
   ) +
   scale_y_sqrt(
     labels = scales::label_number(accuracy = 0.001),
-    expand = expansion(mult = 0.04)
+    expand = expansion(
+      mult = c(signature_y_expand_bottom, signature_y_expand_top)
+    )
   ) +
   theme_classic(base_size = base_size + 1) +
   guides(
@@ -785,8 +811,6 @@ signature_plot <- ggplot(
   ) +
   theme(
     legend.position = "bottom",
-    plot.title = element_text(face = "bold", size = 10.5),
-    plot.subtitle = element_text(size = 7.5),
     plot.caption = element_text(hjust = 0, size = 5.8),
     axis.title = element_text(size = 8.2),
     axis.text = element_text(size = 7),
@@ -801,7 +825,10 @@ signature_plot <- ggplot(
 signature_pdf <- sub(
   "\\.pdf$", "_refugial_signatures.pdf", output_file, ignore.case = TRUE
 )
-ggsave(signature_pdf, signature_plot, width = 4, height = 5, units = "in")
+ggsave(
+  signature_pdf, signature_plot,
+  width = signature_width, height = signature_height, units = "in"
+)
 
 map_only <- sub("\\.pdf$", "_map.pdf", output_file, ignore.case = TRUE)
 ggsave(map_only, map_plot, width = map_width, height = map_height, units = "in")
