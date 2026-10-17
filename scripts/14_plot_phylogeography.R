@@ -56,6 +56,12 @@ signature_y_expand_bottom <- as.numeric(Sys.getenv(
 signature_y_expand_top <- as.numeric(Sys.getenv(
   "SIGNATURE_Y_EXPAND_TOP", "0.04"
 ))
+signature_text_x_inset <- as.numeric(Sys.getenv(
+  "SIGNATURE_TEXT_X_INSET", "0.02"
+))
+signature_text_y_inset <- as.numeric(Sys.getenv(
+  "SIGNATURE_TEXT_Y_INSET", "0.02"
+))
 map_land_color <- Sys.getenv("MAP_LAND_COLOR", "#F2F2F2")
 map_sea_color <- Sys.getenv("MAP_SEA_COLOR", "#FFFFFF")
 map_border_color <- Sys.getenv("MAP_BORDER_COLOR", "#777777")
@@ -122,12 +128,18 @@ signature_controls <- c(
   SIGNATURE_X_EXPAND_LEFT = signature_x_expand_left,
   SIGNATURE_X_EXPAND_RIGHT = signature_x_expand_right,
   SIGNATURE_Y_EXPAND_BOTTOM = signature_y_expand_bottom,
-  SIGNATURE_Y_EXPAND_TOP = signature_y_expand_top
+  SIGNATURE_Y_EXPAND_TOP = signature_y_expand_top,
+  SIGNATURE_TEXT_X_INSET = signature_text_x_inset,
+  SIGNATURE_TEXT_Y_INSET = signature_text_y_inset
 )
 if (any(!is.finite(signature_controls)) ||
     any(signature_controls[c("SIGNATURE_WIDTH", "SIGNATURE_HEIGHT")] <= 0) ||
-    any(signature_controls[grep("EXPAND", names(signature_controls))] < 0)) {
-  stop("Signature dimensions must be positive and axis expansions non-negative")
+    any(signature_controls[grep("EXPAND|INSET", names(signature_controls))] < 0) ||
+    any(signature_controls[grep("TEXT_.*INSET", names(signature_controls))] >= 0.5)) {
+  stop(paste(
+    "Signature dimensions must be positive; axis expansions and text insets",
+    "must be non-negative, and text insets must be below 0.5"
+  ))
 }
 
 needed_snp <- c("population", "pop_gen", "private_allelic_richness")
@@ -734,20 +746,26 @@ x_log_span <- diff(x_log_range)
 y_sqrt_span <- diff(y_sqrt_range)
 if (x_log_span == 0) x_log_span <- 1
 if (y_sqrt_span == 0) y_sqrt_span <- 1
+x_panel_range <- c(
+  x_log_range[1] - signature_x_expand_left * x_log_span,
+  x_log_range[2] + signature_x_expand_right * x_log_span
+)
+y_panel_range <- c(
+  max(0, y_sqrt_range[1] - signature_y_expand_bottom * y_sqrt_span),
+  y_sqrt_range[2] + signature_y_expand_top * y_sqrt_span
+)
+x_text <- 10^c(
+  x_panel_range[1] + signature_text_x_inset * diff(x_panel_range),
+  x_panel_range[2] - signature_text_x_inset * diff(x_panel_range)
+)
+y_text <- c(
+  y_panel_range[2] - signature_text_y_inset * diff(y_panel_range),
+  y_panel_range[1] + signature_text_y_inset * diff(y_panel_range)
+)^2
 quadrant_text <- data.frame(
   signature = factor(signature_levels, levels = signature_levels),
-  x = 10^c(
-    x_log_range[1] + 0.03 * x_log_span,
-    x_log_range[2] - 0.03 * x_log_span,
-    x_log_range[1] + 0.03 * x_log_span,
-    x_log_range[2] - 0.03 * x_log_span
-  ),
-  y = c(
-    (y_sqrt_range[2] - 0.03 * y_sqrt_span)^2,
-    (y_sqrt_range[2] - 0.03 * y_sqrt_span)^2,
-    (y_sqrt_range[1] + 0.03 * y_sqrt_span)^2,
-    (y_sqrt_range[1] + 0.03 * y_sqrt_span)^2
-  ),
+  x = c(x_text[1], x_text[2], x_text[1], x_text[2]),
+  y = c(y_text[1], y_text[1], y_text[2], y_text[2]),
   hjust = c(0, 1, 0, 1),
   vjust = c(1, 1, 0, 0),
   label = c(
