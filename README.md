@@ -188,6 +188,26 @@ colors are stored in `data/admixture_K19/`. The supplied LGM spatial layer is
 reprojected with the samples into Arctic Polar Stereographic coordinates
 (EPSG:3995).
 
+The supplied LGM layer contains boundary lines rather than fillable polygons.
+Convert the closed boundaries to polygons once before plotting. Polygon area is
+calculated in the Northern Hemisphere equal-area projection EPSG:6931. The
+default 1,000-km2 threshold removes small islands and polygonization slivers;
+change `MIN_AREA_KM2` if inspection of the output indicates that the threshold
+should be more or less restrictive. The original shapefile is not modified.
+
+```bash
+MIN_AREA_KM2=1000 \
+Rscript scripts/15_polygonize_lgm_boundary.R \
+  data/LGM_boundary/LGM_boundary.shp \
+  data/LGM_boundary/LGM_ice_polygons.gpkg
+```
+
+The script writes the polygon layer and a neighboring
+`LGM_ice_polygons_summary.tsv`. Set `LGM_SIMPLIFY_TOLERANCE_M` to a positive
+distance only if additional vertex reduction is needed; zero, the default,
+does not simplify the retained ice boundaries. A `.shp` output path can be
+used, but GeoPackage is recommended because it is a single portable file.
+
 ```bash
 Rscript scripts/13_prepare_k19_map_data.R \
   data/admixture_K19 \
@@ -197,7 +217,7 @@ Rscript scripts/13_prepare_k19_map_data.R \
 Rscript scripts/14_plot_phylogeography.R \
   results/map/aligned_K19_sample_map_data.tsv \
   results/map/aligned_K19_population_summary.tsv \
-  data/LGM_boundary/LGM_boundary.shp \
+  data/LGM_boundary/LGM_ice_polygons.gpkg \
   results/diversity \
   results/refugia/uniform_population_refugia_metrics.tsv \
   data/phylogeographic_regions.tsv \
@@ -216,11 +236,10 @@ graticules, and a framed projected panel, while retaining an Arctic Polar
 Stereographic projection. Useful plotting controls include
 `MAP_JITTER_RADIUS_KM`, `MAP_PIE_RADIUS_KM`, `MAP_MIN_LATITUDE`,
 `MAP_LAND_COLOR`, `MAP_SEA_COLOR`, `MAP_BORDER_COLOR`, `FIGURE_WIDTH`, and
-`FIGURE_HEIGHT`. LGM polygon inputs are drawn as light-blue shaded areas using
-`LGM_FILL_COLOR` and `LGM_FILL_ALPHA`. The supplied `LGM_boundary.shp` is a
-polyline layer, so it is drawn as a blue boundary using `LGM_LINE_COLOR`,
-`LGM_LINE_WIDTH`, and `LGM_LINE_ALPHA`; a polyline cannot provide interior
-ice shading. Before projection, features entirely
+`FIGURE_HEIGHT`. The derived LGM polygons are drawn as light-blue shaded areas
+using `LGM_FILL_COLOR` and `LGM_FILL_ALPHA`. If the original polyline layer is
+supplied instead, it is drawn as a blue boundary using `LGM_LINE_COLOR`,
+`LGM_LINE_WIDTH`, and `LGM_LINE_ALPHA`. Before projection, features entirely
 south of `LGM_MIN_LATITUDE` are omitted to prevent unprojectable Southern
 Hemisphere geometries from becoming missing coordinates; the default threshold
 is 0 degrees latitude.
@@ -250,6 +269,15 @@ richness. Tick labels remain in the original units. The square-root scale
 accommodates zero private-allele values without an arbitrary pseudocount, and
 the transformations do not change the raw-value median cutoffs or signature
 assignments.
+
+The standalone signature plot has no title or subtitle. Its plotting space can
+be adjusted independently with `SIGNATURE_X_EXPAND_LEFT`,
+`SIGNATURE_X_EXPAND_RIGHT`, `SIGNATURE_Y_EXPAND_BOTTOM`, and
+`SIGNATURE_Y_EXPAND_TOP`. Defaults are 0.04, 0.18, 0.18, and 0.04,
+respectively. Larger values add more space on that side of the transformed
+axis. `SIGNATURE_WIDTH` and `SIGNATURE_HEIGHT` control the PDF dimensions in
+inches and default to 4 and 5.
+
 Gray map outlines provide geographic context for samples outside the focal
 population comparison but are omitted from the diversity-signature legend.
 
