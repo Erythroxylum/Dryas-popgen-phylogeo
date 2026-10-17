@@ -278,6 +278,12 @@ respectively. Larger values add more space on that side of the transformed
 axis. `SIGNATURE_WIDTH` and `SIGNATURE_HEIGHT` control the PDF dimensions in
 inches and default to 4 and 5.
 
+The four quadrant descriptions are anchored to the panel corners.
+`SIGNATURE_TEXT_X_INSET` and `SIGNATURE_TEXT_Y_INSET` control how far they are
+moved inward from the left/right and top/bottom edges, respectively. Their
+defaults are both 0.02. Increase either value to move the text farther into
+the panel; decrease it toward zero to move the text closer to the corners.
+
 Gray map outlines provide geographic context for samples outside the focal
 population comparison but are omitted from the diversity-signature legend.
 
