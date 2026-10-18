@@ -54,6 +54,9 @@ population_halo_alpha <- as.numeric(Sys.getenv(
 show_hypothesis_regions <- tolower(trimws(Sys.getenv(
   "MAP_SHOW_HYPOTHESIS_REGIONS", "FALSE"
 ))) %in% c("true", "t", "1", "yes")
+merge_same_signature_halos <- tolower(trimws(Sys.getenv(
+  "MAP_MERGE_SAME_SIGNATURE_HALOS", "TRUE"
+))) %in% c("true", "t", "1", "yes")
 beringia_pie_radius_km <- as.numeric(Sys.getenv(
   "BERINGIA_PIE_RADIUS_KM", as.character(pie_radius_km)
 ))
@@ -427,9 +430,27 @@ build_population_halos <- function(data, x_column, y_column, crs, pie_radius_km)
   do.call(rbind, halo_list)
 }
 
+dissolve_population_halos <- function(halos) {
+  # Drummondii is retained as a sample pie but has no refugial-signature halo.
+  halos <- halos[halos$signature %in% signature_levels, , drop = FALSE]
+  if (!nrow(halos) || !merge_same_signature_halos) return(halos)
+  dissolved <- lapply(signature_levels, function(signature_class) {
+    z <- halos[halos$signature == signature_class, , drop = FALSE]
+    if (!nrow(z)) return(NULL)
+    st_sf(
+      signature = signature_class,
+      population_count = nrow(z),
+      populations = paste(z$population, collapse = ";"),
+      geometry = st_union(st_geometry(z))
+    )
+  })
+  do.call(rbind, dissolved[!vapply(dissolved, is.null, logical(1))])
+}
+
 map_population_halos <- build_population_halos(
   samples, "x_plot", "y_plot", st_crs(3995), pie_radius_km
 )
+map_population_halos <- dissolve_population_halos(map_population_halos)
 
 # A projected latitude circle gives a symmetric polar crop.
 crop_points <- st_as_sf(
@@ -501,7 +522,7 @@ if (nrow(regions)) {
 
 # Population-derived halos replace broad, manually asserted refuge/contact
 # circles. Their transparent interiors preserve the ancestry pies and LGM map.
-for (signature_class in c("not_applicable", signature_levels)) {
+for (signature_class in signature_levels) {
   z <- map_population_halos[
     map_population_halos$signature == signature_class, , drop = FALSE
   ]
@@ -658,6 +679,9 @@ beringia_population_halos <- build_population_halos(
   samples, "beringia_x", "beringia_y", beringia_crs,
   beringia_pie_radius_km
 )
+beringia_population_halos <- dissolve_population_halos(
+  beringia_population_halos
+)
 if (nrow(regions)) {
   beringia_region_points <- st_transform(region_points, beringia_crs)
   beringia_region_buffers <- st_buffer(
@@ -699,7 +723,7 @@ if (nrow(regions)) {
     ggnewscale::new_scale_color()
 }
 
-for (signature_class in c("not_applicable", signature_levels)) {
+for (signature_class in signature_levels) {
   z <- beringia_population_halos[
     beringia_population_halos$signature == signature_class, , drop = FALSE
   ]
