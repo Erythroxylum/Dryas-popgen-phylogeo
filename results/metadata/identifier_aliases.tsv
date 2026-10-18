@@ -242,15 +242,9 @@ sampleID	cauc_ODP43226	cauc_ODP43226
 oldfilename	7438_cau_GE	cauc_ODP7438
 s384	cauc_ODP7438	cauc_ODP7438
 sampleID	cauc_ODP7438	cauc_ODP7438
-oldfilename	7446_cau_GE	cauc_ODP7446
-sampleID	cauc_ODP7446	cauc_ODP7446
-oldfilename	7448_cau_GE	cauc_ODP7448
-sampleID	cauc_ODP7448	cauc_ODP7448
 oldfilename	7452_cau_GE	cauc_ODP7452
 s384	cauc_ODP7452	cauc_ODP7452
 sampleID	cauc_ODP7452	cauc_ODP7452
-oldfilename	7453_cau_GE	cauc_ODP7453
-sampleID	cauc_ODP7453	cauc_ODP7453
 oldfilename	cermon_CM1a	Cermon_DW847
 s384	Cermon_DW847	Cermon_DW847
 sampleID	Cermon_DW847	Cermon_DW847
@@ -284,7 +278,6 @@ sampleID	drum_BABY4356	drum_BABY4356
 oldfilename	BB55_aja_CA-YT	drum_BABY55
 s384	drum_BABY55	drum_BABY55
 sampleID	drum_BABY55	drum_BABY55
-sampleID	drum_BABY58	drum_BABY58
 oldfilename	BB6104_dru_CA-YT	drum_BABY6104
 s384	drum_BABY6104	drum_BABY6104
 sampleID	drum_BABY6104	drum_BABY6104
@@ -327,8 +320,6 @@ sampleID	gran_ODP7506	gran_ODP7506
 oldfilename	Doc_BTH_01	hook_BTH01
 s384	hook_BTH01	hook_BTH01
 sampleID	hook_BTH01	hook_BTH01
-oldfilename	Doc_BTH_02	hook_BTH02
-sampleID	hook_BTH02	hook_BTH02
 oldfilename	Doc_BTH_03	hook_BTH03
 s384	hook_BTH03	hook_BTH03
 sampleID	hook_BTH03	hook_BTH03
@@ -374,8 +365,6 @@ sampleID	hook_DW709	hook_DW709
 oldfilename	DW712_hoo_US-CO	hook_DW712
 s384	hook_DW712	hook_DW712
 sampleID	hook_DW712	hook_DW712
-oldfilename	DW713_hoo_US-CO	hook_DW713
-sampleID	hook_DW713	hook_DW713
 oldfilename	DW725_hoo_US-CO	hook_DW725
 s384	hook_DW725	hook_DW725
 sampleID	hook_DW725	hook_DW725
@@ -409,15 +398,9 @@ sampleID	hook_ODP8463	hook_ODP8463
 oldfilename	8464_hoo_US-CO	hook_ODP8464
 s384	hook_ODP8464	hook_ODP8464
 sampleID	hook_ODP8464	hook_ODP8464
-oldfilename	14941_hoo_US-CO	hook_RM14941
-sampleID	hook_RM14941	hook_RM14941
 oldfilename	14942_hoo_US-CO	hook_RM14942
 s384	hook_RM14942	hook_RM14942
 sampleID	hook_RM14942	hook_RM14942
-oldfilename	14943_hoo_US-CO	hook_RM14943
-sampleID	hook_RM14943	hook_RM14943
-oldfilename	14944_hoo_US-CO	hook_RM14944
-sampleID	hook_RM14944	hook_RM14944
 oldfilename	14945_hoo_US-CO	hook_RM14945
 s384	hook_RM14945	hook_RM14945
 sampleID	hook_RM14945	hook_RM14945
@@ -490,9 +473,6 @@ sampleID	intg_BABY1589	intg_BABY1589
 oldfilename	B6522B_int_CA-YT	intg_BABY6522B
 s384	intg_BABY6522B	intg_BABY6522B
 sampleID	intg_BABY6522B	intg_BABY6522B
-sampleID	intg_BABY73b	intg_BABY73b
-oldfilename	7460_int_GL-NW	intg_ODP7460
-sampleID	intg_ODP7460	intg_ODP7460
 oldfilename	7461_int_GL-NW	intg_ODP7461
 s384	intg_ODP7461	intg_ODP7461
 sampleID	intg_ODP7461	intg_ODP7461
@@ -595,7 +575,6 @@ sampleID	intgsyl_BABY10075	intgsyl_BABY10075
 oldfilename	BB5065_int_CA-YT	intgsyl_BABY5065
 s384	intgsyl_BABY5065	intgsyl_BABY5065
 sampleID	intgsyl_BABY5065	intgsyl_BABY5065
-sampleID	intgsyl_BABY5649	intgsyl_BABY5649
 oldfilename	BB8811_int_CA-NU	intgsyl_BABY8811
 s384	intgsyl_BABY8811	intgsyl_BABY8811
 sampleID	intgsyl_BABY8811	intgsyl_BABY8811
@@ -719,8 +698,6 @@ sampleID	octo_JOT03	octo_JOT03
 oldfilename	Doc_JOT_04	octo_JOT04
 s384	octo_JOT04	octo_JOT04
 sampleID	octo_JOT04	octo_JOT04
-oldfilename	Doc_KOL_01	octo_KOL01
-sampleID	octo_KOL01	octo_KOL01
 oldfilename	Doc_KOL_02	octo_KOL02
 s384	octo_KOL02	octo_KOL02
 sampleID	octo_KOL02	octo_KOL02
@@ -877,7 +854,6 @@ sampleID	octo_ODP8039	octo_ODP8039
 oldfilename	8043_oct_NO-SJ	octo_ODP8043
 s384	octo_ODP8043	octo_ODP8043
 sampleID	octo_ODP8043	octo_ODP8043
-sampleID	octo_ODP8069	octo_ODP8069
 oldfilename	8072_oct_NO-SJ	octo_ODP8072
 s384	octo_ODP8072	octo_ODP8072
 sampleID	octo_ODP8072	octo_ODP8072
@@ -1130,8 +1106,6 @@ sampleID	punccf_ODP8559	punccf_ODP8559
 oldfilename	persta_PS1	Pursta_DW848
 s384	Pursta_DW848	Pursta_DW848
 sampleID	Pursta_DW848	Pursta_DW848
-oldfilename	pertri_PT1a	Purtri_DW846a
-sampleID	Purtri_DW846a	Purtri_DW846a
 oldfilename	pertri_PT1b	Purtri_DW846b
 s384	Purtri_DW846b	Purtri_DW846b
 sampleID	Purtri_DW846b	Purtri_DW846b

@@ -1,0 +1,3 @@
+metric	cutoff	default_rule
+pi	0.00134805780238253	median_across_selected_non_drummondii_populations
+private_allelic_richness	0.00183402109124255	median_across_selected_non_drummondii_populations

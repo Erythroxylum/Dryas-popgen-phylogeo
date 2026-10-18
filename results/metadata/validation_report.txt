@@ -1,4 +1,4 @@
-Metadata rows: 399
+Metadata rows: 384
 VCF samples: 384
 Selected samples: 215
 Uniform samples: 106
