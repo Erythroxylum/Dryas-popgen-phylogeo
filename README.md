@@ -262,7 +262,12 @@ and their ancestry pies, with configurable minimum size and padding through
 `MAP_POPULATION_HALO_MIN_RADIUS_KM` and `MAP_POPULATION_HALO_PADDING_KM`.
 `MAP_POPULATION_HALO_LINEWIDTH` and `MAP_POPULATION_HALO_ALPHA` control the
 outline. Transparent interiors prevent overlapping populations from obscuring
-the map or ancestry proportions.
+the map or ancestry proportions. By default,
+`MAP_MERGE_SAME_SIGNATURE_HALOS=TRUE` dissolves overlapping halos with the same
+signature into one continuous outline while retaining disconnected regions as
+separate shapes. Set it to `FALSE` to recover one halo per population.
+Drummondii retains its gray sample pies but receives no halo because it is
+excluded from the refugial-signature comparison.
 
 The same command also writes a wide Beringia map named
 `*_beringia_map.pdf`. It uses a Lambert azimuthal equal-area projection
