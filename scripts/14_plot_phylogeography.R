@@ -66,6 +66,9 @@ signature_text_x_inset <- as.numeric(Sys.getenv(
 signature_text_y_inset <- as.numeric(Sys.getenv(
   "SIGNATURE_TEXT_Y_INSET", "0.02"
 ))
+signature_text_right_hjust <- as.numeric(Sys.getenv(
+  "SIGNATURE_TEXT_RIGHT_HJUST", "0.80"
+))
 map_land_color <- Sys.getenv("MAP_LAND_COLOR", "#F2F2F2")
 map_sea_color <- Sys.getenv("MAP_SEA_COLOR", "#FFFFFF")
 map_border_color <- Sys.getenv("MAP_BORDER_COLOR", "#777777")
@@ -142,7 +145,8 @@ signature_controls <- c(
   SIGNATURE_Y_EXPAND_BOTTOM = signature_y_expand_bottom,
   SIGNATURE_Y_EXPAND_TOP = signature_y_expand_top,
   SIGNATURE_TEXT_X_INSET = signature_text_x_inset,
-  SIGNATURE_TEXT_Y_INSET = signature_text_y_inset
+  SIGNATURE_TEXT_Y_INSET = signature_text_y_inset,
+  SIGNATURE_TEXT_RIGHT_HJUST = signature_text_right_hjust
 )
 if (any(!is.finite(signature_controls)) ||
     any(signature_controls[c("SIGNATURE_WIDTH", "SIGNATURE_HEIGHT")] <= 0) ||
@@ -152,6 +156,9 @@ if (any(!is.finite(signature_controls)) ||
     "Signature dimensions must be positive; axis expansions and text insets",
     "must be non-negative, and text insets must be below 0.5"
   ))
+}
+if (signature_text_right_hjust < 0 || signature_text_right_hjust > 1) {
+  stop("SIGNATURE_TEXT_RIGHT_HJUST must be between 0 and 1")
 }
 
 needed_snp <- c("population", "pop_gen", "private_allelic_richness")
@@ -805,7 +812,10 @@ quadrant_text <- data.frame(
   signature = factor(signature_levels, levels = signature_levels),
   x = c(x_text[1], x_text[2], x_text[1], x_text[2]),
   y = c(y_text[1], y_text[1], y_text[2], y_text[2]),
-  hjust = c(0, 1, 0, 1),
+  hjust = c(
+    0, signature_text_right_hjust,
+    0, signature_text_right_hjust
+  ),
   vjust = c(1, 1, 0, 0),
   label = c(
     "Isolated relict:\nlow pi, high private alleles",
