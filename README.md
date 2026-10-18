@@ -236,7 +236,11 @@ graticules, and a framed projected panel, while retaining an Arctic Polar
 Stereographic projection. Useful plotting controls include
 `MAP_JITTER_RADIUS_KM`, `MAP_PIE_RADIUS_KM`, `MAP_MIN_LATITUDE`,
 `MAP_LAND_COLOR`, `MAP_SEA_COLOR`, `MAP_BORDER_COLOR`, `FIGURE_WIDTH`, and
-`FIGURE_HEIGHT`. The derived LGM polygons are drawn as light-blue shaded areas
+`FIGURE_HEIGHT`. By default, the main map retains the symmetric polar extent
+defined by `MAP_MIN_LATITUDE`. To make an asymmetric rectangular crop without
+changing the EPSG:3995 projection, use `MAP_CENTER_LON`, `MAP_CENTER_LAT`,
+`MAP_HALF_WIDTH_X_KM`, and `MAP_HALF_HEIGHT_KM`. The derived LGM polygons are
+drawn as light-blue shaded areas
 using `LGM_FILL_COLOR` and `LGM_FILL_ALPHA`. If the original polyline layer is
 supplied instead, it is drawn as a blue boundary using `LGM_LINE_COLOR`,
 `LGM_LINE_WIDTH`, and `LGM_LINE_ALPHA`. Before projection, features entirely
