@@ -818,10 +818,10 @@ quadrant_text <- data.frame(
   ),
   vjust = c(1, 1, 0, 0),
   label = c(
-    "Isolated relict:\nlow pi, high private alleles",
-    "Persistent refugium:\nhigh pi, high private alleles",
-    "Founder population:\nlow pi, low private alleles",
-    "Secondary contact:\nhigh pi, low private alleles"
+    "Isolated population",
+    "Persistent refugium",
+    "Founder population",
+    "Secondary contact"
   )
 )
 
