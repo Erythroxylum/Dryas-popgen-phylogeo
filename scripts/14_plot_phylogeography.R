@@ -37,6 +37,10 @@ beringia_pie_radius_km <- as.numeric(Sys.getenv(
   "BERINGIA_PIE_RADIUS_KM", as.character(pie_radius_km)
 ))
 map_min_latitude <- as.numeric(Sys.getenv("MAP_MIN_LATITUDE", "25"))
+map_center_lon <- as.numeric(Sys.getenv("MAP_CENTER_LON", "0"))
+map_center_lat <- as.numeric(Sys.getenv("MAP_CENTER_LAT", "90"))
+map_half_width_x_raw <- trimws(Sys.getenv("MAP_HALF_WIDTH_X_KM", ""))
+map_half_height_raw <- trimws(Sys.getenv("MAP_HALF_HEIGHT_KM", ""))
 map_width <- as.numeric(Sys.getenv("MAP_WIDTH", "12"))
 map_height <- as.numeric(Sys.getenv("MAP_HEIGHT", "10"))
 figure_width <- as.numeric(Sys.getenv("FIGURE_WIDTH", "20"))
@@ -115,6 +119,14 @@ if (!is.finite(lgm_fill_alpha) || lgm_fill_alpha < 0 || lgm_fill_alpha > 1) {
 if (!is.finite(lgm_min_latitude) || lgm_min_latitude < -90 ||
     lgm_min_latitude > 90) {
   stop("LGM_MIN_LATITUDE must be between -90 and 90")
+}
+if (!is.finite(map_center_lon) || map_center_lon < -180 ||
+    map_center_lon > 180) {
+  stop("MAP_CENTER_LON must be between -180 and 180")
+}
+if (!is.finite(map_center_lat) || map_center_lat < -90 ||
+    map_center_lat > 90) {
+  stop("MAP_CENTER_LAT must be between -90 and 90")
 }
 if (!is.finite(lgm_line_width) || lgm_line_width <= 0) {
   stop("LGM_LINE_WIDTH must be a positive number")
@@ -343,6 +355,33 @@ crop_points <- st_as_sf(
 crop_xy <- st_coordinates(st_transform(crop_points, 3995))
 map_limit <- max(sqrt(rowSums(crop_xy^2)))
 
+# Keep the Arctic Polar Stereographic projection but optionally shift and crop
+# its plotting window. This changes the composition, not the map projection or
+# the coordinates used for the ancestry pies.
+map_center_point <- st_as_sf(
+  data.frame(lon = map_center_lon, lat = map_center_lat),
+  coords = c("lon", "lat"), crs = 4326
+)
+map_center_xy <- st_coordinates(st_transform(map_center_point, 3995))[1, ]
+map_half_width_x <- if (nzchar(map_half_width_x_raw)) {
+  as.numeric(map_half_width_x_raw) * 1000
+} else {
+  map_limit
+}
+map_half_height <- if (nzchar(map_half_height_raw)) {
+  as.numeric(map_half_height_raw) * 1000
+} else {
+  map_limit
+}
+if (!is.finite(map_half_width_x) || map_half_width_x <= 0) {
+  stop("MAP_HALF_WIDTH_X_KM must be a positive number")
+}
+if (!is.finite(map_half_height) || map_half_height <= 0) {
+  stop("MAP_HALF_HEIGHT_KM must be a positive number")
+}
+map_xlim <- map_center_xy[1] + c(-map_half_width_x, map_half_width_x)
+map_ylim <- map_center_xy[2] + c(-map_half_height, map_half_height)
+
 map_plot <- ggplot() +
   geom_sf(data = land, fill = map_land_color, color = NA)
 if (lgm_has_polygon) {
@@ -416,7 +455,7 @@ map_plot <- map_plot +
   ) +
   coord_sf(
     crs = st_crs(3995),
-    xlim = c(-map_limit, map_limit), ylim = c(-map_limit, map_limit),
+    xlim = map_xlim, ylim = map_ylim,
     expand = FALSE
   ) +
   labs(
