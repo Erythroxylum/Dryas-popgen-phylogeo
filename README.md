@@ -225,7 +225,12 @@ Rscript scripts/14_plot_phylogeography.R \
 ```
 
 The sample pies are deterministically offset within `geoID`, so repeated runs
-have identical layouts. Pie outlines use three descriptive diversity-signature
+have identical layouts. By default, thin leader lines connect displaced pies
+to their true collection coordinates, which are marked with small points. Use
+`MAP_SHOW_LEADER_LINES=FALSE` to suppress them. Their appearance is controlled
+with `MAP_LEADER_LINE_COLOR`, `MAP_LEADER_LINE_WIDTH`,
+`MAP_LEADER_LINE_ALPHA`, and `MAP_COORDINATE_POINT_SIZE`. Pie outlines use
+three descriptive diversity-signature
 colors defined by population pi and private allelic richness; unselected
 samples are gray. The 19 component names and high-contrast colors are editable
 in `data/K19_component_labels.tsv`. Broad hypothesis regions in
@@ -278,10 +283,24 @@ centered by default at 65 N, 180 E. The crop and output can be adjusted with
 `BERINGIA_MAP_HEIGHT`, and `BERINGIA_LEGEND_NCOL`. If only
 `BERINGIA_HALF_WIDTH_KM` is supplied, the horizontal and vertical half-extents
 default to 1.4 and 0.8 times that value, respectively, producing a wide map.
+Leader lines are also drawn on this map using the same controls.
+
+The composite PDF contains three manuscript panels: **A**, the circumpolar K19
+ancestry map; **B**, the compact refugial-signature comparison; and **C**,
+individual observed SNP heterozygosity for samples assigned to uniform
+populations, admixed populations, or no focal population. Panel C is
+descriptive: violins show the distributions, narrow boxplots show their
+medians and interquartile ranges, and points show individual samples. It reads
+`results/diversity/individual_snp_heterozygosity.tsv`, produced by
+`scripts/04_individual_heterozygosity.R` in the core workflow.
 
 The plotting step also writes
 `results/map/population_refugial_signatures.tsv` and a standalone
-`*_refugial_signatures.pdf` (4 x 5 inches). Drummondii is excluded from this
+`*_refugial_signatures.pdf` (4 x 5 inches). It additionally writes a large,
+population-labeled supplementary version named
+`*_refugial_signatures_labeled.pdf`. Its defaults are 8 x 7 inches and can be
+changed with `SIGNATURE_SI_WIDTH`, `SIGNATURE_SI_HEIGHT`, and
+`SIGNATURE_SI_LABEL_SIZE`. Drummondii is excluded from this
 signature plot and from its default cutoffs because it is not equivalent to the
 ingroup populations in the refugial comparison; it remains visible in the map
 and side panels in gray. By default, medians across the remaining selected
