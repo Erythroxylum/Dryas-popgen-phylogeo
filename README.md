@@ -287,6 +287,10 @@ The four quadrant descriptions are anchored to the panel corners.
 moved inward from the left/right and top/bottom edges, respectively. Their
 defaults are both 0.02. Increase either value to move the text farther into
 the panel; decrease it toward zero to move the text closer to the corners.
+`SIGNATURE_TEXT_RIGHT_HJUST` separately controls the horizontal alignment of
+the upper-right and lower-right descriptions. Its default is 0.80; decreasing
+it moves both right-side descriptions farther right, while increasing it
+toward 1 moves them left.
 
 Gray map outlines provide geographic context for samples outside the focal
 population comparison but are omitted from the diversity-signature legend.
