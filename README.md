@@ -248,6 +248,13 @@ south of `LGM_MIN_LATITUDE` are omitted to prevent unprojectable Southern
 Hemisphere geometries from becoming missing coordinates; the default threshold
 is 0 degrees latitude.
 
+Samples outside the classified population comparison are always drawn first,
+behind the classified populations. They are also smaller and muted by default.
+Use `MAP_UNASSIGNED_PIE_SCALE` to change their radius relative to classified
+pies (default 0.70) and `MAP_UNASSIGNED_PIE_ALPHA` to change their opacity
+(default 0.35). Classified-population pies are then drawn at full size and
+near-full opacity, independent of input-file row order.
+
 The same command also writes a wide Beringia map named
 `*_beringia_map.pdf`. It uses a Lambert azimuthal equal-area projection
 centered by default at 65 N, 180 E. The crop and output can be adjusted with
