@@ -33,6 +33,12 @@ output_file <- args[7]
 dir.create(dirname(output_file), recursive = TRUE, showWarnings = FALSE)
 
 pie_radius_km <- as.numeric(Sys.getenv("MAP_PIE_RADIUS_KM", "60"))
+unassigned_pie_scale <- as.numeric(Sys.getenv(
+  "MAP_UNASSIGNED_PIE_SCALE", "0.70"
+))
+unassigned_pie_alpha <- as.numeric(Sys.getenv(
+  "MAP_UNASSIGNED_PIE_ALPHA", "0.35"
+))
 beringia_pie_radius_km <- as.numeric(Sys.getenv(
   "BERINGIA_PIE_RADIUS_KM", as.character(pie_radius_km)
 ))
@@ -118,6 +124,14 @@ if (length(setdiff(needed_sample, names(samples)))) {
 }
 if (!is.finite(lgm_fill_alpha) || lgm_fill_alpha < 0 || lgm_fill_alpha > 1) {
   stop("LGM_FILL_ALPHA must be between zero and one")
+}
+if (!is.finite(unassigned_pie_scale) || unassigned_pie_scale <= 0 ||
+    unassigned_pie_scale > 1) {
+  stop("MAP_UNASSIGNED_PIE_SCALE must be greater than 0 and no greater than 1")
+}
+if (!is.finite(unassigned_pie_alpha) || unassigned_pie_alpha < 0 ||
+    unassigned_pie_alpha > 1) {
+  stop("MAP_UNASSIGNED_PIE_ALPHA must be between 0 and 1")
 }
 if (!is.finite(lgm_min_latitude) || lgm_min_latitude < -90 ||
     lgm_min_latitude > 90) {
@@ -430,15 +444,29 @@ map_plot <- map_plot + geom_point(
   alpha = 0, size = 0.01
 )
 
-for (signature_class in names(outline_colors)) {
+pie_draw_order <- c("not_selected", "not_applicable", signature_levels)
+for (signature_class in pie_draw_order) {
   z <- samples[samples$signature == signature_class, , drop = FALSE]
   if (!nrow(z)) next
+  radius_multiplier <- if (signature_class == "not_selected") {
+    unassigned_pie_scale
+  } else {
+    1
+  }
+  layer_alpha <- if (signature_class == "not_selected") {
+    unassigned_pie_alpha
+  } else {
+    0.98
+  }
   map_plot <- map_plot + scatterpie::geom_scatterpie(
     data = z,
-    aes(x = x_plot, y = y_plot, r = pie_radius_km * 1000),
+    aes(
+      x = x_plot, y = y_plot,
+      r = pie_radius_km * radius_multiplier * 1000
+    ),
     cols = q_columns,
     color = outline_colors[signature_class], linewidth = 0.38,
-    alpha = 0.98
+    alpha = layer_alpha
   )
 }
 
@@ -468,8 +496,7 @@ map_plot <- map_plot +
   labs(
     title = "Geographic structure and secondary contact in Dryas",
     subtitle = "Sample-level K19 ancestry; pale blue indicates the supplied LGM boundary layer",
-    x = "Longitude", y = "Latitude",
-    caption = "Gray pie outlines indicate samples outside the focal population comparison."
+    x = "Longitude", y = "Latitude"
   ) +
   theme_minimal(base_size = base_size) +
   theme(
@@ -596,15 +623,28 @@ beringia_plot <- beringia_plot + geom_point(
   alpha = 0, size = 0.01
 )
 
-for (signature_class in names(outline_colors)) {
+for (signature_class in pie_draw_order) {
   z <- samples[samples$signature == signature_class, , drop = FALSE]
   if (!nrow(z)) next
+  radius_multiplier <- if (signature_class == "not_selected") {
+    unassigned_pie_scale
+  } else {
+    1
+  }
+  layer_alpha <- if (signature_class == "not_selected") {
+    unassigned_pie_alpha
+  } else {
+    0.98
+  }
   beringia_plot <- beringia_plot + scatterpie::geom_scatterpie(
     data = z,
-    aes(x = beringia_x, y = beringia_y, r = beringia_pie_radius_km * 1000),
+    aes(
+      x = beringia_x, y = beringia_y,
+      r = beringia_pie_radius_km * radius_multiplier * 1000
+    ),
     cols = q_columns,
     color = outline_colors[signature_class], linewidth = 0.38,
-    alpha = 0.98
+    alpha = layer_alpha
   )
 }
 
@@ -645,8 +685,7 @@ beringia_plot <- beringia_plot +
       "Lambert azimuthal equal-area projection centered at ",
       beringia_center_lat, " N, ", beringia_center_lon, " E"
     ),
-    x = "Longitude", y = "Latitude",
-    caption = "Gray pie outlines indicate samples outside the focal population comparison."
+    x = "Longitude", y = "Latitude"
   ) +
   theme_minimal(base_size = base_size) +
   theme(
