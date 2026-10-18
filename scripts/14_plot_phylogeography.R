@@ -39,6 +39,21 @@ unassigned_pie_scale <- as.numeric(Sys.getenv(
 unassigned_pie_alpha <- as.numeric(Sys.getenv(
   "MAP_UNASSIGNED_PIE_ALPHA", "0.35"
 ))
+population_halo_min_radius_km <- as.numeric(Sys.getenv(
+  "MAP_POPULATION_HALO_MIN_RADIUS_KM", "60"
+))
+population_halo_padding_km <- as.numeric(Sys.getenv(
+  "MAP_POPULATION_HALO_PADDING_KM", "20"
+))
+population_halo_linewidth <- as.numeric(Sys.getenv(
+  "MAP_POPULATION_HALO_LINEWIDTH", "0.75"
+))
+population_halo_alpha <- as.numeric(Sys.getenv(
+  "MAP_POPULATION_HALO_ALPHA", "0.90"
+))
+show_hypothesis_regions <- tolower(trimws(Sys.getenv(
+  "MAP_SHOW_HYPOTHESIS_REGIONS", "FALSE"
+))) %in% c("true", "t", "1", "yes")
 beringia_pie_radius_km <- as.numeric(Sys.getenv(
   "BERINGIA_PIE_RADIUS_KM", as.character(pie_radius_km)
 ))
@@ -133,6 +148,21 @@ if (!is.finite(unassigned_pie_alpha) || unassigned_pie_alpha < 0 ||
     unassigned_pie_alpha > 1) {
   stop("MAP_UNASSIGNED_PIE_ALPHA must be between 0 and 1")
 }
+if (!is.finite(population_halo_min_radius_km) ||
+    population_halo_min_radius_km <= 0) {
+  stop("MAP_POPULATION_HALO_MIN_RADIUS_KM must be positive")
+}
+if (!is.finite(population_halo_padding_km) ||
+    population_halo_padding_km < 0) {
+  stop("MAP_POPULATION_HALO_PADDING_KM must be non-negative")
+}
+if (!is.finite(population_halo_linewidth) || population_halo_linewidth <= 0) {
+  stop("MAP_POPULATION_HALO_LINEWIDTH must be positive")
+}
+if (!is.finite(population_halo_alpha) || population_halo_alpha < 0 ||
+    population_halo_alpha > 1) {
+  stop("MAP_POPULATION_HALO_ALPHA must be between 0 and 1")
+}
 if (!is.finite(lgm_min_latitude) || lgm_min_latitude < -90 ||
     lgm_min_latitude > 90) {
   stop("LGM_MIN_LATITUDE must be between -90 and 90")
@@ -215,35 +245,25 @@ private_cutoff <- environment_cutoff(
 )
 
 signature_data$signature <- ifelse(
-  signature_data$pi < pi_cutoff &
-    signature_data$private_allelic_richness >= private_cutoff,
-  "isolated_relict",
+  signature_data$private_allelic_richness >= private_cutoff,
+  "candidate_refugium",
   ifelse(
-    signature_data$pi >= pi_cutoff &
-      signature_data$private_allelic_richness >= private_cutoff,
-    "persistent_refugium",
-    ifelse(
-      signature_data$pi < pi_cutoff &
-        signature_data$private_allelic_richness < private_cutoff,
-      "founder_population", "secondary_contact"
-    )
+    signature_data$pi < pi_cutoff,
+    "founder_population", "secondary_contact"
   )
 )
 signature_data$signature[is_drummondii] <- "not_applicable"
 
 signature_levels <- c(
-  "isolated_relict", "persistent_refugium",
-  "founder_population", "secondary_contact"
+  "candidate_refugium", "founder_population", "secondary_contact"
 )
 signature_labels <- c(
-  isolated_relict = "Isolated relict",
-  persistent_refugium = "Persistent refugium",
+  candidate_refugium = "Candidate refugium",
   founder_population = "Founder population",
   secondary_contact = "Secondary contact"
 )
 signature_colors <- c(
-  isolated_relict = "#CC79A7",
-  persistent_refugium = "#009E73",
+  candidate_refugium = "#009E73",
   founder_population = "#0072B2",
   secondary_contact = "#D55E00"
 )
@@ -348,7 +368,8 @@ if (!lgm_has_polygon) {
   )
 }
 
-show_region <- tolower(trimws(as.character(regions$show))) %in% c("true", "t", "1", "yes")
+show_region <- show_hypothesis_regions &
+  tolower(trimws(as.character(regions$show))) %in% c("true", "t", "1", "yes")
 regions <- regions[show_region, , drop = FALSE]
 if (nrow(regions)) {
   required_regions <- c(
@@ -367,6 +388,48 @@ if (nrow(regions)) {
   region_points <- st_transform(region_points, 3995)
   region_buffers <- st_buffer(region_points, dist = regions$radius_km * 1000)
 }
+
+build_population_halos <- function(data, x_column, y_column, crs, pie_radius_km) {
+  population_name <- trimws(as.character(data$pop_gen_population))
+  keep <- data$pop_gen != "not_selected" &
+    !is.na(population_name) & nzchar(population_name) &
+    is.finite(data[[x_column]]) & is.finite(data[[y_column]])
+  index_groups <- split(which(keep), population_name[keep])
+  if (!length(index_groups)) {
+    return(st_sf(
+      population = character(), signature = character(),
+      radius_km = numeric(), geometry = st_sfc(crs = crs)
+    ))
+  }
+  halo_list <- lapply(names(index_groups), function(population) {
+    idx <- index_groups[[population]]
+    xy <- cbind(data[[x_column]][idx], data[[y_column]][idx])
+    center <- colMeans(xy)
+    distances <- sqrt(rowSums(sweep(xy, 2, center, "-")^2))
+    radius_m <- max(
+      population_halo_min_radius_km * 1000,
+      max(distances) +
+        (pie_radius_km + population_halo_padding_km) * 1000
+    )
+    population_signature <- unique(na.omit(as.character(data$signature[idx])))
+    if (length(population_signature) != 1) {
+      stop("Population has inconsistent diversity signatures: ", population)
+    }
+    st_sf(
+      population = population,
+      signature = population_signature,
+      radius_km = radius_m / 1000,
+      geometry = st_buffer(
+        st_sfc(st_point(center), crs = crs), dist = radius_m
+      )
+    )
+  })
+  do.call(rbind, halo_list)
+}
+
+map_population_halos <- build_population_halos(
+  samples, "x_plot", "y_plot", st_crs(3995), pie_radius_km
+)
 
 # A projected latitude circle gives a symmetric polar crop.
 crop_points <- st_as_sf(
@@ -436,6 +499,19 @@ if (nrow(regions)) {
     ggnewscale::new_scale_color()
 }
 
+# Population-derived halos replace broad, manually asserted refuge/contact
+# circles. Their transparent interiors preserve the ancestry pies and LGM map.
+for (signature_class in c("not_applicable", signature_levels)) {
+  z <- map_population_halos[
+    map_population_halos$signature == signature_class, , drop = FALSE
+  ]
+  if (!nrow(z)) next
+  map_plot <- map_plot + geom_sf(
+    data = z, fill = NA, color = outline_colors[signature_class],
+    linewidth = population_halo_linewidth, alpha = population_halo_alpha
+  )
+}
+
 # Invisible points create an outline-color legend; the pie borders themselves
 # are drawn in separate fixed-color layers below.
 map_plot <- map_plot + geom_point(
@@ -458,12 +534,10 @@ for (signature_class in pie_draw_order) {
   } else {
     0.98
   }
+  z$pie_radius_m <- pie_radius_km * radius_multiplier * 1000
   map_plot <- map_plot + scatterpie::geom_scatterpie(
     data = z,
-    aes(
-      x = x_plot, y = y_plot,
-      r = pie_radius_km * radius_multiplier * 1000
-    ),
+    aes(x = x_plot, y = y_plot, r = pie_radius_m),
     cols = q_columns,
     color = outline_colors[signature_class], linewidth = 0.38,
     alpha = layer_alpha
@@ -484,7 +558,10 @@ map_plot <- map_plot +
     name = "Diversity signature"
   ) +
   guides(
-    fill = guide_legend(ncol = 1, order = 3, override.aes = list(alpha = 1)),
+    fill = guide_legend(
+      ncol = 1, order = 3,
+      override.aes = list(alpha = 1, color = NA, linewidth = 0)
+    ),
     color = guide_legend(ncol = 1, order = 2,
                          override.aes = list(alpha = 1, size = 2.8))
   ) +
@@ -513,6 +590,7 @@ map_plot <- map_plot +
     legend.box.just = "left",
     legend.text = element_text(size = base_size * 0.72),
     legend.title = element_text(size = base_size * 0.80, face = "bold"),
+    legend.key = element_blank(),
     legend.key.height = grid::unit(2.8, "mm"),
     legend.key.width = grid::unit(4.2, "mm"),
     plot.margin = margin(4, 1, 4, 4)
@@ -576,6 +654,10 @@ for (idx in split(seq_len(nrow(samples)), beringia_group)) {
 
 beringia_land <- st_transform(land, beringia_crs)
 beringia_lgm <- st_transform(lgm, beringia_crs)
+beringia_population_halos <- build_population_halos(
+  samples, "beringia_x", "beringia_y", beringia_crs,
+  beringia_pie_radius_km
+)
 if (nrow(regions)) {
   beringia_region_points <- st_transform(region_points, beringia_crs)
   beringia_region_buffers <- st_buffer(
@@ -617,6 +699,17 @@ if (nrow(regions)) {
     ggnewscale::new_scale_color()
 }
 
+for (signature_class in c("not_applicable", signature_levels)) {
+  z <- beringia_population_halos[
+    beringia_population_halos$signature == signature_class, , drop = FALSE
+  ]
+  if (!nrow(z)) next
+  beringia_plot <- beringia_plot + geom_sf(
+    data = z, fill = NA, color = outline_colors[signature_class],
+    linewidth = population_halo_linewidth, alpha = population_halo_alpha
+  )
+}
+
 beringia_plot <- beringia_plot + geom_point(
   data = samples,
   aes(x = beringia_x, y = beringia_y, color = signature),
@@ -636,12 +729,10 @@ for (signature_class in pie_draw_order) {
   } else {
     0.98
   }
+  z$pie_radius_m <- beringia_pie_radius_km * radius_multiplier * 1000
   beringia_plot <- beringia_plot + scatterpie::geom_scatterpie(
     data = z,
-    aes(
-      x = beringia_x, y = beringia_y,
-      r = beringia_pie_radius_km * radius_multiplier * 1000
-    ),
+    aes(x = beringia_x, y = beringia_y, r = pie_radius_m),
     cols = q_columns,
     color = outline_colors[signature_class], linewidth = 0.38,
     alpha = layer_alpha
@@ -666,7 +757,7 @@ beringia_plot <- beringia_plot +
   guides(
     fill = guide_legend(
       ncol = beringia_legend_ncol, order = 3,
-      override.aes = list(alpha = 1)
+      override.aes = list(alpha = 1, color = NA, linewidth = 0)
     ),
     color = guide_legend(
       ncol = min(beringia_legend_ncol, length(signature_levels)), order = 2,
@@ -703,6 +794,7 @@ beringia_plot <- beringia_plot +
     legend.box.just = "center",
     legend.text = element_text(size = base_size * 0.72),
     legend.title = element_text(size = base_size * 0.80, face = "bold"),
+    legend.key = element_blank(),
     legend.key.height = grid::unit(2.8, "mm"),
     legend.key.width = grid::unit(4.2, "mm"),
     plot.margin = margin(4, 1, 4, 4)
@@ -849,16 +941,14 @@ y_text <- c(
 )^2
 quadrant_text <- data.frame(
   signature = factor(signature_levels, levels = signature_levels),
-  x = c(x_text[1], x_text[2], x_text[1], x_text[2]),
-  y = c(y_text[1], y_text[1], y_text[2], y_text[2]),
+  x = c(sqrt(x_text[1] * x_text[2]), x_text[1], x_text[2]),
+  y = c(y_text[1], y_text[2], y_text[2]),
   hjust = c(
-    0, signature_text_right_hjust,
-    0, signature_text_right_hjust
+    0.5, 0, signature_text_right_hjust
   ),
-  vjust = c(1, 1, 0, 0),
+  vjust = c(1, 0, 0),
   label = c(
-    "Isolated population",
-    "Persistent refugium",
+    "Candidate refugium",
     "Founder population",
     "Secondary contact"
   )
@@ -868,8 +958,12 @@ signature_plot <- ggplot(
   signature_plot_data,
   aes(x = pi, y = private_allelic_richness)
 ) +
-  geom_vline(xintercept = pi_cutoff, color = "#4D4D4D", linewidth = 0.45) +
   geom_hline(yintercept = private_cutoff, color = "#4D4D4D", linewidth = 0.45) +
+  annotate(
+    "segment", x = pi_cutoff, xend = pi_cutoff,
+    y = 0, yend = private_cutoff,
+    color = "#4D4D4D", linewidth = 0.45
+  ) +
   geom_point(
     aes(color = signature), shape = 21, fill = "white",
     size = 2.6, stroke = 0.95, alpha = 1
