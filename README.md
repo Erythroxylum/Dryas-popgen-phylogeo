@@ -225,12 +225,13 @@ Rscript scripts/14_plot_phylogeography.R \
 ```
 
 The sample pies are deterministically offset within `geoID`, so repeated runs
-have identical layouts. Pie outlines use the four diversity-signature colors
-defined by population pi and private allelic richness; unselected samples are
-gray. The 19 component names and high-contrast colors are editable in
-`data/K19_component_labels.tsv`. Approximate hypothesis regions are controlled by
-`data/phylogeographic_regions.tsv`; their radii are visual annotations rather
-than inferred biological boundaries. The map follows the attached
+have identical layouts. Pie outlines use three descriptive diversity-signature
+colors defined by population pi and private allelic richness; unselected
+samples are gray. The 19 component names and high-contrast colors are editable
+in `data/K19_component_labels.tsv`. Broad hypothesis regions in
+`data/phylogeographic_regions.tsv` are disabled by default because they are
+visual annotations rather than population-genetic results. Set
+`MAP_SHOW_HYPOTHESIS_REGIONS=TRUE` to display them. The map follows the attached
 `mapmixture` style using Natural Earth 1:50m country polygons, geographic
 graticules, and a framed projected panel, while retaining an Arctic Polar
 Stereographic projection. Useful plotting controls include
@@ -255,6 +256,14 @@ pies (default 0.70) and `MAP_UNASSIGNED_PIE_ALPHA` to change their opacity
 (default 0.35). Classified-population pies are then drawn at full size and
 near-full opacity, independent of input-file row order.
 
+Each classified population is surrounded by an outline-only halo calculated
+from the displayed positions of its samples. The radius encloses those samples
+and their ancestry pies, with configurable minimum size and padding through
+`MAP_POPULATION_HALO_MIN_RADIUS_KM` and `MAP_POPULATION_HALO_PADDING_KM`.
+`MAP_POPULATION_HALO_LINEWIDTH` and `MAP_POPULATION_HALO_ALPHA` control the
+outline. Transparent interiors prevent overlapping populations from obscuring
+the map or ancestry proportions.
+
 The same command also writes a wide Beringia map named
 `*_beringia_map.pdf`. It uses a Lambert azimuthal equal-area projection
 centered by default at 65 N, 180 E. The crop and output can be adjusted with
@@ -268,13 +277,18 @@ default to 1.4 and 0.8 times that value, respectively, producing a wide map.
 The plotting step also writes
 `results/map/population_refugial_signatures.tsv` and a standalone
 `*_refugial_signatures.pdf` (4 x 5 inches). Drummondii is excluded from this
-quadrant plot and from its default cutoffs because it is not equivalent to the
+signature plot and from its default cutoffs because it is not equivalent to the
 ingroup populations in the refugial comparison; it remains visible in the map
 and side panels in gray. By default, medians across the remaining selected
 populations divide high from low nucleotide diversity and private allelic
-richness. These cutoffs can be replaced with `SIGNATURE_PI_CUTOFF` and
-`SIGNATURE_PRIVATE_CUTOFF`. Points are unlabeled hollow circles whose outlines
-show the assigned diversity signature. For legibility, the standalone plot
+richness. Populations with high private allelic richness are grouped as
+candidate refugia regardless of whether pi is below or above its median. Among
+populations with low private allelic richness, the pi cutoff distinguishes
+founder-population from secondary-contact signatures. These are descriptive
+hypotheses rather than demographic-model assignments. The cutoffs can be
+replaced with `SIGNATURE_PI_CUTOFF` and `SIGNATURE_PRIVATE_CUTOFF`. Points are
+unlabeled hollow circles whose outlines show the assigned diversity signature.
+For legibility, the standalone plot
 uses a log10 x-axis for pi and a square-root y-axis for private allelic
 richness. Tick labels remain in the original units. The square-root scale
 accommodates zero private-allele values without an arbitrary pseudocount, and
@@ -289,15 +303,15 @@ respectively. Larger values add more space on that side of the transformed
 axis. `SIGNATURE_WIDTH` and `SIGNATURE_HEIGHT` control the PDF dimensions in
 inches and default to 4 and 5.
 
-The four quadrant descriptions are anchored to the panel corners.
+The three signature descriptions are anchored near their corresponding panel
+regions.
 `SIGNATURE_TEXT_X_INSET` and `SIGNATURE_TEXT_Y_INSET` control how far they are
 moved inward from the left/right and top/bottom edges, respectively. Their
 defaults are both 0.02. Increase either value to move the text farther into
 the panel; decrease it toward zero to move the text closer to the corners.
 `SIGNATURE_TEXT_RIGHT_HJUST` separately controls the horizontal alignment of
-the upper-right and lower-right descriptions. Its default is 0.80; decreasing
-it moves both right-side descriptions farther right, while increasing it
-toward 1 moves them left.
+the lower-right description. Its default is 0.80; decreasing it moves that
+description farther right, while increasing it toward 1 moves it left.
 
 Gray map outlines provide geographic context for samples outside the focal
 population comparison but are omitted from the diversity-signature legend.
