@@ -57,6 +57,15 @@ show_hypothesis_regions <- tolower(trimws(Sys.getenv(
 merge_same_signature_halos <- tolower(trimws(Sys.getenv(
   "MAP_MERGE_SAME_SIGNATURE_HALOS", "TRUE"
 ))) %in% c("true", "t", "1", "yes")
+show_leader_lines <- tolower(trimws(Sys.getenv(
+  "MAP_SHOW_LEADER_LINES", "TRUE"
+))) %in% c("true", "t", "1", "yes")
+leader_line_color <- Sys.getenv("MAP_LEADER_LINE_COLOR", "#595959")
+leader_line_width <- as.numeric(Sys.getenv("MAP_LEADER_LINE_WIDTH", "0.24"))
+leader_line_alpha <- as.numeric(Sys.getenv("MAP_LEADER_LINE_ALPHA", "0.70"))
+coordinate_point_size <- as.numeric(Sys.getenv(
+  "MAP_COORDINATE_POINT_SIZE", "0.45"
+))
 beringia_pie_radius_km <- as.numeric(Sys.getenv(
   "BERINGIA_PIE_RADIUS_KM", as.character(pie_radius_km)
 ))
@@ -92,6 +101,11 @@ signature_text_y_inset <- as.numeric(Sys.getenv(
 ))
 signature_text_right_hjust <- as.numeric(Sys.getenv(
   "SIGNATURE_TEXT_RIGHT_HJUST", "0.80"
+))
+signature_si_width <- as.numeric(Sys.getenv("SIGNATURE_SI_WIDTH", "8"))
+signature_si_height <- as.numeric(Sys.getenv("SIGNATURE_SI_HEIGHT", "7"))
+signature_si_label_size <- as.numeric(Sys.getenv(
+  "SIGNATURE_SI_LABEL_SIZE", "2.8"
 ))
 map_land_color <- Sys.getenv("MAP_LAND_COLOR", "#F2F2F2")
 map_sea_color <- Sys.getenv("MAP_SEA_COLOR", "#FFFFFF")
@@ -130,12 +144,15 @@ component_key <- read_tsv(component_label_file)
 pi_point <- read_tsv(file.path(diversity_dir, "filtered_sequence_population_pi.tsv"))
 pi_ci <- read_tsv(file.path(diversity_dir, "filtered_sequence_pi_bootstrap_ci.tsv"))
 snp_point <- read_tsv(file.path(diversity_dir, "population_snp_diversity.tsv"))
+individual_heterozygosity <- read_tsv(file.path(
+  diversity_dir, "individual_snp_heterozygosity.tsv"
+))
 
 q_columns <- grep("^Q[0-9]{2}$", names(samples), value = TRUE)
 if (length(q_columns) != 19) stop("Expected Q01--Q19 in sample map data")
 needed_sample <- c(
   "sampleID", "geoID", "Latitude", "Longitude", "pop_gen",
-  "pop_gen_population", "x_plot", "y_plot", q_columns
+  "pop_gen_population", "x_3995", "y_3995", "x_plot", "y_plot", q_columns
 )
 if (length(setdiff(needed_sample, names(samples)))) {
   stop("Sample map table lacks required plotting columns")
@@ -165,6 +182,16 @@ if (!is.finite(population_halo_linewidth) || population_halo_linewidth <= 0) {
 if (!is.finite(population_halo_alpha) || population_halo_alpha < 0 ||
     population_halo_alpha > 1) {
   stop("MAP_POPULATION_HALO_ALPHA must be between 0 and 1")
+}
+if (!is.finite(leader_line_width) || leader_line_width <= 0) {
+  stop("MAP_LEADER_LINE_WIDTH must be positive")
+}
+if (!is.finite(leader_line_alpha) || leader_line_alpha < 0 ||
+    leader_line_alpha > 1) {
+  stop("MAP_LEADER_LINE_ALPHA must be between 0 and 1")
+}
+if (!is.finite(coordinate_point_size) || coordinate_point_size < 0) {
+  stop("MAP_COORDINATE_POINT_SIZE must be non-negative")
 }
 if (!is.finite(lgm_min_latitude) || lgm_min_latitude < -90 ||
     lgm_min_latitude > 90) {
@@ -206,6 +233,16 @@ if (any(!is.finite(signature_controls)) ||
 }
 if (signature_text_right_hjust < 0 || signature_text_right_hjust > 1) {
   stop("SIGNATURE_TEXT_RIGHT_HJUST must be between 0 and 1")
+}
+if (!is.finite(signature_si_width) || signature_si_width <= 0 ||
+    !is.finite(signature_si_height) || signature_si_height <= 0 ||
+    !is.finite(signature_si_label_size) || signature_si_label_size <= 0) {
+  stop("SIGNATURE_SI_WIDTH, SIGNATURE_SI_HEIGHT, and SIGNATURE_SI_LABEL_SIZE must be positive")
+}
+
+needed_individual <- c("sampleID", "snp_heterozygosity", "call_rate")
+if (length(setdiff(needed_individual, names(individual_heterozygosity)))) {
+  stop("individual_snp_heterozygosity.tsv lacks required columns")
 }
 
 needed_snp <- c("population", "pop_gen", "private_allelic_richness")
@@ -452,6 +489,23 @@ map_population_halos <- build_population_halos(
 )
 map_population_halos <- dissolve_population_halos(map_population_halos)
 
+build_leader_segments <- function(data, origin_x, origin_y, display_x, display_y) {
+  distance <- sqrt(
+    (data[[display_x]] - data[[origin_x]])^2 +
+      (data[[display_y]] - data[[origin_y]])^2
+  )
+  keep <- is.finite(distance) & distance > 1
+  data.frame(
+    x = data[[origin_x]][keep], y = data[[origin_y]][keep],
+    xend = data[[display_x]][keep], yend = data[[display_y]][keep],
+    stringsAsFactors = FALSE
+  )
+}
+
+map_leaders <- build_leader_segments(
+  samples, "x_3995", "y_3995", "x_plot", "y_plot"
+)
+
 # A projected latitude circle gives a symmetric polar crop.
 crop_points <- st_as_sf(
   data.frame(lon = seq(-180, 180, by = 2), lat = map_min_latitude),
@@ -503,6 +557,25 @@ if (lgm_has_polygon) {
 map_plot <- map_plot + geom_sf(
   data = land, fill = NA, color = map_border_color, linewidth = 0.18
 )
+
+# Leader lines make deterministic pie offsets explicit. Lines terminate at pie
+# centers and are drawn before the pies, so the circle naturally masks the
+# inner part of each line. Small points mark the true collection coordinates.
+if (show_leader_lines && nrow(map_leaders)) {
+  map_plot <- map_plot +
+    geom_segment(
+      data = map_leaders,
+      aes(x = x, y = y, xend = xend, yend = yend),
+      inherit.aes = FALSE, color = leader_line_color,
+      linewidth = leader_line_width, alpha = leader_line_alpha,
+      lineend = "round"
+    ) +
+    geom_point(
+      data = map_leaders, aes(x = x, y = y), inherit.aes = FALSE,
+      color = leader_line_color, size = coordinate_point_size,
+      alpha = leader_line_alpha
+    )
+}
 
 if (nrow(regions)) {
   map_plot <- map_plot +
@@ -651,8 +724,10 @@ beringia_samples_sf <- st_as_sf(
 )
 beringia_samples_sf <- st_transform(beringia_samples_sf, beringia_crs)
 beringia_xy <- st_coordinates(beringia_samples_sf)
-samples$beringia_x <- beringia_xy[, 1]
-samples$beringia_y <- beringia_xy[, 2]
+samples$beringia_origin_x <- beringia_xy[, 1]
+samples$beringia_origin_y <- beringia_xy[, 2]
+samples$beringia_x <- samples$beringia_origin_x
+samples$beringia_y <- samples$beringia_origin_y
 
 beringia_group <- trimws(as.character(samples$geoID))
 missing_beringia_group <- is.na(beringia_group) | !nzchar(beringia_group)
@@ -672,6 +747,11 @@ for (idx in split(seq_len(nrow(samples)), beringia_group)) {
   samples$beringia_x[idx] <- center_x + radius * cos(angle)
   samples$beringia_y[idx] <- center_y + radius * sin(angle)
 }
+
+beringia_leaders <- build_leader_segments(
+  samples,
+  "beringia_origin_x", "beringia_origin_y", "beringia_x", "beringia_y"
+)
 
 beringia_land <- st_transform(land, beringia_crs)
 beringia_lgm <- st_transform(lgm, beringia_crs)
@@ -706,6 +786,22 @@ beringia_plot <- beringia_plot + geom_sf(
   data = beringia_land, fill = NA,
   color = map_border_color, linewidth = 0.20
 )
+
+if (show_leader_lines && nrow(beringia_leaders)) {
+  beringia_plot <- beringia_plot +
+    geom_segment(
+      data = beringia_leaders,
+      aes(x = x, y = y, xend = xend, yend = yend),
+      inherit.aes = FALSE, color = leader_line_color,
+      linewidth = leader_line_width, alpha = leader_line_alpha,
+      lineend = "round"
+    ) +
+    geom_point(
+      data = beringia_leaders, aes(x = x, y = y), inherit.aes = FALSE,
+      color = leader_line_color, size = coordinate_point_size,
+      alpha = leader_line_alpha
+    )
+}
 
 if (nrow(regions)) {
   beringia_plot <- beringia_plot +
@@ -932,7 +1028,71 @@ relationship_plot <- ggplot(
     plot.margin = margin(4, 20, 4, 1)
   )
 
-# Standalone four-quadrant summary. Drummondii is excluded because it is not
+# Descriptive per-individual heterozygosity. Population class comes from the
+# same metadata assignments used for the map; unassigned samples are retained
+# as a visual reference rather than treated as a demographic population.
+individual_data <- merge(
+  individual_heterozygosity[
+    c("sampleID", "snp_heterozygosity", "call_rate")
+  ],
+  samples[c("sampleID", "pop_gen")],
+  by = "sampleID", all = FALSE, sort = FALSE
+)
+individual_data <- individual_data[
+  is.finite(individual_data$snp_heterozygosity), , drop = FALSE
+]
+if (!nrow(individual_data)) {
+  stop("No mapped samples have finite individual SNP heterozygosity")
+}
+individual_data$sample_class <- factor(
+  individual_data$pop_gen,
+  levels = c("uniform", "admixed", "not_selected"),
+  labels = c("Uniform", "Admixed", "Unassigned")
+)
+if (any(is.na(individual_data$sample_class))) {
+  stop("Unexpected population class in individual heterozygosity data")
+}
+individual_class_colors <- c(
+  Uniform = "#0072B2", Admixed = "#D55E00", Unassigned = "#999999"
+)
+class_counts <- table(individual_data$sample_class)
+class_axis_labels <- setNames(
+  paste0(names(class_counts), "\n(n = ", as.integer(class_counts), ")"),
+  names(class_counts)
+)
+
+individual_heterozygosity_plot <- ggplot(
+  individual_data,
+  aes(x = sample_class, y = snp_heterozygosity, fill = sample_class)
+) +
+  geom_violin(
+    trim = FALSE, scale = "width", color = "#4D4D4D",
+    linewidth = 0.35, alpha = 0.42
+  ) +
+  geom_boxplot(
+    width = 0.14, outlier.shape = NA, fill = "white",
+    color = "#333333", linewidth = 0.38
+  ) +
+  geom_jitter(
+    aes(color = sample_class), width = 0.10, height = 0,
+    size = 0.85, alpha = 0.52, show.legend = FALSE
+  ) +
+  scale_fill_manual(values = individual_class_colors, guide = "none") +
+  scale_color_manual(values = individual_class_colors, guide = "none") +
+  scale_x_discrete(labels = class_axis_labels) +
+  labs(
+    x = "Population assignment",
+    y = "Individual observed heterozygosity"
+  ) +
+  theme_classic(base_size = base_size + 1) +
+  theme(
+    axis.text.x = element_text(color = "black"),
+    axis.text.y = element_text(color = "black"),
+    panel.background = element_rect(fill = "white", color = NA),
+    plot.background = element_rect(fill = "white", color = NA)
+  )
+
+# Refugial-signature summary. Drummondii is excluded because it is not
 # equivalent to the ingroup populations in the refugial comparison.
 signature_plot_data <- signature_data[!is_drummondii, , drop = FALSE]
 if (any(signature_plot_data$pi <= 0)) {
@@ -1046,12 +1206,43 @@ signature_plot <- ggplot(
     legend.key = element_rect(fill = "white", color = NA)
   )
 
+# Large supplementary version with every analyzed population labeled. The
+# main composite uses the unlabeled form so its structure remains legible.
+signature_label_data <- signature_plot_data
+signature_label_data$display_population <- gsub(
+  "_", " ", sub("^x_?", "", signature_label_data$population)
+)
+signature_si_plot <- signature_plot +
+  geom_text_repel(
+    data = signature_label_data,
+    aes(label = display_population),
+    size = signature_si_label_size, seed = 20261018,
+    min.segment.length = 0, max.overlaps = Inf,
+    box.padding = 0.38, point.padding = 0.20,
+    force = 1.3, color = "black", show.legend = FALSE
+  ) +
+  theme(
+    axis.title = element_text(size = 10),
+    axis.text = element_text(size = 8.5),
+    legend.title = element_text(size = 8.5),
+    legend.text = element_text(size = 8)
+  )
+
 signature_pdf <- sub(
   "\\.pdf$", "_refugial_signatures.pdf", output_file, ignore.case = TRUE
 )
 ggsave(
   signature_pdf, signature_plot,
   width = signature_width, height = signature_height, units = "in"
+)
+
+signature_si_pdf <- sub(
+  "\\.pdf$", "_refugial_signatures_labeled.pdf",
+  output_file, ignore.case = TRUE
+)
+ggsave(
+  signature_si_pdf, signature_si_plot,
+  width = signature_si_width, height = signature_si_height, units = "in"
 )
 
 map_only <- sub("\\.pdf$", "_map.pdf", output_file, ignore.case = TRUE)
@@ -1065,12 +1256,20 @@ ggsave(
   width = beringia_map_width, height = beringia_map_height, units = "in"
 )
 
-pi_class_plot <- pi_class_plot + theme(plot.margin = margin(4, 8, 4, 1))
-private_plot <- private_plot + theme(plot.margin = margin(4, 8, 4, 1))
-side_panels <- pi_class_plot / private_plot / relationship_plot +
-  plot_layout(heights = c(0.75, 1.25, 1.45))
+# The main figure contains exactly three panels: the circumpolar ancestry map,
+# the compact refugial-signature summary, and descriptive individual Ho.
+signature_panel <- signature_plot +
+  theme(
+    legend.position = "none",
+    plot.caption = element_blank(),
+    plot.margin = margin(5, 7, 5, 5)
+  )
+individual_heterozygosity_plot <- individual_heterozygosity_plot +
+  theme(plot.margin = margin(5, 7, 5, 5))
+side_panels <- signature_panel / individual_heterozygosity_plot +
+  plot_layout(heights = c(1.08, 0.92))
 composite <- map_plot | side_panels
-composite <- composite + plot_layout(widths = c(2.0, 1.08)) +
+composite <- composite + plot_layout(widths = c(2.05, 1.0)) +
   plot_annotation(tag_levels = "A")
 ggsave(
   output_file, composite,
@@ -1081,6 +1280,7 @@ message("Map-only figure: ", map_only)
 message("Beringia equal-area map: ", beringia_map)
 message("Composite figure: ", output_file)
 message("Refugial-signature figure: ", signature_pdf)
+message("Labeled SI refugial-signature figure: ", signature_si_pdf)
 message("Refugial-signature assignments: ", signature_output)
 message("Refugial-signature thresholds: ", signature_threshold_output)
 
