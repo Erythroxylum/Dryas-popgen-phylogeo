@@ -1321,8 +1321,17 @@ extract_legend <- function(p) {
   if (length(idx) != 1L) stop("Expected one legend box")
   g$grobs[[idx]]
 }
-class_legend <- extract_legend(individual_heterozygosity_plot)
-k19_legend <- extract_legend(map_plot)
+# Shared legend typography controls (ggplot sizes are in points).
+legend_text_size <- base_size * 1.15
+legend_title_size <- base_size * 1.20
+shared_legend_theme <- theme(
+  legend.text = element_text(size = legend_text_size),
+  legend.title = element_text(size = legend_title_size, face = "bold")
+)
+class_legend <- extract_legend(
+  individual_heterozygosity_plot + shared_legend_theme
+)
+k19_legend <- extract_legend(map_plot + shared_legend_theme)
 
 # Anchor each legend at the left edge of its allocated row.
 left_align_legend <- function(legend) {
@@ -1340,7 +1349,7 @@ left_align_legend <- function(legend) {
 # Layout controls: relative heights from top to bottom in the left column.
 # Increase a row's value to allocate more space to that plot or legend.
 left_heights <- c(
-  0.29,  # C: individual heterozygosity plot
+  0.29,  # A: individual heterozygosity plot
   0.32,  # B: refugial-signature plot
   0.10,  # Individual class legend
   0.29   # K19 admixture component legend (bottom left)
@@ -1349,7 +1358,7 @@ composite_widths <- c(1.10, 2.46)  # Left column and map, respectively.
 
 left_side_panels <- wrap_plots(
   individual_heterozygosity_plot +
-    theme(legend.position = "none") + labs(tag = "C"),
+    theme(legend.position = "none") + labs(tag = "A"),
   signature_panel + labs(tag = "B"),
   wrap_elements(
     full = left_align_legend(class_legend),
@@ -1362,11 +1371,16 @@ left_side_panels <- wrap_plots(
   ncol = 1,
   heights = left_heights
 )
-# Preserve the existing panel letters when moving the panels.
-composite <- (
-  left_side_panels |
-    (map_plot + theme(legend.position = "none") + labs(tag = "A"))
-) +
+# Reserve empty space BELOW the map so its fixed-aspect panel sits higher.
+# Reduce the first value to move the map upward; increase it to move it down.
+map_column_heights <- c(0.82, 0.18)  # Map, empty space below.
+map_column <- wrap_plots(
+  map_plot + theme(legend.position = "none") + labs(tag = "C"),
+  plot_spacer(),
+  ncol = 1,
+  heights = map_column_heights
+)
+composite <- (left_side_panels | map_column) +
   plot_layout(widths = composite_widths)
 ggsave(
   output_file, composite,
