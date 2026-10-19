@@ -673,7 +673,7 @@ map_plot <- map_plot +
   ) +
   guides(
     fill = guide_legend(
-      nrow = 2, byrow = TRUE, order = 3,
+      nrow = 3, byrow = TRUE, order = 3,
       override.aes = list(alpha = 1, color = NA, linewidth = 0)
     ),
     color = guide_legend(
@@ -705,8 +705,8 @@ map_plot <- map_plot +
     legend.direction = "horizontal",
     legend.box = "horizontal",
     legend.box.just = "center",
-    legend.text = element_text(size = base_size * 0.82),
-    legend.title = element_text(size = base_size * 0.92, face = "bold"),
+    legend.text = element_text(size = base_size * 0.95),
+    legend.title = element_text(size = base_size, face = "bold"),
     legend.key = element_blank(),
     legend.key.height = grid::unit(2.8, "mm"),
     legend.key.width = grid::unit(4.2, "mm"),
@@ -1070,13 +1070,13 @@ if (!nrow(individual_data)) {
 individual_data$sample_class <- factor(
   individual_data$pop_gen,
   levels = c("uniform", "admixed", "not_selected"),
-  labels = c("Uniform", "Admixed", "Unassigned")
+  labels = c("Unadmixed", "Admixed", "Unassigned")
 )
 if (any(is.na(individual_data$sample_class))) {
   stop("Unexpected population class in individual heterozygosity data")
 }
 individual_class_colors <- c(
-  Uniform = "#0072B2", Admixed = "#D55E00", Unassigned = "#999999"
+  Unadmixed = "#0072B2", Admixed = "#D55E00", Unassigned = "#999999"
 )
 class_counts <- table(individual_data$sample_class)
 class_axis_labels <- setNames(
@@ -1099,10 +1099,18 @@ individual_heterozygosity_plot <- ggplot(
   geom_jitter(
     aes(color = sample_class), width = 0.10, height = 0,
     shape = 16, size = heterozygosity_point_size,
-    alpha = 0.58, show.legend = FALSE
+    alpha = 0.58, show.legend = TRUE
   ) +
   scale_fill_manual(values = individual_class_colors, guide = "none") +
-  scale_color_manual(values = individual_class_colors, guide = "none") +
+  scale_color_manual(
+    values = individual_class_colors,
+    breaks = c("Admixed", "Unadmixed", "Unassigned"),
+    name = "Individual class",
+    guide = guide_legend(
+      nrow = 1, byrow = TRUE,
+      override.aes = list(shape = 16, size = 3.2, alpha = 1)
+    )
+  ) +
   scale_x_discrete(labels = class_axis_labels) +
   labs(
     x = "Population assignment",
@@ -1113,6 +1121,10 @@ individual_heterozygosity_plot <- ggplot(
     axis.title = element_text(size = axis_title_size),
     axis.text.x = element_text(size = axis_text_size, color = "black"),
     axis.text.y = element_text(size = axis_text_size, color = "black"),
+    legend.position = "bottom",
+    legend.direction = "horizontal",
+    legend.title = element_text(size = base_size * 0.90, face = "bold"),
+    legend.text = element_text(size = base_size * 0.85),
     panel.background = element_rect(fill = "white", color = NA),
     plot.background = element_rect(fill = "white", color = NA)
   )
@@ -1298,7 +1310,11 @@ individual_heterozygosity_plot <- individual_heterozygosity_plot +
   theme(plot.margin = margin(5, 7, 5, 5))
 side_panels <- signature_panel / individual_heterozygosity_plot +
   plot_layout(heights = c(1.08, 0.92))
-composite <- map_plot | side_panels
+# Center the B/C stack in 75% of the available height. The blank quarters are
+# split equally above and below, leaving room for Panel C's horizontal legend.
+short_side_panels <- plot_spacer() / side_panels / plot_spacer() +
+  plot_layout(heights = c(0.125, 0.75, 0.125))
+composite <- map_plot | short_side_panels
 composite <- composite + plot_layout(widths = c(2.46, 0.80)) +
   plot_annotation(tag_levels = "A")
 ggsave(
