@@ -107,6 +107,9 @@ signature_si_height <- as.numeric(Sys.getenv("SIGNATURE_SI_HEIGHT", "7"))
 signature_si_label_size <- as.numeric(Sys.getenv(
   "SIGNATURE_SI_LABEL_SIZE", "2.8"
 ))
+heterozygosity_point_size <- as.numeric(Sys.getenv(
+  "HETEROZYGOSITY_POINT_SIZE", "1.35"
+))
 map_land_color <- Sys.getenv("MAP_LAND_COLOR", "#F2F2F2")
 map_sea_color <- Sys.getenv("MAP_SEA_COLOR", "#FFFFFF")
 map_border_color <- Sys.getenv("MAP_BORDER_COLOR", "#777777")
@@ -238,6 +241,9 @@ if (!is.finite(signature_si_width) || signature_si_width <= 0 ||
     !is.finite(signature_si_height) || signature_si_height <= 0 ||
     !is.finite(signature_si_label_size) || signature_si_label_size <= 0) {
   stop("SIGNATURE_SI_WIDTH, SIGNATURE_SI_HEIGHT, and SIGNATURE_SI_LABEL_SIZE must be positive")
+}
+if (!is.finite(heterozygosity_point_size) || heterozygosity_point_size <= 0) {
+  stop("HETEROZYGOSITY_POINT_SIZE must be positive")
 }
 
 needed_individual <- c("sampleID", "snp_heterozygosity", "call_rate")
@@ -558,25 +564,6 @@ map_plot <- map_plot + geom_sf(
   data = land, fill = NA, color = map_border_color, linewidth = 0.18
 )
 
-# Leader lines make deterministic pie offsets explicit. Lines terminate at pie
-# centers and are drawn before the pies, so the circle naturally masks the
-# inner part of each line. Small points mark the true collection coordinates.
-if (show_leader_lines && nrow(map_leaders)) {
-  map_plot <- map_plot +
-    geom_segment(
-      data = map_leaders,
-      aes(x = x, y = y, xend = xend, yend = yend),
-      inherit.aes = FALSE, color = leader_line_color,
-      linewidth = leader_line_width, alpha = leader_line_alpha,
-      lineend = "round"
-    ) +
-    geom_point(
-      data = map_leaders, aes(x = x, y = y), inherit.aes = FALSE,
-      color = leader_line_color, size = coordinate_point_size,
-      alpha = leader_line_alpha
-    )
-}
-
 if (nrow(regions)) {
   map_plot <- map_plot +
     geom_sf(
@@ -636,6 +623,25 @@ for (signature_class in pie_draw_order) {
     color = outline_colors[signature_class], linewidth = 0.38,
     alpha = layer_alpha
   )
+}
+
+# Draw leaders above the pies so they remain visible when the jitter distance
+# is smaller than the pie radius. The point at the line origin is the true
+# collection coordinate; the other endpoint is the displayed pie center.
+if (show_leader_lines && nrow(map_leaders)) {
+  map_plot <- map_plot +
+    geom_segment(
+      data = map_leaders,
+      aes(x = x, y = y, xend = xend, yend = yend),
+      inherit.aes = FALSE, color = leader_line_color,
+      linewidth = leader_line_width, alpha = leader_line_alpha,
+      lineend = "round"
+    ) +
+    geom_point(
+      data = map_leaders, aes(x = x, y = y), inherit.aes = FALSE,
+      color = leader_line_color, size = coordinate_point_size,
+      alpha = leader_line_alpha
+    )
 }
 
 map_plot <- map_plot +
@@ -787,22 +793,6 @@ beringia_plot <- beringia_plot + geom_sf(
   color = map_border_color, linewidth = 0.20
 )
 
-if (show_leader_lines && nrow(beringia_leaders)) {
-  beringia_plot <- beringia_plot +
-    geom_segment(
-      data = beringia_leaders,
-      aes(x = x, y = y, xend = xend, yend = yend),
-      inherit.aes = FALSE, color = leader_line_color,
-      linewidth = leader_line_width, alpha = leader_line_alpha,
-      lineend = "round"
-    ) +
-    geom_point(
-      data = beringia_leaders, aes(x = x, y = y), inherit.aes = FALSE,
-      color = leader_line_color, size = coordinate_point_size,
-      alpha = leader_line_alpha
-    )
-}
-
 if (nrow(regions)) {
   beringia_plot <- beringia_plot +
     geom_sf(
@@ -857,6 +847,22 @@ for (signature_class in pie_draw_order) {
     color = outline_colors[signature_class], linewidth = 0.38,
     alpha = layer_alpha
   )
+}
+
+if (show_leader_lines && nrow(beringia_leaders)) {
+  beringia_plot <- beringia_plot +
+    geom_segment(
+      data = beringia_leaders,
+      aes(x = x, y = y, xend = xend, yend = yend),
+      inherit.aes = FALSE, color = leader_line_color,
+      linewidth = leader_line_width, alpha = leader_line_alpha,
+      lineend = "round"
+    ) +
+    geom_point(
+      data = beringia_leaders, aes(x = x, y = y), inherit.aes = FALSE,
+      color = leader_line_color, size = coordinate_point_size,
+      alpha = leader_line_alpha
+    )
 }
 
 beringia_x_limit <- beringia_half_width_x_km * 1000
@@ -1075,7 +1081,8 @@ individual_heterozygosity_plot <- ggplot(
   ) +
   geom_jitter(
     aes(color = sample_class), width = 0.10, height = 0,
-    size = 0.85, alpha = 0.52, show.legend = FALSE
+    shape = 16, size = heterozygosity_point_size,
+    alpha = 0.58, show.legend = FALSE
   ) +
   scale_fill_manual(values = individual_class_colors, guide = "none") +
   scale_color_manual(values = individual_class_colors, guide = "none") +
@@ -1115,6 +1122,26 @@ y_panel_range <- c(
   max(0, y_sqrt_range[1] - signature_y_expand_bottom * y_sqrt_span),
   y_sqrt_range[2] + signature_y_expand_top * y_sqrt_span
 )
+# Draw the lower vertical separator in normalized panel coordinates. This
+# reaches the panel boundary even when scale expansion creates space below
+# zero on the square-root axis.
+y_scale_range <- c(
+  y_sqrt_range[1] - signature_y_expand_bottom * y_sqrt_span,
+  y_sqrt_range[2] + signature_y_expand_top * y_sqrt_span
+)
+separator_x_npc <- (
+  log10(pi_cutoff) - x_panel_range[1]
+) / diff(x_panel_range)
+separator_y_npc <- (
+  sqrt(private_cutoff) - y_scale_range[1]
+) / diff(y_scale_range)
+separator_grob <- grid::segmentsGrob(
+  x0 = grid::unit(separator_x_npc, "npc"),
+  x1 = grid::unit(separator_x_npc, "npc"),
+  y0 = grid::unit(0, "npc"),
+  y1 = grid::unit(separator_y_npc, "npc"),
+  gp = grid::gpar(col = "#4D4D4D", lwd = 0.85)
+)
 x_text <- 10^c(
   x_panel_range[1] + signature_text_x_inset * diff(x_panel_range),
   x_panel_range[2] - signature_text_x_inset * diff(x_panel_range)
@@ -1143,10 +1170,9 @@ signature_plot <- ggplot(
   aes(x = pi, y = private_allelic_richness)
 ) +
   geom_hline(yintercept = private_cutoff, color = "#4D4D4D", linewidth = 0.45) +
-  annotate(
-    "segment", x = pi_cutoff, xend = pi_cutoff,
-    y = 0, yend = private_cutoff,
-    color = "#4D4D4D", linewidth = 0.45
+  annotation_custom(
+    grob = separator_grob,
+    xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf
   ) +
   geom_point(
     aes(color = signature), shape = 21, fill = "white",
