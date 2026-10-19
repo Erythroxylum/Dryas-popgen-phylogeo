@@ -1295,7 +1295,7 @@ individual_heterozygosity_plot <- individual_heterozygosity_plot +
 side_panels <- signature_panel / individual_heterozygosity_plot +
   plot_layout(heights = c(1.08, 0.92))
 composite <- map_plot | side_panels
-composite <- composite + plot_layout(widths = c(2.05, 1.0)) +
+composite <- composite + plot_layout(widths = c(2.46, 0.80)) +
   plot_annotation(tag_levels = "A")
 ggsave(
   output_file, composite,
