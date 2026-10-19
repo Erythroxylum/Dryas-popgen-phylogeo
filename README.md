@@ -244,7 +244,11 @@ graticules, and a framed projected panel, while retaining an Arctic Polar
 Stereographic projection. Useful plotting controls include
 `MAP_JITTER_RADIUS_KM`, `MAP_PIE_RADIUS_KM`, `MAP_MIN_LATITUDE`,
 `MAP_LAND_COLOR`, `MAP_SEA_COLOR`, `MAP_BORDER_COLOR`, `FIGURE_WIDTH`, and
-`FIGURE_HEIGHT`. By default, the main map retains the symmetric polar extent
+`FIGURE_HEIGHT`. `FIGURE_BASE_SIZE` sets the general text scale, while
+`FIGURE_AXIS_TITLE_SIZE` and `FIGURE_AXIS_TEXT_SIZE` independently control all
+axis titles and tick labels. The main map has no internal title or subtitle;
+its K19 ancestry legend is placed below the map in two rows, beside the
+diversity-signature legend. By default, the main map retains the symmetric polar extent
 defined by `MAP_MIN_LATITUDE`. To make an asymmetric rectangular crop without
 changing the EPSG:3995 projection, use `MAP_CENTER_LON`, `MAP_CENTER_LAT`,
 `MAP_HALF_WIDTH_X_KM`, and `MAP_HALF_HEIGHT_KM`. The derived LGM polygons are
