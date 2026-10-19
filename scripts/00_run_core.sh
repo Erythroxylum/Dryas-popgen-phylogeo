@@ -20,7 +20,7 @@ NBOOT="$nboot" Rscript scripts/03_population_diversity.R \
   results/diversity
 
 Rscript scripts/04_individual_heterozygosity.R \
-  results/vcf/s215_popgen_all_snps.vcf.gz \
+  "$vcf" \
   results/metadata/sample_to_population.tsv \
   results/diversity/individual_snp_heterozygosity.tsv
 
