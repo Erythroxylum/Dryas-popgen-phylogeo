@@ -663,7 +663,7 @@ map_plot <- map_plot +
     values = component_colors,
     breaks = q_columns,
     labels = component_labels[q_columns],
-    name = "K19 ancestry component"
+    name = "K19"
   ) +
   scale_color_manual(
     values = outline_colors,
@@ -674,7 +674,8 @@ map_plot <- map_plot +
   ) +
   guides(
     fill = guide_legend(
-      nrow = 3, byrow = TRUE, order = 3,
+      ncol = 4, byrow = TRUE, order = 3,
+      title.position = "top", title.hjust = 0,
       override.aes = list(alpha = 1, color = NA, linewidth = 0)
     )
   ) +
@@ -1105,6 +1106,7 @@ individual_heterozygosity_plot <- ggplot(
     name = "Individual class",
     guide = guide_legend(
       nrow = 1, byrow = TRUE,
+      title.position = "top", title.hjust = 0,
       override.aes = list(shape = 16, size = 3.2, alpha = 1)
     )
   ) +
@@ -1305,19 +1307,47 @@ signature_panel <- signature_plot +
   )
 individual_heterozygosity_plot <- individual_heterozygosity_plot +
   theme(plot.margin = margin(5, 7, 5, 5))
-# Top-align Panels B and C within 75% of the available height. Their original
-# 1.08:0.92 relative heights are retained, and the unused quarter is below.
-# Listing all three rows explicitly prevents patchwork from flattening a nested
-# layout into three panels governed by only two height values.
+# Extract legends before hiding them in the composite's data panels.
+# This supports both older ggplot2's guide-box and newer guide-box-bottom.
+extract_legend <- function(p) {
+  g <- ggplotGrob(p + theme(legend.position = "bottom"))
+  idx <- which(grepl("^guide-box", g$layout$name))
+  idx <- idx[!vapply(
+    g$grobs[idx], inherits, logical(1), what = "zeroGrob"
+  )]
+  if (length(idx) != 1L) stop("Expected one legend box")
+  g$grobs[[idx]]
+}
+class_legend <- extract_legend(individual_heterozygosity_plot)
+k19_legend <- extract_legend(map_plot)
+
+# Layout controls: relative heights from top to bottom in the right column.
+# Move a legend by changing the heights above it; change its own allocation
+# to give it more room. Reorder the wrap_plots entries to change their order.
+right_heights <- c(
+  0.30,  # B: refugial-signature plot
+  0.27,  # C: individual heterozygosity plot
+  0.08,  # Individual class legend
+  0.27,  # K19 legend
+  0.08   # Empty space below
+)
+composite_widths <- c(2.46, 1.10)  # Map and right column, respectively.
+
 short_side_panels <- wrap_plots(
   signature_panel,
-  individual_heterozygosity_plot,
+  individual_heterozygosity_plot +
+    theme(legend.position = "none"),
+  wrap_elements(full = class_legend, ignore_tag = TRUE),
+  wrap_elements(full = k19_legend, ignore_tag = TRUE),
   plot_spacer(),
   ncol = 1,
-  heights = c(0.405, 0.345, 0.25)
+  heights = right_heights
 )
-composite <- map_plot | short_side_panels
-composite <- composite + plot_layout(widths = c(2.46, 0.80)) +
+composite <- (
+  (map_plot + theme(legend.position = "none")) |
+    short_side_panels
+) +
+  plot_layout(widths = composite_widths) +
   plot_annotation(tag_levels = "A")
 ggsave(
   output_file, composite,
