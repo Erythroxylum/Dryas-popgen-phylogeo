@@ -247,9 +247,10 @@ Stereographic projection. Useful plotting controls include
 `FIGURE_HEIGHT`. `FIGURE_BASE_SIZE` directly controls the axis titles and tick
 labels across all panels; axis titles are drawn at 1.10 times this value and
 axis values at the specified value. The script prints the resolved typography
-values at startup. The main map has no internal title or subtitle;
-its K19 ancestry legend is placed below the map in three rows, beside the
-diversity-signature legend. By default, the main map retains the symmetric polar extent
+values at startup. The main map has no internal title or subtitle. Its K19 ancestry
+legend is placed below the map in three rows. Colored population outlines
+remain visible, but their three diversity-signature classes are explained in
+Panel B rather than repeated in the Panel A legend. By default, the main map retains the symmetric polar extent
 defined by `MAP_MIN_LATITUDE`. To make an asymmetric rectangular crop without
 changing the EPSG:3995 projection, use `MAP_CENTER_LON`, `MAP_CENTER_LAT`,
 `MAP_HALF_WIDTH_X_KM`, and `MAP_HALF_HEIGHT_KM`. The derived LGM polygons are
@@ -299,8 +300,8 @@ populations, admixed populations, or no focal population. Panel C is
 descriptive: violins show the distributions, narrow boxplots show their
 medians and interquartile ranges, and points show individual samples. A
 horizontal point-color legend below the panel identifies admixed, unadmixed,
-and unassigned individuals. The B/C stack is centered beside Panel A at 75% of
-the full map height. It reads
+and unassigned individuals. The B/C stack is top-aligned beside Panel A at 75% of
+the full map height, with the unused quarter placed below it. It reads
 `results/diversity/individual_snp_heterozygosity.tsv`, produced by
 `scripts/04_individual_heterozygosity.R` in the core workflow. That script must
 be run on the full cleaned 384-sample VCF—not the 215-sample population
