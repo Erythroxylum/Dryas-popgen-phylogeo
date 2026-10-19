@@ -119,7 +119,9 @@ map_land_color <- Sys.getenv("MAP_LAND_COLOR", "#F2F2F2")
 map_sea_color <- Sys.getenv("MAP_SEA_COLOR", "#FFFFFF")
 map_border_color <- Sys.getenv("MAP_BORDER_COLOR", "#777777")
 lgm_fill_color <- Sys.getenv("LGM_FILL_COLOR", "#BDD7E7")
-lgm_fill_alpha <- as.numeric(Sys.getenv("LGM_FILL_ALPHA", "0.70"))
+# Glacier shading opacity: 0 = transparent, 1 = opaque.
+# Override at run time with LGM_FILL_ALPHA (for example, 0.20 for lighter blue).
+lgm_fill_alpha <- as.numeric(Sys.getenv("LGM_FILL_ALPHA", "0.35"))
 lgm_min_latitude <- as.numeric(Sys.getenv("LGM_MIN_LATITUDE", "0"))
 lgm_line_color <- Sys.getenv("LGM_LINE_COLOR", "#6BAED6")
 lgm_line_width <- as.numeric(Sys.getenv("LGM_LINE_WIDTH", "0.35"))
