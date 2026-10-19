@@ -669,16 +669,13 @@ map_plot <- map_plot +
     values = outline_colors,
     breaks = signature_levels,
     labels = signature_labels[signature_levels],
-    name = "Diversity signature"
+    name = "Diversity signature",
+    guide = "none"
   ) +
   guides(
     fill = guide_legend(
       nrow = 3, byrow = TRUE, order = 3,
       override.aes = list(alpha = 1, color = NA, linewidth = 0)
-    ),
-    color = guide_legend(
-      nrow = 1, byrow = TRUE, order = 2,
-      override.aes = list(alpha = 1, size = 2.8)
     )
   ) +
   coord_sf(
@@ -1310,10 +1307,10 @@ individual_heterozygosity_plot <- individual_heterozygosity_plot +
   theme(plot.margin = margin(5, 7, 5, 5))
 side_panels <- signature_panel / individual_heterozygosity_plot +
   plot_layout(heights = c(1.08, 0.92))
-# Center the B/C stack in 75% of the available height. The blank quarters are
-# split equally above and below, leaving room for Panel C's horizontal legend.
-short_side_panels <- plot_spacer() / side_panels / plot_spacer() +
-  plot_layout(heights = c(0.125, 0.75, 0.125))
+# Top-align the B/C stack in 75% of the available height. The unused quarter
+# is placed below the stack, keeping both panels at the upper right of Panel A.
+short_side_panels <- side_panels / plot_spacer() +
+  plot_layout(heights = c(0.75, 0.25))
 composite <- map_plot | short_side_panels
 composite <- composite + plot_layout(widths = c(2.46, 0.80)) +
   plot_annotation(tag_levels = "A")
