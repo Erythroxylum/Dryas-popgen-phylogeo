@@ -79,6 +79,12 @@ map_height <- as.numeric(Sys.getenv("MAP_HEIGHT", "10"))
 figure_width <- as.numeric(Sys.getenv("FIGURE_WIDTH", "20"))
 figure_height <- as.numeric(Sys.getenv("FIGURE_HEIGHT", "12.5"))
 base_size <- as.numeric(Sys.getenv("FIGURE_BASE_SIZE", "9"))
+axis_title_size <- as.numeric(Sys.getenv(
+  "FIGURE_AXIS_TITLE_SIZE", as.character(base_size * 1.05)
+))
+axis_text_size <- as.numeric(Sys.getenv(
+  "FIGURE_AXIS_TEXT_SIZE", as.character(base_size * 0.90)
+))
 signature_width <- as.numeric(Sys.getenv("SIGNATURE_WIDTH", "4"))
 signature_height <- as.numeric(Sys.getenv("SIGNATURE_HEIGHT", "5"))
 signature_x_expand_left <- as.numeric(Sys.getenv(
@@ -244,6 +250,10 @@ if (!is.finite(signature_si_width) || signature_si_width <= 0 ||
 }
 if (!is.finite(heterozygosity_point_size) || heterozygosity_point_size <= 0) {
   stop("HETEROZYGOSITY_POINT_SIZE must be positive")
+}
+if (!is.finite(axis_title_size) || axis_title_size <= 0 ||
+    !is.finite(axis_text_size) || axis_text_size <= 0) {
+  stop("FIGURE_AXIS_TITLE_SIZE and FIGURE_AXIS_TEXT_SIZE must be positive")
 }
 
 needed_individual <- c("sampleID", "snp_heterozygosity", "call_rate")
@@ -659,11 +669,13 @@ map_plot <- map_plot +
   ) +
   guides(
     fill = guide_legend(
-      ncol = 1, order = 3,
+      nrow = 2, byrow = TRUE, order = 3,
       override.aes = list(alpha = 1, color = NA, linewidth = 0)
     ),
-    color = guide_legend(ncol = 1, order = 2,
-                         override.aes = list(alpha = 1, size = 2.8))
+    color = guide_legend(
+      nrow = 1, byrow = TRUE, order = 2,
+      override.aes = list(alpha = 1, size = 2.8)
+    )
   ) +
   coord_sf(
     crs = st_crs(3995),
@@ -671,8 +683,8 @@ map_plot <- map_plot +
     expand = FALSE
   ) +
   labs(
-    title = "Geographic structure and secondary contact in Dryas",
-    subtitle = "Sample-level K19 ancestry; pale blue indicates the supplied LGM boundary layer",
+    title = NULL,
+    subtitle = NULL,
     x = "Longitude", y = "Latitude"
   ) +
   theme_minimal(base_size = base_size) +
@@ -683,13 +695,14 @@ map_plot <- map_plot +
     panel.border = element_rect(fill = NA, color = "black", linewidth = 0.32),
     plot.background = element_rect(fill = map_sea_color, color = NA),
     plot.title = element_text(face = "bold"),
-    axis.title = element_text(color = "black"),
-    axis.text = element_text(color = "black"),
-    legend.position = "left",
-    legend.box = "vertical",
-    legend.box.just = "left",
-    legend.text = element_text(size = base_size * 0.72),
-    legend.title = element_text(size = base_size * 0.80, face = "bold"),
+    axis.title = element_text(size = axis_title_size, color = "black"),
+    axis.text = element_text(size = axis_text_size, color = "black"),
+    legend.position = "bottom",
+    legend.direction = "horizontal",
+    legend.box = "horizontal",
+    legend.box.just = "center",
+    legend.text = element_text(size = base_size * 0.82),
+    legend.title = element_text(size = base_size * 0.92, face = "bold"),
     legend.key = element_blank(),
     legend.key.height = grid::unit(2.8, "mm"),
     legend.key.width = grid::unit(4.2, "mm"),
@@ -913,8 +926,8 @@ beringia_plot <- beringia_plot +
     panel.border = element_rect(fill = NA, color = "black", linewidth = 0.32),
     plot.background = element_rect(fill = map_sea_color, color = NA),
     plot.title = element_text(face = "bold"),
-    axis.title = element_text(color = "black"),
-    axis.text = element_text(color = "black"),
+    axis.title = element_text(size = axis_title_size, color = "black"),
+    axis.text = element_text(size = axis_text_size, color = "black"),
     legend.position = "bottom",
     legend.box = "vertical",
     legend.box.just = "center",
@@ -1093,8 +1106,9 @@ individual_heterozygosity_plot <- ggplot(
   ) +
   theme_classic(base_size = base_size + 1) +
   theme(
-    axis.text.x = element_text(color = "black"),
-    axis.text.y = element_text(color = "black"),
+    axis.title = element_text(size = axis_title_size),
+    axis.text.x = element_text(size = axis_text_size, color = "black"),
+    axis.text.y = element_text(size = axis_text_size, color = "black"),
     panel.background = element_rect(fill = "white", color = NA),
     plot.background = element_rect(fill = "white", color = NA)
   )
@@ -1208,8 +1222,8 @@ signature_plot <- ggplot(
   theme(
     legend.position = "bottom",
     plot.caption = element_text(hjust = 0, size = 5.8),
-    axis.title = element_text(size = 8.2),
-    axis.text = element_text(size = 7),
+    axis.title = element_text(size = axis_title_size),
+    axis.text = element_text(size = axis_text_size),
     legend.title = element_text(size = 7.2),
     legend.text = element_text(size = 6.8),
     panel.background = element_rect(fill = "white", color = NA),
@@ -1234,8 +1248,8 @@ signature_si_plot <- signature_plot +
     force = 1.3, color = "black", show.legend = FALSE
   ) +
   theme(
-    axis.title = element_text(size = 10),
-    axis.text = element_text(size = 8.5),
+    axis.title = element_text(size = axis_title_size),
+    axis.text = element_text(size = axis_text_size),
     legend.title = element_text(size = 8.5),
     legend.text = element_text(size = 8)
   )
