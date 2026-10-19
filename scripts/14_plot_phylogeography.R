@@ -1122,26 +1122,6 @@ y_panel_range <- c(
   max(0, y_sqrt_range[1] - signature_y_expand_bottom * y_sqrt_span),
   y_sqrt_range[2] + signature_y_expand_top * y_sqrt_span
 )
-# Draw the lower vertical separator in normalized panel coordinates. This
-# reaches the panel boundary even when scale expansion creates space below
-# zero on the square-root axis.
-y_scale_range <- c(
-  y_sqrt_range[1] - signature_y_expand_bottom * y_sqrt_span,
-  y_sqrt_range[2] + signature_y_expand_top * y_sqrt_span
-)
-separator_x_npc <- (
-  log10(pi_cutoff) - x_panel_range[1]
-) / diff(x_panel_range)
-separator_y_npc <- (
-  sqrt(private_cutoff) - y_scale_range[1]
-) / diff(y_scale_range)
-separator_grob <- grid::segmentsGrob(
-  x0 = grid::unit(separator_x_npc, "npc"),
-  x1 = grid::unit(separator_x_npc, "npc"),
-  y0 = grid::unit(0, "npc"),
-  y1 = grid::unit(separator_y_npc, "npc"),
-  gp = grid::gpar(col = "#4D4D4D", lwd = 0.85)
-)
 x_text <- 10^c(
   x_panel_range[1] + signature_text_x_inset * diff(x_panel_range),
   x_panel_range[2] - signature_text_x_inset * diff(x_panel_range)
@@ -1169,11 +1149,17 @@ signature_plot <- ggplot(
   signature_plot_data,
   aes(x = pi, y = private_allelic_richness)
 ) +
-  geom_hline(yintercept = private_cutoff, color = "#4D4D4D", linewidth = 0.45) +
-  annotation_custom(
-    grob = separator_grob,
-    xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf
+  # Draw the vertical separator to the lower panel boundary, then mask its
+  # upper portion so it separates only founder and secondary-contact space.
+  geom_vline(
+    xintercept = pi_cutoff, color = "#4D4D4D", linewidth = 0.45
   ) +
+  annotate(
+    "segment", x = pi_cutoff, xend = pi_cutoff,
+    y = private_cutoff, yend = Inf,
+    color = "white", linewidth = 0.95
+  ) +
+  geom_hline(yintercept = private_cutoff, color = "#4D4D4D", linewidth = 0.45) +
   geom_point(
     aes(color = signature), shape = 21, fill = "white",
     size = 2.6, stroke = 0.95, alpha = 1
