@@ -82,7 +82,7 @@ ipyrad-locus representatives.
 
 ```bash
 Rscript scripts/04_individual_heterozygosity.R \
-  results/vcf/s215_popgen_all_snps.vcf.gz \
+  data/s384_batchclean_ab25_locusFDR05_mac4_dp15-150_miss10.sorted.vcf.gz \
   results/metadata/sample_to_population.tsv \
   results/diversity/individual_snp_heterozygosity.tsv
 ```
@@ -227,7 +227,9 @@ Rscript scripts/14_plot_phylogeography.R \
 The sample pies are deterministically offset within `geoID`, so repeated runs
 have identical layouts. By default, thin leader lines connect displaced pies
 to their true collection coordinates, which are marked with small points. Use
-`MAP_SHOW_LEADER_LINES=FALSE` to suppress them. Their appearance is controlled
+`MAP_SHOW_LEADER_LINES=FALSE` to suppress them. Leader lines and true-coordinate
+points are drawn above the pies so they remain visible when a pie radius exceeds
+the jitter distance. Their appearance is controlled
 with `MAP_LEADER_LINE_COLOR`, `MAP_LEADER_LINE_WIDTH`,
 `MAP_LEADER_LINE_ALPHA`, and `MAP_COORDINATE_POINT_SIZE`. Pie outlines use
 three descriptive diversity-signature
@@ -292,7 +294,10 @@ populations, admixed populations, or no focal population. Panel C is
 descriptive: violins show the distributions, narrow boxplots show their
 medians and interquartile ranges, and points show individual samples. It reads
 `results/diversity/individual_snp_heterozygosity.tsv`, produced by
-`scripts/04_individual_heterozygosity.R` in the core workflow.
+`scripts/04_individual_heterozygosity.R` in the core workflow. That script must
+be run on the full cleaned 384-sample VCF—not the 215-sample population
+subset—so that the third, unassigned category is available. Point size is
+controlled by `HETEROZYGOSITY_POINT_SIZE` (default 1.35).
 
 The plotting step also writes
 `results/map/population_refugial_signatures.tsv` and a standalone
