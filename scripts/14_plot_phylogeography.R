@@ -1305,12 +1305,17 @@ signature_panel <- signature_plot +
   )
 individual_heterozygosity_plot <- individual_heterozygosity_plot +
   theme(plot.margin = margin(5, 7, 5, 5))
-side_panels <- signature_panel / individual_heterozygosity_plot +
-  plot_layout(heights = c(1.08, 0.92))
-# Top-align the B/C stack in 75% of the available height. The unused quarter
-# is placed below the stack, keeping both panels at the upper right of Panel A.
-short_side_panels <- side_panels / plot_spacer() +
-  plot_layout(heights = c(0.75, 0.25))
+# Top-align Panels B and C within 75% of the available height. Their original
+# 1.08:0.92 relative heights are retained, and the unused quarter is below.
+# Listing all three rows explicitly prevents patchwork from flattening a nested
+# layout into three panels governed by only two height values.
+short_side_panels <- wrap_plots(
+  signature_panel,
+  individual_heterozygosity_plot,
+  plot_spacer(),
+  ncol = 1,
+  heights = c(0.405, 0.345, 0.25)
+)
 composite <- map_plot | short_side_panels
 composite <- composite + plot_layout(widths = c(2.46, 0.80)) +
   plot_annotation(tag_levels = "A")
