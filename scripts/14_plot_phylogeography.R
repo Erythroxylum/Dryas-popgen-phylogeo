@@ -79,12 +79,11 @@ map_height <- as.numeric(Sys.getenv("MAP_HEIGHT", "10"))
 figure_width <- as.numeric(Sys.getenv("FIGURE_WIDTH", "20"))
 figure_height <- as.numeric(Sys.getenv("FIGURE_HEIGHT", "12.5"))
 base_size <- as.numeric(Sys.getenv("FIGURE_BASE_SIZE", "9"))
-axis_title_size <- as.numeric(Sys.getenv(
-  "FIGURE_AXIS_TITLE_SIZE", as.character(base_size * 1.05)
-))
-axis_text_size <- as.numeric(Sys.getenv(
-  "FIGURE_AXIS_TEXT_SIZE", as.character(base_size * 0.90)
-))
+# Axis typography is derived directly from FIGURE_BASE_SIZE so one run-time
+# control consistently changes every panel. Keeping these values independent
+# previously allowed exported axis-size variables to override the base size.
+axis_title_size <- base_size * 1.10
+axis_text_size <- base_size
 signature_width <- as.numeric(Sys.getenv("SIGNATURE_WIDTH", "4"))
 signature_height <- as.numeric(Sys.getenv("SIGNATURE_HEIGHT", "5"))
 signature_x_expand_left <- as.numeric(Sys.getenv(
@@ -251,10 +250,15 @@ if (!is.finite(signature_si_width) || signature_si_width <= 0 ||
 if (!is.finite(heterozygosity_point_size) || heterozygosity_point_size <= 0) {
   stop("HETEROZYGOSITY_POINT_SIZE must be positive")
 }
-if (!is.finite(axis_title_size) || axis_title_size <= 0 ||
-    !is.finite(axis_text_size) || axis_text_size <= 0) {
-  stop("FIGURE_AXIS_TITLE_SIZE and FIGURE_AXIS_TEXT_SIZE must be positive")
+if (!is.finite(base_size) || base_size <= 0) {
+  stop("FIGURE_BASE_SIZE must be positive")
 }
+
+message(
+  "Figure typography: base=", base_size,
+  "; axis titles=", axis_title_size,
+  "; axis values=", axis_text_size
+)
 
 needed_individual <- c("sampleID", "snp_heterozygosity", "call_rate")
 if (length(setdiff(needed_individual, names(individual_heterozygosity)))) {
