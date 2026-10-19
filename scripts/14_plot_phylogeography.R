@@ -665,7 +665,7 @@ map_plot <- map_plot +
     values = component_colors,
     breaks = q_columns,
     labels = component_labels[q_columns],
-    name = "K19"
+    name = "K19 admixture component"
   ) +
   scale_color_manual(
     values = outline_colors,
@@ -1124,8 +1124,9 @@ individual_heterozygosity_plot <- ggplot(
     axis.text.y = element_text(size = axis_text_size, color = "black"),
     legend.position = "bottom",
     legend.direction = "horizontal",
-    legend.title = element_text(size = base_size * 0.90, face = "bold"),
-    legend.text = element_text(size = base_size * 0.85),
+    # Individual-class legend typography controls.
+    legend.title = element_text(size = base_size * 1.20, face = "bold"),
+    legend.text = element_text(size = base_size * 1.15),
     panel.background = element_rect(fill = "white", color = NA),
     plot.background = element_rect(fill = "white", color = NA)
   )
@@ -1323,34 +1324,50 @@ extract_legend <- function(p) {
 class_legend <- extract_legend(individual_heterozygosity_plot)
 k19_legend <- extract_legend(map_plot)
 
-# Layout controls: relative heights from top to bottom in the right column.
-# Move a legend by changing the heights above it; change its own allocation
-# to give it more room. Reorder the wrap_plots entries to change their order.
-right_heights <- c(
-  0.30,  # B: refugial-signature plot
-  0.27,  # C: individual heterozygosity plot
-  0.08,  # Individual class legend
-  0.27,  # K19 legend
-  0.08   # Empty space below
-)
-composite_widths <- c(2.46, 1.10)  # Map and right column, respectively.
+# Anchor each legend at the left edge of its allocated row.
+left_align_legend <- function(legend) {
+  grid::grobTree(
+    legend,
+    vp = grid::viewport(
+      x = 0, y = 0.5,
+      width = grid::grobWidth(legend),
+      height = grid::grobHeight(legend),
+      just = c("left", "center")
+    )
+  )
+}
 
-short_side_panels <- wrap_plots(
-  signature_panel,
-  individual_heterozygosity_plot +
-    theme(legend.position = "none"),
-  wrap_elements(full = class_legend, ignore_tag = TRUE),
-  wrap_elements(full = k19_legend, ignore_tag = TRUE),
-  plot_spacer(),
-  ncol = 1,
-  heights = right_heights
+# Layout controls: relative heights from top to bottom in the left column.
+# Increase a row's value to allocate more space to that plot or legend.
+left_heights <- c(
+  0.29,  # C: individual heterozygosity plot
+  0.32,  # B: refugial-signature plot
+  0.10,  # Individual class legend
+  0.29   # K19 admixture component legend (bottom left)
 )
+composite_widths <- c(1.10, 2.46)  # Left column and map, respectively.
+
+left_side_panels <- wrap_plots(
+  individual_heterozygosity_plot +
+    theme(legend.position = "none") + labs(tag = "C"),
+  signature_panel + labs(tag = "B"),
+  wrap_elements(
+    full = left_align_legend(class_legend),
+    clip = FALSE, ignore_tag = TRUE
+  ),
+  wrap_elements(
+    full = left_align_legend(k19_legend),
+    clip = FALSE, ignore_tag = TRUE
+  ),
+  ncol = 1,
+  heights = left_heights
+)
+# Preserve the existing panel letters when moving the panels.
 composite <- (
-  (map_plot + theme(legend.position = "none")) |
-    short_side_panels
+  left_side_panels |
+    (map_plot + theme(legend.position = "none") + labs(tag = "A"))
 ) +
-  plot_layout(widths = composite_widths) +
-  plot_annotation(tag_levels = "A")
+  plot_layout(widths = composite_widths)
 ggsave(
   output_file, composite,
   width = figure_width, height = figure_height, units = "in"
