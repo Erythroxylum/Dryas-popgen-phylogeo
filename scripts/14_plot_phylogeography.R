@@ -1349,12 +1349,13 @@ left_align_legend <- function(legend) {
 # Layout controls: relative heights from top to bottom in the left column.
 # Increase a row's value to allocate more space to that plot or legend.
 left_heights <- c(
-  0.29,  # A: individual heterozygosity plot
-  0.32,  # B: refugial-signature plot
+  0.24,  # A: individual heterozygosity plot
+  0.27,  # B: refugial-signature plot
   0.10,  # Individual class legend
-  0.29   # K19 admixture component legend (bottom left)
+  0.22,  # K19 admixture component legend
+  0.17   # Empty space below keeps the legends higher
 )
-composite_widths <- c(1.10, 2.46)  # Left column and map, respectively.
+composite_widths <- c(0.95, 2.61)  # Left column and map, respectively.
 
 left_side_panels <- wrap_plots(
   individual_heterozygosity_plot +
@@ -1368,12 +1369,13 @@ left_side_panels <- wrap_plots(
     full = left_align_legend(k19_legend),
     clip = FALSE, ignore_tag = TRUE
   ),
+  plot_spacer(),
   ncol = 1,
   heights = left_heights
 )
 # Reserve empty space BELOW the map so its fixed-aspect panel sits higher.
 # Reduce the first value to move the map upward; increase it to move it down.
-map_column_heights <- c(0.82, 0.18)  # Map, empty space below.
+map_column_heights <- c(0.90, 0.10)  # Map, empty space below.
 map_column <- wrap_plots(
   map_plot + theme(legend.position = "none") + labs(tag = "C"),
   plot_spacer(),
