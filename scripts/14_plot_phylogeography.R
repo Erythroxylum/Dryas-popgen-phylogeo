@@ -112,8 +112,8 @@ signature_si_height <- as.numeric(Sys.getenv("SIGNATURE_SI_HEIGHT", "7"))
 signature_si_label_size <- as.numeric(Sys.getenv(
   "SIGNATURE_SI_LABEL_SIZE", "2.8"
 ))
-heterozygosity_point_size <- as.numeric(Sys.getenv(
-  "HETEROZYGOSITY_POINT_SIZE", "2.6"
+diversity_point_size <- as.numeric(Sys.getenv(
+  "DIVERSITY_POINT_SIZE", "3.4"
 ))
 map_land_color <- Sys.getenv("MAP_LAND_COLOR", "#F2F2F2")
 map_sea_color <- Sys.getenv("MAP_SEA_COLOR", "#FFFFFF")
@@ -249,8 +249,8 @@ if (!is.finite(signature_si_width) || signature_si_width <= 0 ||
     !is.finite(signature_si_label_size) || signature_si_label_size <= 0) {
   stop("SIGNATURE_SI_WIDTH, SIGNATURE_SI_HEIGHT, and SIGNATURE_SI_LABEL_SIZE must be positive")
 }
-if (!is.finite(heterozygosity_point_size) || heterozygosity_point_size <= 0) {
-  stop("HETEROZYGOSITY_POINT_SIZE must be positive")
+if (!is.finite(diversity_point_size) || diversity_point_size <= 0) {
+  stop("DIVERSITY_POINT_SIZE must be positive")
 }
 if (!is.finite(base_size) || base_size <= 0) {
   stop("FIGURE_BASE_SIZE must be positive")
@@ -636,6 +636,7 @@ for (signature_class in pie_draw_order) {
     data = z,
     aes(x = x_plot, y = y_plot, r = pie_radius_m),
     cols = q_columns,
+    key_glyph = ggplot2::draw_key_point,
     color = outline_colors[signature_class], linewidth = 0.38,
     alpha = layer_alpha
   )
@@ -678,7 +679,10 @@ map_plot <- map_plot +
     fill = guide_legend(
       ncol = 4, byrow = TRUE, order = 3,
       title.position = "top", title.hjust = 0,
-      override.aes = list(alpha = 1, color = NA, linewidth = 0)
+      override.aes = list(
+        shape = 21, size = 3.5, stroke = 0,
+        alpha = 1, color = NA, linewidth = 0
+      )
     )
   ) +
   coord_sf(
@@ -861,6 +865,7 @@ for (signature_class in pie_draw_order) {
     data = z,
     aes(x = beringia_x, y = beringia_y, r = pie_radius_m),
     cols = q_columns,
+    key_glyph = ggplot2::draw_key_point,
     color = outline_colors[signature_class], linewidth = 0.38,
     alpha = layer_alpha
   )
@@ -900,7 +905,10 @@ beringia_plot <- beringia_plot +
   guides(
     fill = guide_legend(
       ncol = beringia_legend_ncol, order = 3,
-      override.aes = list(alpha = 1, color = NA, linewidth = 0)
+      override.aes = list(
+        shape = 21, size = 3.5, stroke = 0,
+        alpha = 1, color = NA, linewidth = 0
+      )
     ),
     color = guide_legend(
       ncol = min(beringia_legend_ncol, length(signature_levels)), order = 2,
@@ -1104,7 +1112,6 @@ individual_focal <- individual_data[
 ]
 
 # Shared point dimensions for Panels A/B and their legend symbols.
-diversity_point_size <- heterozygosity_point_size
 diversity_point_stroke <- 0.95
 
 individual_admixture_plot <- ggplot(
@@ -1389,15 +1396,7 @@ left_heights <- c(
 )
 composite_widths <- c(0.95, 2.61)  # Left column and map, respectively.
 
-# Fixed top clearance in inches; take the extra space from the bottom spacer
-# so the existing plots and legends retain approximately their current sizes.
-left_top_offset_in <- 0.5
-left_layout_heights <- left_heights
-left_layout_heights[5] <- max(
-  0.01, left_layout_heights[5] - left_top_offset_in / figure_height
-)
 left_side_panels <- wrap_plots(
-  plot_spacer(),
   signature_panel + labs(tag = "A"),
   individual_admixture_plot +
     theme(legend.position = "none") + labs(tag = "B"),
@@ -1411,10 +1410,7 @@ left_side_panels <- wrap_plots(
   ),
   plot_spacer(),
   ncol = 1,
-  heights = grid::unit.c(
-    grid::unit(left_top_offset_in, "in"),
-    grid::unit(left_layout_heights, "null")
-  )
+  heights = left_heights
 )
 # Reserve empty space BELOW the map so its fixed-aspect panel sits higher.
 # Reduce the first value to move the map upward; increase it to move it down.
