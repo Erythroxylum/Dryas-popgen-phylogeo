@@ -113,7 +113,7 @@ signature_si_label_size <- as.numeric(Sys.getenv(
   "SIGNATURE_SI_LABEL_SIZE", "2.8"
 ))
 heterozygosity_point_size <- as.numeric(Sys.getenv(
-  "HETEROZYGOSITY_POINT_SIZE", "1.35"
+  "HETEROZYGOSITY_POINT_SIZE", "2.6"
 ))
 map_land_color <- Sys.getenv("MAP_LAND_COLOR", "#F2F2F2")
 map_sea_color <- Sys.getenv("MAP_SEA_COLOR", "#FFFFFF")
@@ -333,7 +333,7 @@ plot_signature_colors <- c(signature_colors, not_applicable = "#777777")
 plot_signature_labels <- c(
   signature_labels, not_applicable = "Drummondii (excluded)"
 )
-outline_colors <- c(plot_signature_colors, not_selected = "#B3B3B3")
+outline_colors <- c(plot_signature_colors, not_selected = "#999999")
 outline_labels <- c(
   plot_signature_labels,
   not_selected = "Outside focal population comparison"
@@ -1103,6 +1103,10 @@ individual_focal <- individual_data[
   individual_data$signature != "not_selected", , drop = FALSE
 ]
 
+# Shared point dimensions for Panels A/B and their legend symbols.
+diversity_point_size <- heterozygosity_point_size
+diversity_point_stroke <- 0.95
+
 individual_admixture_plot <- ggplot(
   individual_data,
   aes(x = snp_heterozygosity, y = admixture_index, color = signature)
@@ -1110,13 +1114,13 @@ individual_admixture_plot <- ggplot(
   # Draw unassigned individuals first as a faint background reference.
   geom_point(
     data = individual_unassigned, shape = 21, fill = "white",
-    size = heterozygosity_point_size, stroke = 0.55,
-    alpha = 0.30, show.legend = FALSE
+    size = diversity_point_size, stroke = diversity_point_stroke,
+    alpha = 0.65, show.legend = FALSE
   ) +
   geom_point(
     data = individual_focal, shape = 21, fill = "white",
-    size = heterozygosity_point_size, stroke = 0.70,
-    alpha = 0.85, show.legend = TRUE
+    size = diversity_point_size, stroke = diversity_point_stroke,
+    alpha = 1, show.legend = TRUE
   ) +
   scale_color_manual(
     values = individual_signature_colors,
@@ -1128,7 +1132,10 @@ individual_admixture_plot <- ggplot(
     guide = guide_legend(
       ncol = 2, byrow = TRUE,
       title.position = "top", title.hjust = 0,
-      override.aes = list(shape = 21, fill = "white", size = 2.6, alpha = 1)
+      override.aes = list(
+        shape = 21, fill = "white", size = diversity_point_size,
+        stroke = diversity_point_stroke, alpha = 1
+      )
     )
   ) +
   scale_y_continuous(
@@ -1214,7 +1221,7 @@ signature_plot <- ggplot(
   geom_hline(yintercept = private_cutoff, color = "#4D4D4D", linewidth = 0.45) +
   geom_point(
     aes(color = signature), shape = 21, fill = "white",
-    size = 2.6, stroke = 0.95, alpha = 1
+    size = diversity_point_size, stroke = diversity_point_stroke, alpha = 1
   ) +
   geom_text(
     data = quadrant_text,
@@ -1254,7 +1261,10 @@ signature_plot <- ggplot(
   guides(
     color = guide_legend(
       ncol = 2,
-      override.aes = list(shape = 21, fill = "white", size = 2.6)
+      override.aes = list(
+        shape = 21, fill = "white", size = diversity_point_size,
+        stroke = diversity_point_stroke, alpha = 1
+      )
     )
   ) +
   theme(
@@ -1323,6 +1333,8 @@ ggsave(
 # The main figure contains exactly three panels: the circumpolar ancestry map,
 # the compact diversity-signature summary, and individual ancestry mixing.
 signature_panel <- signature_plot +
+  # Wrap the long rotated title to keep it inside the compact panel.
+  labs(y = "Private allelic richness\n(square-root scale)") +
   theme(
     legend.position = "none",
     plot.caption = element_blank(),
@@ -1377,7 +1389,15 @@ left_heights <- c(
 )
 composite_widths <- c(0.95, 2.61)  # Left column and map, respectively.
 
+# Fixed top clearance in inches; take the extra space from the bottom spacer
+# so the existing plots and legends retain approximately their current sizes.
+left_top_offset_in <- 0.5
+left_layout_heights <- left_heights
+left_layout_heights[5] <- max(
+  0.01, left_layout_heights[5] - left_top_offset_in / figure_height
+)
 left_side_panels <- wrap_plots(
+  plot_spacer(),
   signature_panel + labs(tag = "A"),
   individual_admixture_plot +
     theme(legend.position = "none") + labs(tag = "B"),
@@ -1391,7 +1411,10 @@ left_side_panels <- wrap_plots(
   ),
   plot_spacer(),
   ncol = 1,
-  heights = left_heights
+  heights = grid::unit.c(
+    grid::unit(left_top_offset_in, "in"),
+    grid::unit(left_layout_heights, "null")
+  )
 )
 # Reserve empty space BELOW the map so its fixed-aspect panel sits higher.
 # Reduce the first value to move the map upward; increase it to move it down.
