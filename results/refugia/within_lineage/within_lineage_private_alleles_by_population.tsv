@@ -1,0 +1,29 @@
+population	species_lineage	n_samples	n_uniform_populations_in_lineage	eligible_loci	observed_private_alleles	rarefied_private_alleles	within_lineage_private_allelic_richness	rarefied_gene_copies	minimum_outside_call_rate	status
+ajanensis_Nome	ajanensis-beringensis	4	3	3093	164	147.821428571429	0.0477922497806106	6	0.8	estimated
+ajanensis_Steese	ajanensis-beringensis	3	3	2483	79	79	0.0318163511880789	6	0.8	estimated
+ajanensis_Wick_Dome	ajanensis-beringensis	3	3	2403	83	83	0.0345401581356638	6	0.8	estimated
+ala-aja_YukonTerr	alaskensis	4	2	2937	137	120.857142857143	0.0411498613745805	6	0.8	estimated
+alaskensis_Alaska	alaskensis	4	2	3184	135	119.392857142857	0.0374977566403446	6	0.8	estimated
+caucasica_Caucasus	caucasica	4	1					6	0.8	not_estimable_single_uniform_population
+drummondii_AK-YT	drummondii	4	1					6	0.8	not_estimable_single_uniform_population
+crenulata_Verkhoyansk	grandis	5	3	3683	114	88.5690476190476	0.0240480715772597	6	0.8	estimated
+grandis_Chekurovka	grandis	4	3	4009	66	56.7142857142857	0.0141467412607348	6	0.8	estimated
+punctata_Yakutia	grandis	5	3	3494	86	63.5690476190476	0.0181937743614904	6	0.8	estimated
+hookeriana_CO	hookeriana	4	1					6	0.8	not_estimable_single_uniform_population
+integrifolia_ECanada	integrifolia	3	4	3699	49	49	0.0132468234658016	6	0.8	estimated
+integrifolia_Ilulissat	integrifolia	3	4	3719	27	27	0.00726001613336918	6	0.8	estimated
+integrifolia_Upernavik	integrifolia	3	4	3945	29	29	0.0073510773130545	6	0.8	estimated
+intg_NWGL	integrifolia	4	4	3946	221	203	0.0514445007602636	6	0.8	estimated
+octo_Caraiman	octopetala	3	9	1847	7	7	0.00378992961559285	6	0.8	estimated
+octo_Faroe	octopetala	3	9	2546	15	15	0.00589159465828751	6	0.8	estimated
+octo_French_Alps	octopetala	4	9	2974	40	36.75	0.0123570948217888	6	0.8	estimated
+octo_NEIceland	octopetala	4	9	2973	10	8.96428571428571	0.00301523232905675	6	0.8	estimated
+octo_Pyrenees	octopetala	4	9	2848	45	44	0.0154494382022472	6	0.8	estimated
+octo_Retezat	octopetala	3	9	2471	17	17	0.00687980574666127	6	0.8	estimated
+octo_Rodnei	octopetala	3	9	2368	23	23	0.00971283783783784	6	0.8	estimated
+octo_SIceland	octopetala	3	9	2684	9	9	0.0033532041728763	6	0.8	estimated
+octo_WCarpathians	octopetala	5	9	3061	87	73.7571428571429	0.024095767022915	6	0.8	estimated
+oxyodonta_Altai	oxyodonta	5	1					6	0.8	not_estimable_single_uniform_population
+Pobeda	sp_Pobeda	3	1					6	0.8	not_estimable_single_uniform_population
+subincisa_Komi	subincisa	4	2	3349	194	171.392857142857	0.0511773237213667	6	0.8	estimated
+subincisa_Svalbard	subincisa	5	2	3479	175	151.261904761905	0.0434785584253822	6	0.8	estimated

@@ -1,20 +1,20 @@
 component	label	color
-Q01	integrifolia - North Slope/Inuvik	#BAFFC9
-Q02	ajanensis - interior Alaska	#1D72F5
-Q03	hookeriana - Rocky Mountains	#DF0101
-Q04	integrifolia - SW Greenland/E Canada	#610B5E
-Q05	alaskensis - interior Alaska/Yukon	#FF9326
-Q06	ajanensis - Seward/Chukotka	#A945FF
-Q07	subincisa - Svalbard	#0089B2
-Q08	integrifolia - N Greenland	#FDF060
-Q09	grandis/crenulata/punctata - Yakutia	#FFA6B2
-Q10	octopetala - N Atlantic/Scandinavia	#BFF217
-Q11	octopetala - Pyrenees/Alps	#60D5FD
-Q12	octopetala - S Carpathians/Balkans	#CC1577
-Q13	octopetala - W Carpathians	#F2B950
-Q14	oxyodonta - Altai/Sayan	#7FB21D
-Q15	Pobeda - E Yakutia	#EC496F
-Q16	drummondii - NW North America	#326397
-Q17	octopetala - Iceland	#B26314
-Q18	caucasica - Caucasus	#027368
-Q19	subincisa - Komi/Urals	#A6CEE3
+Q01	integrifolia 1	#BAFFC9
+Q02	ajanensis 1	#1D72F5
+Q03	hookeriana	#DF0101
+Q04	integrifolia 2	#610B5E
+Q05	alaskensis	#FF9326
+Q06	ajanensis 2	#A945FF
+Q07	subincisa 1	#0089B2
+Q08	integrifolia 3	#FDF060
+Q09	grandis	#FFA6B2
+Q10	octopetala 1	#BFF217
+Q11	octopetala 2	#60D5FD
+Q12	octopetala 3	#CC1577
+Q13	octopetala 4	#F2B950
+Q14	oxyodonta	#7FB21D
+Q15	sp. Pobeda	#EC496F
+Q16	drummondii	#326397
+Q17	octopetala 5	#B26314
+Q18	caucasica	#027368
+Q19	subincisa 2	#A6CEE3
