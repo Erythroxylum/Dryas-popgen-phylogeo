@@ -1051,74 +1051,92 @@ relationship_plot <- ggplot(
     plot.margin = margin(4, 20, 4, 1)
   )
 
-# Descriptive per-individual heterozygosity. Population class comes from the
-# same metadata assignments used for the map; unassigned samples are retained
-# as a visual reference rather than treated as a demographic population.
+# Individual ancestry mixing versus observed heterozygosity. Diversity
+# signatures are inherited from populations, using the same classes as Panel A
+# and the map. Drummondii is excluded from this comparison, as in Panel A;
+# it is not relabeled as unassigned.
 individual_data <- merge(
   individual_heterozygosity[
     c("sampleID", "snp_heterozygosity", "call_rate")
   ],
-  samples[c("sampleID", "pop_gen")],
+  samples[c("sampleID", "signature", q_columns)],
   by = "sampleID", all = FALSE, sort = FALSE
 )
+individual_q <- as.matrix(individual_data[, q_columns, drop = FALSE])
+if (any(!is.finite(individual_q)) || any(individual_q < 0) ||
+    any(individual_q > 1)) {
+  stop("Individual K19 ancestry proportions must be finite and between 0 and 1")
+}
+individual_data$admixture_index <- 1 - apply(individual_q, 1, max)
 individual_data <- individual_data[
-  is.finite(individual_data$snp_heterozygosity), , drop = FALSE
+  is.finite(individual_data$snp_heterozygosity) &
+    !is.na(individual_data$signature) &
+    individual_data$signature != "not_applicable", , drop = FALSE
 ]
 if (!nrow(individual_data)) {
-  stop("No mapped samples have finite individual SNP heterozygosity")
+  stop("No mapped non-drummondii samples have finite individual heterozygosity")
 }
-individual_data$sample_class <- factor(
-  individual_data$pop_gen,
-  levels = c("uniform", "admixed", "not_selected"),
-  labels = c("Unadmixed", "Admixed", "Unassigned")
+individual_signature_levels <- c(
+  "not_selected", "founder_population", "candidate_refugium",
+  "secondary_contact"
 )
-if (any(is.na(individual_data$sample_class))) {
-  stop("Unexpected population class in individual heterozygosity data")
+individual_signature_labels <- c(
+  not_selected = "Unassigned",
+  founder_population = "Founder population",
+  candidate_refugium = "Candidate refugium",
+  secondary_contact = "Secondary contact"
+)
+individual_signature_colors <- c(
+  not_selected = outline_colors["not_selected"][[1]],
+  signature_colors
+)
+individual_data$signature <- factor(
+  individual_data$signature, levels = individual_signature_levels
+)
+if (any(is.na(individual_data$signature))) {
+  stop("Unexpected population diversity signature in individual scatterplot")
 }
-# Neutral colors distinguish ancestry-assignment classes from the green,
-# blue, and orange population-diversity signatures in Panels B and C.
-# Match unassigned individuals to the map's not_selected outline gray.
-individual_class_colors <- c(
-  Unadmixed = "#333333", Admixed = "#777777", Unassigned = "#B3B3B3"
-)
-class_counts <- table(individual_data$sample_class)
-class_axis_labels <- setNames(
-  paste0(names(class_counts), "\n(n = ", as.integer(class_counts), ")"),
-  names(class_counts)
-)
+individual_unassigned <- individual_data[
+  individual_data$signature == "not_selected", , drop = FALSE
+]
+individual_focal <- individual_data[
+  individual_data$signature != "not_selected", , drop = FALSE
+]
 
-individual_heterozygosity_plot <- ggplot(
+individual_admixture_plot <- ggplot(
   individual_data,
-  aes(x = sample_class, y = snp_heterozygosity, fill = sample_class)
+  aes(x = snp_heterozygosity, y = admixture_index, color = signature)
 ) +
-  geom_violin(
-    trim = FALSE, scale = "width", color = "#4D4D4D",
-    linewidth = 0.35, alpha = 0.42
+  # Draw unassigned individuals first as a faint background reference.
+  geom_point(
+    data = individual_unassigned, shape = 21, fill = "white",
+    size = heterozygosity_point_size, stroke = 0.55,
+    alpha = 0.30, show.legend = FALSE
   ) +
-  geom_boxplot(
-    width = 0.14, outlier.shape = NA, fill = "white",
-    color = "#333333", linewidth = 0.38
+  geom_point(
+    data = individual_focal, shape = 21, fill = "white",
+    size = heterozygosity_point_size, stroke = 0.70,
+    alpha = 0.85, show.legend = TRUE
   ) +
-  geom_jitter(
-    aes(color = sample_class), width = 0.10, height = 0,
-    shape = 16, size = heterozygosity_point_size,
-    alpha = 0.58, show.legend = TRUE
-  ) +
-  scale_fill_manual(values = individual_class_colors, guide = "none") +
   scale_color_manual(
-    values = individual_class_colors,
-    breaks = c("Admixed", "Unadmixed", "Unassigned"),
-    name = "Individual class",
+    values = individual_signature_colors,
+    limits = individual_signature_levels,
+    breaks = individual_signature_levels,
+    labels = individual_signature_labels[individual_signature_levels],
+    drop = FALSE,
+    name = "Population diversity signature",
     guide = guide_legend(
-      nrow = 1, byrow = TRUE,
+      ncol = 2, byrow = TRUE,
       title.position = "top", title.hjust = 0,
-      override.aes = list(shape = 16, size = 3.2, alpha = 1)
+      override.aes = list(shape = 21, fill = "white", size = 2.6, alpha = 1)
     )
   ) +
-  scale_x_discrete(labels = class_axis_labels) +
+  scale_y_continuous(
+    limits = c(0, NA), expand = expansion(mult = c(0.03, 0.06))
+  ) +
   labs(
-    x = "Population assignment",
-    y = "Individual observed heterozygosity"
+    x = "Individual observed heterozygosity",
+    y = "Admixture index (1 - max q)"
   ) +
   theme_classic(base_size = base_size + 1) +
   theme(
@@ -1127,7 +1145,6 @@ individual_heterozygosity_plot <- ggplot(
     axis.text.y = element_text(size = axis_text_size, color = "black"),
     legend.position = "bottom",
     legend.direction = "horizontal",
-    # Individual-class legend typography controls.
     legend.title = element_text(size = base_size * 1.20, face = "bold"),
     legend.text = element_text(size = base_size * 1.15),
     panel.background = element_rect(fill = "white", color = NA),
@@ -1304,14 +1321,14 @@ ggsave(
 )
 
 # The main figure contains exactly three panels: the circumpolar ancestry map,
-# the compact refugial-signature summary, and descriptive individual Ho.
+# the compact diversity-signature summary, and individual ancestry mixing.
 signature_panel <- signature_plot +
   theme(
     legend.position = "none",
     plot.caption = element_blank(),
     plot.margin = margin(5, 7, 5, 5)
   )
-individual_heterozygosity_plot <- individual_heterozygosity_plot +
+individual_admixture_plot <- individual_admixture_plot +
   theme(plot.margin = margin(5, 7, 5, 5))
 # Extract legends before hiding them in the composite's data panels.
 # This supports both older ggplot2's guide-box and newer guide-box-bottom.
@@ -1332,7 +1349,7 @@ shared_legend_theme <- theme(
   legend.title = element_text(size = legend_title_size, face = "bold")
 )
 class_legend <- extract_legend(
-  individual_heterozygosity_plot + shared_legend_theme
+  individual_admixture_plot + shared_legend_theme
 )
 k19_legend <- extract_legend(map_plot + shared_legend_theme)
 
@@ -1352,18 +1369,18 @@ left_align_legend <- function(legend) {
 # Layout controls: relative heights from top to bottom in the left column.
 # Increase a row's value to allocate more space to that plot or legend.
 left_heights <- c(
-  0.24,  # A: individual heterozygosity plot
-  0.27,  # B: refugial-signature plot
-  0.10,  # Individual class legend
+  0.24,  # A: population diversity-signature plot
+  0.27,  # B: individual admixture versus heterozygosity
+  0.10,  # Shared population diversity-signature legend (A and B)
   0.22,  # K19 admixture component legend
   0.17   # Empty space below keeps the legends higher
 )
 composite_widths <- c(0.95, 2.61)  # Left column and map, respectively.
 
 left_side_panels <- wrap_plots(
-  individual_heterozygosity_plot +
-    theme(legend.position = "none") + labs(tag = "A"),
-  signature_panel + labs(tag = "B"),
+  signature_panel + labs(tag = "A"),
+  individual_admixture_plot +
+    theme(legend.position = "none") + labs(tag = "B"),
   wrap_elements(
     full = left_align_legend(class_legend),
     clip = FALSE, ignore_tag = TRUE
