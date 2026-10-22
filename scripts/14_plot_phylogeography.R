@@ -1075,8 +1075,11 @@ individual_data$sample_class <- factor(
 if (any(is.na(individual_data$sample_class))) {
   stop("Unexpected population class in individual heterozygosity data")
 }
+# Neutral colors distinguish ancestry-assignment classes from the green,
+# blue, and orange population-diversity signatures in Panels B and C.
+# Match unassigned individuals to the map's not_selected outline gray.
 individual_class_colors <- c(
-  Unadmixed = "#0072B2", Admixed = "#D55E00", Unassigned = "#999999"
+  Unadmixed = "#333333", Admixed = "#777777", Unassigned = "#B3B3B3"
 )
 class_counts <- table(individual_data$sample_class)
 class_axis_labels <- setNames(
