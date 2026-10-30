@@ -52,10 +52,6 @@ cauc_ODP43226
 cauc_ODP7438
 cauc_ODP7452
 cren_ODP53249
-cren_ODP53870
-cren_ODP53871
-cren_ODP53872
-cren_ODP7483
 drum_BABY4356
 drum_BABY55
 drum_BABY63
@@ -63,7 +59,6 @@ drum_ODP7486
 gran_ODP59146
 gran_ODP59147
 gran_ODP59148
-gran_ODP7506
 hook_DW685
 hook_DW689
 hook_DW695
@@ -199,15 +194,11 @@ oxydcf_SAY05
 oxydcf_SAY09
 punc_ODP53237
 punc_ODP53362
-punc_ODP53628
-punc_ODP53651
 punc_ODP53656
-punc_ODP59151
 punc_ODP63467
 punc_ODP63471
 punc_ODP63475
 punc_ODP8549
-punc_ODP8560
 sp_ODP8577
 sp_ODP8583
 sp_POB02

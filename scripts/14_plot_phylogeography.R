@@ -321,7 +321,7 @@ signature_levels <- c(
 )
 signature_labels <- c(
   candidate_refugium = "Candidate refugium",
-  founder_population = "Founder population",
+  founder_population = "Founder/bottleneck population",
   secondary_contact = "Secondary contact"
 )
 signature_colors <- c(
@@ -621,12 +621,16 @@ pie_draw_order <- c("not_selected", "not_applicable", signature_levels)
 for (signature_class in pie_draw_order) {
   z <- samples[samples$signature == signature_class, , drop = FALSE]
   if (!nrow(z)) next
-  radius_multiplier <- if (signature_class == "not_selected") {
+  radius_multiplier <- if (
+  signature_class %in% c("not_selected", "not_applicable")
+) {
     unassigned_pie_scale
   } else {
     1
   }
-  layer_alpha <- if (signature_class == "not_selected") {
+  layer_alpha <- if (
+  signature_class %in% c("not_selected", "not_applicable")
+) {
     unassigned_pie_alpha
   } else {
     0.98
@@ -680,7 +684,7 @@ map_plot <- map_plot +
       ncol = 4, byrow = TRUE, order = 3,
       title.position = "top", title.hjust = 0,
       override.aes = list(
-        shape = 21, size = 3.5, stroke = 0,
+        shape = 21, size = 5, stroke = 0,
         alpha = 1, color = NA, linewidth = 0
       )
     )
@@ -850,12 +854,16 @@ beringia_plot <- beringia_plot + geom_point(
 for (signature_class in pie_draw_order) {
   z <- samples[samples$signature == signature_class, , drop = FALSE]
   if (!nrow(z)) next
-  radius_multiplier <- if (signature_class == "not_selected") {
+  radius_multiplier <- if (
+  signature_class %in% c("not_selected", "not_applicable")
+) {
     unassigned_pie_scale
   } else {
     1
   }
-  layer_alpha <- if (signature_class == "not_selected") {
+  layer_alpha <- if (
+  signature_class %in% c("not_selected", "not_applicable")
+) {
     unassigned_pie_alpha
   } else {
     0.98
@@ -1090,7 +1098,7 @@ individual_signature_levels <- c(
 )
 individual_signature_labels <- c(
   not_selected = "Unassigned",
-  founder_population = "Founder population",
+  founder_population = "Founder/bottleneck population",
   candidate_refugium = "Candidate refugium",
   secondary_contact = "Secondary contact"
 )
@@ -1206,8 +1214,8 @@ quadrant_text <- data.frame(
   vjust = c(1, 0, 0),
   label = c(
     "Candidate refugium",
-    "Founder population",
-    "Secondary contact"
+    "Founder/bottleneck\npopulation",
+    "Secondary\ncontact"
   )
 )
 
@@ -1234,7 +1242,7 @@ signature_plot <- ggplot(
     data = quadrant_text,
     aes(x = x, y = y, label = label, hjust = hjust, vjust = vjust),
     color = "black",
-    fontface = "bold", size = 2.6, lineheight = 0.95,
+    fontface = "bold", size = 3.2, lineheight = 0.95,
     inherit.aes = FALSE, show.legend = FALSE
   ) +
   scale_color_manual(
@@ -1388,11 +1396,11 @@ left_align_legend <- function(legend) {
 # Layout controls: relative heights from top to bottom in the left column.
 # Increase a row's value to allocate more space to that plot or legend.
 left_heights <- c(
-  0.24,  # A: population diversity-signature plot
-  0.27,  # B: individual admixture versus heterozygosity
-  0.10,  # Shared population diversity-signature legend (A and B)
-  0.22,  # K19 admixture component legend
-  0.17   # Empty space below keeps the legends higher
+  0.24,  # A — unchanged
+  0.31,  # B — unchanged
+  0.18,  # Population diversity legend: +0.04
+  0.14,  # K19 legend: −0.04
+  0.13   # Bottom spacer — unchanged
 )
 composite_widths <- c(0.95, 2.61)  # Left column and map, respectively.
 

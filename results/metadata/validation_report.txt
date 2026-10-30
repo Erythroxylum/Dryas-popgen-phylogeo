@@ -1,10 +1,10 @@
 Metadata rows: 384
 VCF samples: 384
-Selected samples: 215
-Uniform samples: 106
+Selected samples: 206
+Uniform samples: 97
 Admixed samples: 109
-Selected populations: 56
-Uniform populations: 28
+Selected populations: 54
+Uniform populations: 26
 Admixed populations: 28
 VCF IDs resolved through sampleID: 384
 VCF IDs resolved through aliases: 0

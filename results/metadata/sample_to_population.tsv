@@ -85,12 +85,12 @@ vcf_order	raw_id	sampleID	phyloID	pop_gen	pop_gen_population	spID	geoID	Latitude
 84	cauc_ODP43226	cauc_ODP43226	cauc_ODP43226-GE.Kazbegi	uniform	caucasica_Caucasus	caucasica	GE.Kazbegi	42.655694	44.660222	1	TRUE
 85	cauc_ODP7438	cauc_ODP7438	cauc_ODP7438-GE.MtskhetaMtianeti	uniform	caucasica_Caucasus	caucasica	GE.MtskhetaMtianeti	42.664722	44.583333	2	TRUE
 86	cauc_ODP7452	cauc_ODP7452	cauc_ODP7452-GE.MtskhetaMtianeti	uniform	caucasica_Caucasus	caucasica	GE.MtskhetaMtianeti	42.534722	44.475278	2	TRUE
-87	cren_ODP53249	cren_ODP53249	cren_ODP53249-RU.Yak.VerkhoyanskMts	uniform	crenulata_Verkhoyansk	grandis	RU.Yak.VerkhoyanskMts	71.081667	127.548333	3	TRUE
-88	cren_ODP53870	cren_ODP53870	cren_ODP53870-RU.Yak.VerkhoyanskMts	uniform	crenulata_Verkhoyansk	grandis	RU.Yak.VerkhoyanskMts	71.686667	127.283333	1	TRUE
-89	cren_ODP53871	cren_ODP53871	cren_ODP53871-RU.Yak.VerkhoyanskMts	uniform	crenulata_Verkhoyansk	grandis	RU.Yak.VerkhoyanskMts	71.686667	127.283333	1	TRUE
-90	cren_ODP53872	cren_ODP53872	cren_ODP53872-RU.Yak.VerkhoyanskMts	uniform	crenulata_Verkhoyansk	grandis	RU.Yak.VerkhoyanskMts	71.686667	127.283333	1	TRUE
+87	cren_ODP53249	cren_ODP53249	cren_ODP53249-RU.Yak.VerkhoyanskMts	uniform	grandis_Chekurovka	grandis	RU.Yak.VerkhoyanskMts	71.081667	127.548333	3	TRUE
+88	cren_ODP53870	cren_ODP53870	cren_ODP53870-RU.Yak.VerkhoyanskMts	unassigned		grandis	RU.Yak.VerkhoyanskMts	71.686667	127.283333	1	FALSE
+89	cren_ODP53871	cren_ODP53871	cren_ODP53871-RU.Yak.VerkhoyanskMts	unassigned		grandis	RU.Yak.VerkhoyanskMts	71.686667	127.283333	1	FALSE
+90	cren_ODP53872	cren_ODP53872	cren_ODP53872-RU.Yak.VerkhoyanskMts	unassigned		grandis	RU.Yak.VerkhoyanskMts	71.686667	127.283333	1	FALSE
 91	cren_ODP53873	cren_ODP53873	cren_ODP53873-RU.Yak.VerkhoyanskMts	unassigned		grandis	RU.Yak.VerkhoyanskMts	71.686667	127.283333	1	FALSE
-92	cren_ODP7483	cren_ODP7483	cren_ODP7483-RU.Yak.VerkhoyanskMts	uniform	crenulata_Verkhoyansk	grandis	RU.Yak.VerkhoyanskMts	71.686667	127.283333	1	TRUE
+92	cren_ODP7483	cren_ODP7483	cren_ODP7483-RU.Yak.VerkhoyanskMts	unassigned		grandis	RU.Yak.VerkhoyanskMts	71.686667	127.283333	1	FALSE
 93	drum_BABY3858	drum_BABY3858	drum_BABY3858-US.AK.TetlinNWR	unassigned		drummondii	US.AK.TetlinNWR	62.54222	-142.49222	3	FALSE
 94	drum_BABY4356	drum_BABY4356	drum_BABY4356-CA.YT.WhiteMt	uniform	drummondii_AK-YT	drummondii	CA.YT.WhiteMt	60.2636	-133.929556	3	TRUE
 95	drum_BABY55	drum_BABY55	drum_BABY55-CA.YT.Aishihik	admixed	xajan_SWYukon	ajanensis-beringensis	CA.YT.Aishihik	61.003907	-137.041936	3	TRUE
@@ -106,7 +106,7 @@ vcf_order	raw_id	sampleID	phyloID	pop_gen	pop_gen_population	spID	geoID	Latitude
 105	gran_ODP59146	gran_ODP59146	gran_ODP59146-RU.Yak.Chekurovka	uniform	grandis_Chekurovka	grandis	RU.Yak.Chekurovka	71.058333	127.508333	1	TRUE
 106	gran_ODP59147	gran_ODP59147	gran_ODP59147-RU.Yak.Chekurovka	uniform	grandis_Chekurovka	grandis	RU.Yak.Chekurovka	71.058333	127.508333	3	TRUE
 107	gran_ODP59148	gran_ODP59148	gran_ODP59148-RU.Yak.Chekurovka	uniform	grandis_Chekurovka	grandis	RU.Yak.Chekurovka	71.058333	127.508333	1	TRUE
-108	gran_ODP7506	gran_ODP7506	gran_ODP7506-RU.Yak.Chekurovka	uniform	grandis_Chekurovka	grandis	RU.Yak.Chekurovka	71.058333	127.508333	1	TRUE
+108	gran_ODP7506	gran_ODP7506	gran_ODP7506-RU.Yak.Chekurovka	unassigned		grandis	RU.Yak.Chekurovka	71.058333	127.508333	1	FALSE
 109	hook_BTH01	hook_BTH01	hook_BTH01-US.WY.Beartooth	unassigned		hookeriana	US.WY.Beartooth	45.0008	-109.401	4	FALSE
 110	hook_BTH03	hook_BTH03	hook_BTH03-US.WY.Beartooth	unassigned		hookeriana	US.WY.Beartooth	45.0008	-109.401	4	FALSE
 111	hook_DW679	hook_DW679	hook_DW679-US.CO.BoulderCo	unassigned		hookeriana	US.CO.BoulderCo	40.0649335	-105.583441	3	FALSE
@@ -218,9 +218,9 @@ vcf_order	raw_id	sampleID	phyloID	pop_gen	pop_gen_population	spID	geoID	Latitude
 217	octo_END01	octo_END01	octo_END01-NO.SJ.Longyearbyen	admixed	xsubi_Longyear	subincisa	NO.SJ.Longyearbyen	78.18875	15.78259	4	TRUE
 218	octo_END02	octo_END02	octo_END02-NO.SJ.Longyearbyen	admixed	xsubi_Longyear	subincisa	NO.SJ.Longyearbyen	78.18875	15.78259	4	TRUE
 219	octo_END03	octo_END03	octo_END03-NO.SJ.Longyearbyen	admixed	xsubi_Longyear	subincisa	NO.SJ.Longyearbyen	78.18875	15.78259	4	TRUE
-220	octo_FAE01	octo_FAE01	octo_FAE01-DK.FO.Eysturoy	uniform	octo_Faroe	octopetala	DK.FO.Eysturoy	62.296929	7.013205	4	TRUE
-221	octo_FAE03	octo_FAE03	octo_FAE03-DK.FO.Eysturoy	uniform	octo_Faroe	octopetala	DK.FO.Eysturoy	62.296929	7.013205	4	TRUE
-222	octo_FAE05	octo_FAE05	octo_FAE05-DK.FO.Eysturoy	uniform	octo_Faroe	octopetala	DK.FO.Eysturoy	62.296929	7.013205	4	TRUE
+220	octo_FAE01	octo_FAE01	octo_FAE01-DK.FO.Eysturoy	uniform	octo_Faroe	octopetala	DK.FO.Eysturoy	62.296929	-7.013205	4	TRUE
+221	octo_FAE03	octo_FAE03	octo_FAE03-DK.FO.Eysturoy	uniform	octo_Faroe	octopetala	DK.FO.Eysturoy	62.296929	-7.013205	4	TRUE
+222	octo_FAE05	octo_FAE05	octo_FAE05-DK.FO.Eysturoy	uniform	octo_Faroe	octopetala	DK.FO.Eysturoy	62.296929	-7.013205	4	TRUE
 223	octo_GAV01	octo_GAV01	octo_GAV01-FR.Pyrenees.Cent	uniform	octo_Pyrenees	octopetala	FR.Pyrenees.Cent	42.7007	-0.0032	4	TRUE
 224	octo_GAV07	octo_GAV07	octo_GAV07-FR.Pyrenees.Cent	unassigned		octopetala	FR.Pyrenees.Cent	42.7007	-0.0032	4	FALSE
 225	octo_HAR01	octo_HAR01	octo_HAR01-SE.Harjedalen	admixed	xocto_Harjedalen	octopetala	SE.Harjedalen	62.5639	12.2803	4	TRUE
@@ -355,10 +355,10 @@ vcf_order	raw_id	sampleID	phyloID	pop_gen	pop_gen_population	spID	geoID	Latitude
 354	oxydcf_SAY09	oxydcf_SAY09	oxydcf_SAY09-RU.EastSayanMts	admixed	xoxyd_Sayan	oxyodonta	RU.EastSayanMts	51.9455	102.440022	4	TRUE
 355	punc_ODP53237	punc_ODP53237	punc_ODP53237-RU.CHU.Anadyr	admixed	xpunc_Anadyr	grandis	RU.CHU.Anadyr	64.6165	177.152883	3	TRUE
 356	punc_ODP53362	punc_ODP53362	punc_ODP53362-RU.CHU.Anadyr	admixed	xpunc_Anadyr	grandis	RU.CHU.Anadyr	64.6165	177.152883	3	TRUE
-357	punc_ODP53628	punc_ODP53628	punc_ODP53628-RU.Yak.Tiksi	uniform	punctata_Yakutia	grandis	RU.Yak.Tiksi	71.6375	128.856667	3	TRUE
-358	punc_ODP53651	punc_ODP53651	punc_ODP53651-RU.Yak.Sokol	uniform	punctata_Yakutia	grandis	RU.Yak.Sokol	72.401667	126.798333	3	TRUE
-359	punc_ODP53656	punc_ODP53656	punc_ODP53656-RU.Yak.VerkhoyanskMts	uniform	punctata_Yakutia	grandis	RU.Yak.VerkhoyanskMts	71.06	127.589167	3	TRUE
-360	punc_ODP59151	punc_ODP59151	punc_ODP59151-RU.Yak.TitAry	uniform	punctata_Yakutia	grandis	RU.Yak.TitAry	71.985833	127.0875	1	TRUE
+357	punc_ODP53628	punc_ODP53628	punc_ODP53628-RU.Yak.Tiksi	unassigned		grandis	RU.Yak.Tiksi	71.6375	128.856667	3	FALSE
+358	punc_ODP53651	punc_ODP53651	punc_ODP53651-RU.Yak.Sokol	unassigned		grandis	RU.Yak.Sokol	72.401667	126.798333	3	FALSE
+359	punc_ODP53656	punc_ODP53656	punc_ODP53656-RU.Yak.VerkhoyanskMts	uniform	grandis_Chekurovka	grandis	RU.Yak.VerkhoyanskMts	71.06	127.589167	3	TRUE
+360	punc_ODP59151	punc_ODP59151	punc_ODP59151-RU.Yak.TitAry	unassigned		grandis	RU.Yak.TitAry	71.985833	127.0875	1	FALSE
 361	punc_ODP63371	punc_ODP63371	punc_ODP63371-RU.Yak.Chekurovka	unassigned		grandis	RU.Yak.Chekurovka	71.048333	127.523333	3	FALSE
 362	punc_ODP63378	punc_ODP63378	punc_ODP63378-RU.Yak.KharaulakhMts	unassigned		grandis	RU.Yak.KharaulakhMts	72.003333	127.128333	3	FALSE
 363	punc_ODP63467	punc_ODP63467	punc_ODP63467-RU.CHU.AnadyrS	admixed	xpunc_Anadyr	grandis	RU.CHU.AnadyrS	64.628611	177.445278	3	TRUE
@@ -367,7 +367,7 @@ vcf_order	raw_id	sampleID	phyloID	pop_gen	pop_gen_population	spID	geoID	Latitude
 366	punc_ODP8549	punc_ODP8549	punc_ODP8549-RU.CHU.ChukchiPenkigney	admixed	xalas_Penkigney	alaskensis	RU.CHU.ChukchiPenkigney	64.871667	-172.666667	2	TRUE
 367	punc_ODP8553	punc_ODP8553	punc_ODP8553-RU.CHU.Wrangel	unassigned		grandis	RU.CHU.Wrangel	70.936667	-179.56	2	FALSE
 368	punc_ODP8555	punc_ODP8555	punc_ODP8555-RU.CHU.Wrangel	unassigned		grandis	RU.CHU.Wrangel	70.936667	-179.56	2	FALSE
-369	punc_ODP8560	punc_ODP8560	punc_ODP8560-RU.Yak.TitAry	uniform	punctata_Yakutia	grandis	RU.Yak.TitAry	71.985833	127.0875	1	TRUE
+369	punc_ODP8560	punc_ODP8560	punc_ODP8560-RU.Yak.TitAry	unassigned		grandis	RU.Yak.TitAry	71.985833	127.0875	1	FALSE
 370	punccf_ODP8559	punccf_ODP8559	punccf_ODP8559-RU.Yak.VerkhoyanskMts	unassigned		grandis	RU.Yak.VerkhoyanskMts	71.686667	127.283333	3	FALSE
 371	sp_ODP59155	sp_ODP59155	sp_ODP59155-GL.N.Nansen	unassigned		integrifolia	GL.N.Nansen	82.958833	-41.44875	3	FALSE
 372	sp_ODP59289	sp_ODP59289	sp_ODP59289-GL.N.Nansen	unassigned		integrifolia	GL.N.Nansen	82.958833	-41.44875	3	FALSE
